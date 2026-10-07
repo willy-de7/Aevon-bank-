@@ -42,7 +42,7 @@ interface SorobanRpcResponse {
  *
  * A production-grade mock server for testing interactions with Soroban contracts
  * on the Stellar network. It simulates JSON-RPC responses for common Soroban
- * operations, allowing for robust integration testing of the ChronoPay backend
+ * operations, allowing for robust integration testing of the Aevon Bank backend
  * without a real blockchain network.
  */
 export class ContractMockServer {

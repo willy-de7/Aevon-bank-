@@ -9,7 +9,7 @@ import { Migration } from "../migrationRunner.js";
  * Design decisions:
  *  - `user_id` is a TEXT primary key (NOT a FK to users(id)) because
  *    authenticated identities in this service come from JWT claims or the
- *    `x-chronopay-user-id` header, and not every identity is guaranteed to
+ *    `x-aevonbank-user-id` header, and not every identity is guaranteed to
  *    have a row in `users`. Enrolment is still gated server-side by the auth
  *    middleware, and rows are deleted by the GDPR erasure path.
  *  - Cipher fields split into dedicated columns (ciphertext / iv / auth tag /

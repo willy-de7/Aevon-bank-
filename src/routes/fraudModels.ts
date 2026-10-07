@@ -112,7 +112,7 @@ router.post("/promote", requireAdminToken, async (req: Request, res: Response) =
   );
 
   try {
-    const actorId = req.header("x-chronopay-admin-token") ?? "admin";
+    const actorId = req.header("x-aevonbank-admin-token") ?? "admin";
     const result = registry.promote({ weights, tenantOverrides }, actorId);
 
     // Record in rollback history so rollback/initiate can reference this.

@@ -39,8 +39,8 @@ describe("GdprExportService", () => {
 
   beforeEach(() => {
     process.env = { ...OLD_ENV };
-    process.env.CHRONOPAY_GDPR_EXPORT_SECRET = TEST_SECRET;
-    process.env.CHRONOPAY_GDPR_EXPORT_TTL_SECONDS = "60";
+    process.env.AEVON_BANK_GDPR_EXPORT_SECRET = TEST_SECRET;
+    process.env.AEVON_BANK_GDPR_EXPORT_TTL_SECONDS = "60";
   });
 
   afterEach(() => {
@@ -88,7 +88,7 @@ describe("GdprExportService", () => {
     });
 
     it("throws when signing secret is not configured", async () => {
-      delete process.env.CHRONOPAY_GDPR_EXPORT_SECRET;
+      delete process.env.AEVON_BANK_GDPR_EXPORT_SECRET;
       const { service } = makeService();
 
       await expect(service.createExport("u1", "https://example.com"))
@@ -157,7 +157,7 @@ describe("GdprExportService", () => {
     });
 
     it("rejects expired token", async () => {
-      process.env.CHRONOPAY_GDPR_EXPORT_TTL_SECONDS = "0"; // immediate expiry
+      process.env.AEVON_BANK_GDPR_EXPORT_TTL_SECONDS = "0"; // immediate expiry
       const { service } = makeService({
         profile: { id: "u1", email: "a@b.com" },
       });
@@ -194,7 +194,7 @@ describe("GdprExportService", () => {
     });
 
     it("throws when signing secret is not configured", async () => {
-      delete process.env.CHRONOPAY_GDPR_EXPORT_SECRET;
+      delete process.env.AEVON_BANK_GDPR_EXPORT_SECRET;
       const { service } = makeService();
 
       await expect(service.getExport("some-token"))

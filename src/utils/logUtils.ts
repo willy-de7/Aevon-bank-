@@ -1,5 +1,5 @@
 /**
- * Structured Logging Utilities for ChronoPay Backend
+ * Structured Logging Utilities for Aevon Bank Backend
  *
  * Provides utilities for safe, consistent logging across the application
  * with built-in security features and performance optimizations.

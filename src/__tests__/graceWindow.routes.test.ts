@@ -30,7 +30,7 @@ import {
 const ADMIN_TOKEN = "test-admin-token-abc";
 
 function makeApp(): { app: express.Express; service: GraceWindowService } {
-  process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+  process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
   const store = new InMemoryGraceWindowStore();
   const service = new GraceWindowService({
@@ -50,7 +50,7 @@ function makeApp(): { app: express.Express; service: GraceWindowService } {
   return { app, service };
 }
 
-const adminHeader = { "x-chronopay-admin-token": ADMIN_TOKEN };
+const adminHeader = { "x-aevonbank-admin-token": ADMIN_TOKEN };
 
 // ─── Auth guard ───────────────────────────────────────────────────────────────
 
@@ -73,7 +73,7 @@ describe("Auth guard — all routes require admin token", () => {
   it.each(routes)("$method $path returns 403 with wrong token", async ({ method, path }) => {
     const { app } = makeApp();
     const res = await (request(app) as any)[method](path)
-      .set("x-chronopay-admin-token", "wrong-token")
+      .set("x-aevonbank-admin-token", "wrong-token")
       .send({});
     expect(res.status).toBe(403);
   });
@@ -462,7 +462,7 @@ describe("GET /api/v1/admin/slot-categories/:category/grace-window/history", () 
 
 describe("500-error handling — PUT and DELETE propagate unexpected errors", () => {
   it("PUT returns 500 when service.set throws an unexpected error", async () => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+    process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
     const throwingService = {
       get: () => undefined,
       list: () => [],
@@ -485,7 +485,7 @@ describe("500-error handling — PUT and DELETE propagate unexpected errors", ()
   });
 
   it("DELETE returns 500 when service.delete throws an unexpected error", async () => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+    process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
     const throwingService = {
       get: () => undefined,
       list: () => [],
@@ -507,7 +507,7 @@ describe("500-error handling — PUT and DELETE propagate unexpected errors", ()
   });
 
   it("PUT returns 422 when service.set throws a GraceWindowValidationError", async () => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+    process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
     const { GraceWindowValidationError: GWVError } = await import(
       "../services/graceWindowService.js"
     );
@@ -533,7 +533,7 @@ describe("500-error handling — PUT and DELETE propagate unexpected errors", ()
   });
 
   it("DELETE returns 422 when service.delete throws a GraceWindowValidationError", async () => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+    process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
     const { GraceWindowValidationError: GWVError } = await import(
       "../services/graceWindowService.js"
     );

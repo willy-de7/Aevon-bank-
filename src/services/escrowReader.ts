@@ -189,7 +189,7 @@ export class HorizonEscrowReader implements IEscrowReader {
     const response = await fetch(url, {
       headers: {
         Accept: "application/json",
-        "User-Agent": `chronopay-escrow-reader/${this.id}`,
+        "User-Agent": `aevonbank-escrow-reader/${this.id}`,
       },
     });
 

@@ -8,7 +8,7 @@
  *   - Sequential composition: repeated charges accumulate correctly
  *   - Budget exhaustion: BudgetExhaustedError thrown exactly at limit
  *   - Alarms: warning fires at 80%, exhausted fires at 100%
- *   - Env-var budget config: CHRONOPAY_DP_EPSILON_BUDGET_<DATASET>
+ *   - Env-var budget config: AEVON_BANK_DP_EPSILON_BUDGET_<DATASET>
  *   - Constructor override config takes precedence over env
  *   - resetSpend: clears accumulated spend without losing budget
  *   - remainingBudget: correct before and after charges
@@ -312,7 +312,7 @@ describe("EpsilonBudgetTracker — alarms", () => {
 
 describe("EpsilonBudgetTracker — budget config", () => {
   afterEach(() => {
-    delete process.env.CHRONOPAY_DP_EPSILON_BUDGET_MYDS;
+    delete process.env.AEVON_BANK_DP_EPSILON_BUDGET_MYDS;
   });
 
   it("uses DEFAULT_EPSILON_BUDGET when no override or env var is set", async () => {
@@ -327,22 +327,22 @@ describe("EpsilonBudgetTracker — budget config", () => {
     expect(remaining).toBe(42);
   });
 
-  it("reads budget from env var CHRONOPAY_DP_EPSILON_BUDGET_<DATASET>", async () => {
-    process.env.CHRONOPAY_DP_EPSILON_BUDGET_MYDS = "25";
+  it("reads budget from env var AEVON_BANK_DP_EPSILON_BUDGET_<DATASET>", async () => {
+    process.env.AEVON_BANK_DP_EPSILON_BUDGET_MYDS = "25";
     const tracker = makeTracker(); // no constructor override
     const remaining = await tracker.remainingBudget("myds");
     expect(remaining).toBe(25);
   });
 
   it("constructor override takes precedence over env var", async () => {
-    process.env.CHRONOPAY_DP_EPSILON_BUDGET_MYDS = "25";
+    process.env.AEVON_BANK_DP_EPSILON_BUDGET_MYDS = "25";
     const tracker = makeTracker({ myds: 99 });
     const remaining = await tracker.remainingBudget("myds");
     expect(remaining).toBe(99);
   });
 
   it("ignores invalid env var value and falls back to default", async () => {
-    process.env.CHRONOPAY_DP_EPSILON_BUDGET_MYDS = "not-a-number";
+    process.env.AEVON_BANK_DP_EPSILON_BUDGET_MYDS = "not-a-number";
     const tracker = makeTracker();
     const remaining = await tracker.remainingBudget("myds");
     expect(remaining).toBe(DEFAULT_EPSILON_BUDGET);

@@ -168,7 +168,7 @@ if (isMainModule) {
     const result = await uploadSbom({
       portalUrl,
       apiKey,
-      projectName: process.env.npm_package_name ?? "chronopay-backend",
+      projectName: process.env.npm_package_name ?? "aevon-bank-backend",
       projectVersion: process.env.GITHUB_REF_NAME ?? process.env.npm_package_version ?? "unknown",
       sbomContent,
     });

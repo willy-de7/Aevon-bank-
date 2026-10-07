@@ -1,5 +1,5 @@
 /**
- * Header Validation Rules — ChronoPay API
+ * Header Validation Rules — Aevon Bank API
  *
  * Provides reusable validators for key HTTP headers:
  *   - Idempotency-Key

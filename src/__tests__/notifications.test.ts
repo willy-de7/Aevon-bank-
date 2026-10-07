@@ -34,8 +34,8 @@ function createApp({
 }
 
 const authHeaders = {
-  "x-chronopay-user-id": "user-1",
-  "x-chronopay-role": "customer",
+  "x-aevonbank-user-id": "user-1",
+  "x-aevonbank-role": "customer",
 };
 
 const validPayload = {
@@ -59,8 +59,8 @@ describe("POST /api/v1/notifications/sms — auth", () => {
     const { app } = createApp();
     const res = await request(app)
       .post("/api/v1/notifications/sms")
-      .set("x-chronopay-user-id", "user-1")
-      .set("x-chronopay-role", "professional")
+      .set("x-aevonbank-user-id", "user-1")
+      .set("x-aevonbank-role", "professional")
       .send(validPayload);
     expect(res.status).toBe(403);
   });

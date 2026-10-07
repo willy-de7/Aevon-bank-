@@ -1,6 +1,6 @@
 # Domain Error to HTTP Status Mapping
 
-This document defines the mapping between ChronoPay domain/service errors and HTTP status codes, and how these are enforced in the centralized error handler.
+This document defines the mapping between Aevon Bank domain/service errors and HTTP status codes, and how these are enforced in the centralized error handler.
 
 ## Purpose
 To ensure consistent, predictable, and secure error responses across all API modules.

@@ -6,7 +6,7 @@ import { setCheckoutRepository } from "../../services/checkout.js";
 import { CheckoutSessionStatus } from "../../types/checkout.js";
 
 const app = createApp({ enableContentNegotiation: false });
-const adminHeaders = { "x-chronopay-admin-token": "test-admin-token" };
+const adminHeaders = { "x-aevonbank-admin-token": "test-admin-token" };
 
 class InMemoryRefundRepo {
   private store: Map<string, any> = new Map();
@@ -83,7 +83,7 @@ describe("Refund Routes", () => {
   let sessionRepo: InMemorySessionRepo;
 
   beforeEach(() => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = "test-admin-token";
+    process.env.AEVON_BANK_ADMIN_TOKEN = "test-admin-token";
     refundRepo = new InMemoryRefundRepo();
     sessionRepo = new InMemorySessionRepo();
     setRefundRepository(refundRepo);
@@ -92,7 +92,7 @@ describe("Refund Routes", () => {
   });
 
   afterEach(() => {
-    delete process.env.CHRONOPAY_ADMIN_TOKEN;
+    delete process.env.AEVON_BANK_ADMIN_TOKEN;
   });
 
   describe("POST /api/v1/admin/refunds", () => {

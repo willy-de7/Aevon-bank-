@@ -48,7 +48,7 @@ export class AuditLogger {
     // Default to 'logs/audit.log' in project root
     const cwd = typeof process !== "undefined" ? process.cwd() : ".";
     this.logFilePath = options?.filePath || path.join(cwd, "logs", "audit.log");
-    this.service = options?.service || "chronopay-backend";
+    this.service = options?.service || "aevon-bank-backend";
     this.environment = options?.environment || "dev";
   }
 
@@ -176,7 +176,7 @@ export class AuditLogger {
   }
 }
 
-const GLOBAL_AUDIT_LOGGER_KEY = "__CHRONOPAY_DEFAULT_AUDIT_LOGGER__" as const;
+const GLOBAL_AUDIT_LOGGER_KEY = "__AEVON_BANK_DEFAULT_AUDIT_LOGGER__" as const;
 
 const globalAuditState = globalThis as typeof globalThis & {
   [GLOBAL_AUDIT_LOGGER_KEY]?: AuditLogger;

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Implemented comprehensive migration safety checks and drift detection for ChronoPay backend to prevent schema divergence across environments.
+Implemented comprehensive migration safety checks and drift detection for Aevon Bank backend to prevent schema divergence across environments.
 
 ## Files Created
 

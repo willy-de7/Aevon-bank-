@@ -5,7 +5,7 @@
 Analytics exports from the audit log carry aggregate counts (events per action,
 events per service) that could allow re-identification of individuals even after
 field-level PII redaction. This document describes the differential-privacy (DP)
-mechanism added in [#515](https://github.com/Chronopay-Org/ChronoPay-Backend/issues/515)
+mechanism added in [#515](https://github.com/AevonBank-Org/Aevon-Bank-Backend/issues/515)
 to protect against that risk.
 
 ## Background: why DP noise?
@@ -71,7 +71,7 @@ with `"_type": "analytics_summary"`:
     "payment.created": 68            // noised
   },
   "countsByService": {
-    "chronopay-backend": 142         // noised
+    "aevon-bank-backend": 142         // noised
   },
   "differentialPrivacy": {
     "mechanism": "laplace",
@@ -127,20 +127,20 @@ inject a custom `BudgetAlarmSink` that forwards to the observability pipeline
 All settings are controlled via environment variables.  No code changes are
 required to tune epsilon or budgets per environment.
 
-### `CHRONOPAY_DP_EPSILON`
+### `AEVON_BANK_DP_EPSILON`
 
 The ε value applied to each export.
 
 - **Type:** positive float
 - **Default:** `1.0`
-- **Example:** `CHRONOPAY_DP_EPSILON=0.5`
+- **Example:** `AEVON_BANK_DP_EPSILON=0.5`
 
 Guidance:
 - ε ≤ 0.1 — very strong privacy, high noise (use for sensitive cohorts)
 - ε = 1.0 — balanced default (recommended for audit exports)
 - ε ≥ 10 — minimal noise; treat counts as near-exact
 
-### `CHRONOPAY_DP_ENABLED`
+### `AEVON_BANK_DP_ENABLED`
 
 Toggle DP noise on/off.  Use `false` **only in local development**.  Exports
 with DP disabled will carry `"dpDisabled": true` in the summary so consumers
@@ -149,13 +149,13 @@ know exact counts are present.
 - **Type:** `"true"` | `"false"`
 - **Default:** `"true"`
 
-### `CHRONOPAY_DP_EPSILON_BUDGET_<DATASET>`
+### `AEVON_BANK_DP_EPSILON_BUDGET_<DATASET>`
 
 Total epsilon budget for a dataset.  The dataset identifier is
 `audit_events`, so the variable is:
 
 ```
-CHRONOPAY_DP_EPSILON_BUDGET_AUDIT_EVENTS=50
+AEVON_BANK_DP_EPSILON_BUDGET_AUDIT_EVENTS=50
 ```
 
 - **Type:** positive float

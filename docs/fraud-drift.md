@@ -55,7 +55,7 @@ in tests, or via env vars in production:
 | `FRAUD_DRIFT_INTERVAL_MS`     | 300000 (5 min; clamped to a 1000 ms floor) |
 | `FRAUD_DRIFT_FLAP_COOLDOWN_MS`| 1800000 (30 min)                |
 | `FRAUD_DRIFT_MIN_SAMPLES`     | 50                              |
-| `FRAUD_DRIFT_RUNBOOK_URL`     | `https://runbooks.chronopay.local/fraud/drift-detector` |
+| `FRAUD_DRIFT_RUNBOOK_URL`     | `https://runbooks.aevonbank.local/fraud/drift-detector` |
 
 `FRAUD_DRIFT_INTERVAL_MS` is clamped to a 1-second floor so any sub-second
 or non-positive value gets promoted to at least one second. Values that

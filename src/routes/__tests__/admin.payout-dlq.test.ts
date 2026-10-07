@@ -7,16 +7,16 @@ import {
 } from "../../services/payoutDlqStore.js";
 
 const app = createApp({ enableTestRoutes: false, enableDocs: false });
-const adminHeaders = { "x-chronopay-admin-token": "test-admin-token" };
+const adminHeaders = { "x-aevonbank-admin-token": "test-admin-token" };
 
 describe("Admin Payout DLQ Inspection API", () => {
   beforeEach(() => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = "test-admin-token";
+    process.env.AEVON_BANK_ADMIN_TOKEN = "test-admin-token";
     resetPayoutDlqStore();
   });
 
   afterEach(() => {
-    delete process.env.CHRONOPAY_ADMIN_TOKEN;
+    delete process.env.AEVON_BANK_ADMIN_TOKEN;
     resetPayoutDlqStore();
   });
 
@@ -40,7 +40,7 @@ describe("Admin Payout DLQ Inspection API", () => {
     it("should return 403 for invalid admin token", async () => {
       const res = await request(app)
         .get("/api/v1/admin/payout-dlq")
-        .set("x-chronopay-admin-token", "wrong-token");
+        .set("x-aevonbank-admin-token", "wrong-token");
       expect(res.status).toBe(403);
       expect(res.body.success).toBe(false);
     });

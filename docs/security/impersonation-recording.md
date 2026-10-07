@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay's impersonation recording system captures and audits every request made by administrators when impersonating user accounts. This provides post-hoc review capabilities and ensures accountability for privileged access.
+Aevon Bank's impersonation recording system captures and audits every request made by administrators when impersonating user accounts. This provides post-hoc review capabilities and ensures accountability for privileged access.
 
 ## Architecture
 
@@ -195,21 +195,21 @@ app.put("/api/v1/users/:userId", async (req, res) => {
 
 **List sessions:**
 ```bash
-curl -H "x-chronopay-admin-token: $ADMIN_TOKEN" \
-  "https://api.chronopay.com/api/v1/admin/impersonation/sessions?targetUserId=user123&limit=10"
+curl -H "x-aevonbank-admin-token: $ADMIN_TOKEN" \
+  "https://api.aevonbank.com/api/v1/admin/impersonation/sessions?targetUserId=user123&limit=10"
 ```
 
 **Get full session details:**
 ```bash
-curl -H "x-chronopay-admin-token: $ADMIN_TOKEN" \
-  "https://api.chronopay.com/api/v1/admin/impersonation/sessions/$SESSION_ID"
+curl -H "x-aevonbank-admin-token: $ADMIN_TOKEN" \
+  "https://api.aevonbank.com/api/v1/admin/impersonation/sessions/$SESSION_ID"
 ```
 
 **Manually close a session:**
 ```bash
 curl -X POST \
-  -H "x-chronopay-admin-token: $ADMIN_TOKEN" \
-  "https://api.chronopay.com/api/v1/admin/impersonation/sessions/$SESSION_ID/close"
+  -H "x-aevonbank-admin-token: $ADMIN_TOKEN" \
+  "https://api.aevonbank.com/api/v1/admin/impersonation/sessions/$SESSION_ID/close"
 ```
 
 ## File Store Configuration

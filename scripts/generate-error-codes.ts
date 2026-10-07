@@ -108,7 +108,7 @@ const CODE_DESCRIPTIONS: Record<ErrorCode, string> = {
 
 const HEADER = `# Error Code Taxonomy
 
-ChronoPay API error responses use a single canonical envelope. Every error
+Aevon Bank API error responses use a single canonical envelope. Every error
 response — whether produced by middleware, a route handler, or the global
 error handler — emits the same shape, and every error carries a stable
 machine-readable \`code\`.

@@ -29,7 +29,7 @@ async function makeJwt(
   return signJwt(claims, secret, options);
 }
 
-describe("auth middleware & ChronoPayRole contract", () => {
+describe("auth middleware & AevonBankRole contract", () => {
   let auditSpy: jest.SpiedFunction<typeof defaultAuditLogger.log>;
 
   beforeEach(() => {
@@ -374,8 +374,8 @@ describe("auth middleware & ChronoPayRole contract", () => {
       mockNext = jest.fn();
     });
 
-    it("returns 401 when x-chronopay-user-id header is missing", () => {
-      mockReq.headers = { "x-chronopay-role": "admin" };
+    it("returns 401 when x-aevonbank-user-id header is missing", () => {
+      mockReq.headers = { "x-aevonbank-role": "admin" };
       const middleware = requireAuthenticatedActor(["admin"]);
       middleware(mockReq as Request, mockRes as Response, mockNext as unknown as NextFunction);
 
@@ -387,8 +387,8 @@ describe("auth middleware & ChronoPayRole contract", () => {
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("returns 401 when x-chronopay-user-id header is empty or whitespace", () => {
-      mockReq.headers = { "x-chronopay-user-id": "", "x-chronopay-role": "admin" };
+    it("returns 401 when x-aevonbank-user-id header is empty or whitespace", () => {
+      mockReq.headers = { "x-aevonbank-user-id": "", "x-aevonbank-role": "admin" };
       const middleware = requireAuthenticatedActor(["admin"]);
       middleware(mockReq as Request, mockRes as Response, mockNext as unknown as NextFunction);
 
@@ -400,7 +400,7 @@ describe("auth middleware & ChronoPayRole contract", () => {
 
       statusMock.mockClear();
       jsonMock.mockClear();
-      mockReq.headers = { "x-chronopay-user-id": "   ", "x-chronopay-role": "admin" };
+      mockReq.headers = { "x-aevonbank-user-id": "   ", "x-aevonbank-role": "admin" };
       middleware(mockReq as Request, mockRes as Response, mockNext as unknown as NextFunction);
 
       expect(statusMock).toHaveBeenCalledWith(401);
@@ -411,8 +411,8 @@ describe("auth middleware & ChronoPayRole contract", () => {
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("returns 401 and audits RBAC_MISSING when x-chronopay-role is absent (line 37 return null path)", () => {
-      mockReq.headers = { "x-chronopay-user-id": "user-123" };
+    it("returns 401 and audits RBAC_MISSING when x-aevonbank-role is absent (line 37 return null path)", () => {
+      mockReq.headers = { "x-aevonbank-user-id": "user-123" };
       const middleware = requireAuthenticatedActor(["admin"]);
       middleware(mockReq as Request, mockRes as Response, mockNext as unknown as NextFunction);
 
@@ -431,10 +431,10 @@ describe("auth middleware & ChronoPayRole contract", () => {
       expect(mockNext).not.toHaveBeenCalled();
     });
 
-    it("returns 400 and audits RBAC_INVALID_ROLE when x-chronopay-role is invalid (line 37 return null path)", () => {
+    it("returns 400 and audits RBAC_INVALID_ROLE when x-aevonbank-role is invalid (line 37 return null path)", () => {
       mockReq.headers = {
-        "x-chronopay-user-id": "user-123",
-        "x-chronopay-role": "hacker",
+        "x-aevonbank-user-id": "user-123",
+        "x-aevonbank-role": "hacker",
       };
       const middleware = requireAuthenticatedActor(["admin"]);
       middleware(mockReq as Request, mockRes as Response, mockNext as unknown as NextFunction);
@@ -456,8 +456,8 @@ describe("auth middleware & ChronoPayRole contract", () => {
 
     it("returns 403 and audits RBAC_FORBIDDEN when role is known but does not satisfy requiredRoles", () => {
       mockReq.headers = {
-        "x-chronopay-user-id": "user-123",
-        "x-chronopay-role": "customer",
+        "x-aevonbank-user-id": "user-123",
+        "x-aevonbank-role": "customer",
       };
       const middleware = requireAuthenticatedActor(["admin"]);
       middleware(mockReq as Request, mockRes as Response, mockNext as unknown as NextFunction);
@@ -482,8 +482,8 @@ describe("auth middleware & ChronoPayRole contract", () => {
 
     it("authorizes when user role satisfies required role directly", () => {
       mockReq.headers = {
-        "x-chronopay-user-id": "  user-123  ",
-        "x-chronopay-role": "customer",
+        "x-aevonbank-user-id": "  user-123  ",
+        "x-aevonbank-role": "customer",
       };
       const middleware = requireAuthenticatedActor(["customer"]);
       middleware(mockReq as Request, mockRes as Response, mockNext as unknown as NextFunction);
@@ -499,8 +499,8 @@ describe("auth middleware & ChronoPayRole contract", () => {
 
     it("authorizes when user role satisfies required role via role hierarchy", () => {
       mockReq.headers = {
-        "x-chronopay-user-id": "admin-1",
-        "x-chronopay-role": "ADMIN",
+        "x-aevonbank-user-id": "admin-1",
+        "x-aevonbank-role": "ADMIN",
       };
       const middleware = requireAuthenticatedActor(["support"]);
       middleware(mockReq as Request, mockRes as Response, mockNext as unknown as NextFunction);

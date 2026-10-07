@@ -135,7 +135,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const token = await challenge("user-1", realNowSec());
       const result = await invoke(
         baseOptions,
-        makeReq({ "x-chronopay-mfa": [token] }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": [token] }, { userId: "user-1" }),
       );
 
       expect(result.status).toBeNull(); // no error response -> handler ran
@@ -146,7 +146,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const token = await challenge("user-1", realNowSec());
       const result = await invoke(
         baseOptions,
-        makeReq({ "x-chronopay-mfa": ["not-a-token", token] }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": ["not-a-token", token] }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(403);
@@ -156,7 +156,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
     it("treats a non-string header value as a missing challenge", async () => {
       const result = await invoke(
         baseOptions,
-        makeReq({ "x-chronopay-mfa": 12345 }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": 12345 }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(401);
@@ -166,7 +166,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
     it("treats an undefined header value as a missing challenge", async () => {
       const result = await invoke(
         baseOptions,
-        makeReq({ "x-chronopay-mfa": undefined }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": undefined }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(401);
@@ -177,7 +177,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const token = await challenge("user-1", realNowSec());
       const result = await invoke(
         baseOptions,
-        makeReq({ "x-chronopay-mfa": `  \t ${token}  ` }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": `  \t ${token}  ` }, { userId: "user-1" }),
       );
 
       expect(result.status).toBeNull();
@@ -187,7 +187,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
     it("treats a whitespace-only header as missing regardless of the user", async () => {
       const result = await invoke(
         baseOptions,
-        makeReq({ "x-chronopay-mfa": "   " }, { userId: "u" }),
+        makeReq({ "x-aevonbank-mfa": "   " }, { userId: "u" }),
       );
       expect(result.status).toBe(401);
       expect(result.body).toEqual({ success: false, error: "Missing MFA challenge" });
@@ -211,7 +211,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
   describe("authentication guard", () => {
     it("rejects a request with no req.auth at all", async () => {
       const token = await challenge("user-1", realNowSec());
-      const result = await invoke(baseOptions, makeReq({ "x-chronopay-mfa": token }));
+      const result = await invoke(baseOptions, makeReq({ "x-aevonbank-mfa": token }));
 
       expect(result.status).toBe(401);
       expect(result.body).toEqual({ success: false, error: "Authentication required" });
@@ -222,7 +222,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const token = await challenge("user-1", realNowSec());
       const result = await invoke(
         baseOptions,
-        makeReq({ "x-chronopay-mfa": token }, { userId: "" }),
+        makeReq({ "x-aevonbank-mfa": token }, { userId: "" }),
       );
 
       expect(result.status).toBe(401);
@@ -238,7 +238,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const at = realNowSec();
       const result = await invoke(
         { ...baseOptions, maxAgeMs: 900_000, nowMs: at * 1000 },
-        makeReq({ "x-chronopay-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
       );
 
       expect(result.status).toBeNull();
@@ -249,7 +249,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const at = realNowSec() - 600;
       const result = await invoke(
         { ...baseOptions, maxAgeMs: 900_000, nowMs: (at + 900) * 1000 },
-        makeReq({ "x-chronopay-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
       );
 
       expect(result.status).toBeNull();
@@ -261,7 +261,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const at = realNowSec() - 600;
       const result = await invoke(
         { ...baseOptions, maxAgeMs: 900_000, nowMs: (at + 900) * 1000 + 1 },
-        makeReq({ "x-chronopay-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
       );
 
       expect(result.status).toBeNull();
@@ -271,7 +271,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const at = realNowSec() - 600;
       const result = await invoke(
         { ...baseOptions, maxAgeMs: 900_000, nowMs: (at + 901) * 1000 },
-        makeReq({ "x-chronopay-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(401);
@@ -285,7 +285,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const at = realNowSec() + 60;
       const result = await invoke(
         { ...baseOptions, maxAgeMs: 900_000, nowMs: realNowSec() * 1000 },
-        makeReq({ "x-chronopay-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(401);
@@ -295,7 +295,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const at = realNowSec() - 300;
       const result = await invoke(
         { ...baseOptions, maxAgeMs: 60_000, nowMs: at * 1000 + 300_000 },
-        makeReq({ "x-chronopay-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": await challenge("user-1", at) }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(401);
@@ -305,7 +305,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const at = realNowSec();
       const result = await invoke(
         { ...baseOptions, nowMs: at * 1000 },
-        makeReq({ "x-chronopay-mfa": await challenge("someone-else", at) }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": await challenge("someone-else", at) }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(403);
@@ -316,7 +316,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const at = realNowSec();
       const result = await invoke(
         { ...baseOptions, nowMs: at * 1000 },
-        makeReq({ "x-chronopay-mfa": await challenge(undefined, at) }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": await challenge(undefined, at) }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(403);
@@ -331,7 +331,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       });
       const result = await invoke(
         { ...baseOptions, nowMs: at * 1000 },
-        makeReq({ "x-chronopay-mfa": token }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": token }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(403);
@@ -350,7 +350,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       );
       const result = await invoke(
         { ...baseOptions, nowMs: at * 1000 },
-        makeReq({ "x-chronopay-mfa": token }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": token }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(403);
@@ -361,7 +361,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       const token = await challenge("user-1", at, {}, -10);
       const result = await invoke(
         { ...baseOptions, nowMs: at * 1000 },
-        makeReq({ "x-chronopay-mfa": token }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": token }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(403);
@@ -376,7 +376,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
       });
       const result = await invoke(
         { ...baseOptions, nowMs: at * 1000 },
-        makeReq({ "x-chronopay-mfa": token }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": token }, { userId: "user-1" }),
       );
 
       expect(result.status).toBe(403);
@@ -402,7 +402,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
           audience: "explicit-audience",
           nowMs: 999_000,
         },
-        makeReq({ "x-chronopay-mfa": "any-token" }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": "any-token" }, { userId: "user-1" }),
       );
 
       expect(spy).toHaveBeenCalledTimes(1);
@@ -425,7 +425,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
         freshUntilSec: 2,
       });
 
-      await invoke({}, makeReq({ "x-chronopay-mfa": "tok" }, { userId: "user-1" }));
+      await invoke({}, makeReq({ "x-aevonbank-mfa": "tok" }, { userId: "user-1" }));
 
       const [, options] = spy.mock.calls[0] as [string, Record<string, unknown>];
       expect(options).toEqual({
@@ -447,7 +447,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
 
       await invoke(
         baseOptions,
-        makeReq({ "x-chronopay-mfa": "   tidy-token   " }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": "   tidy-token   " }, { userId: "user-1" }),
       );
 
       expect(spy.mock.calls[0][0]).toBe("tidy-token");
@@ -491,7 +491,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
 
         const result = await invoke(
           baseOptions,
-          makeReq({ "x-chronopay-mfa": "tok" }, { userId: "user-1" }),
+          makeReq({ "x-aevonbank-mfa": "tok" }, { userId: "user-1" }),
         );
 
         expect(result.status).toBe(status);
@@ -507,7 +507,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
 
       const result = await invoke(
         baseOptions,
-        makeReq({ "x-chronopay-mfa": "tok" }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": "tok" }, { userId: "user-1" }),
       );
 
       expect(JSON.stringify(result.body)).not.toContain("db://internal");
@@ -522,7 +522,7 @@ describe("requireFreshMfa — dedicated coverage", () => {
 
       const result = await invoke(
         baseOptions,
-        makeReq({ "x-chronopay-mfa": "tok" }, { userId: "user-1" }),
+        makeReq({ "x-aevonbank-mfa": "tok" }, { userId: "user-1" }),
       );
 
       expect(result.nextCalls).toBe(1);

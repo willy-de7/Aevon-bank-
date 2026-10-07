@@ -224,11 +224,11 @@ describe("ErrorHandlerOptions", () => {
     createErrorHandler({
       unknownErrorMessage: "Something went wrong",
       includeStackTrace: false,
-    })(new Error("postgres://user:hunter2@db.internal:5432/chronopay"), makeReq(), res, makeNext());
+    })(new Error("postgres://user:hunter2@db.internal:5432/aevonbank"), makeReq(), res, makeNext());
 
     expect(res.body?.error).toBe("Something went wrong");
     expect(JSON.stringify(res.body)).not.toContain("hunter2");
-    expect(JSON.stringify(res.body)).not.toContain("chronopay");
+    expect(JSON.stringify(res.body)).not.toContain("aevonbank");
   });
 
   it("treats explicitly undefined overrides as absent", () => {
@@ -1012,7 +1012,7 @@ function createHarness(options: ErrorHandlerOptions = {}): express.Express {
   app.get(
     "/async-unknown-error",
     asyncErrorHandler(async () => {
-      throw new Error("postgres://chronopay:hunter2@db.internal:5432/chronopay");
+      throw new Error("postgres://aevonbank:hunter2@db.internal:5432/aevonbank");
     }),
   );
   app.get("/sync-app-error", () => {

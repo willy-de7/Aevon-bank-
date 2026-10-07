@@ -10,7 +10,7 @@ groups:
           severity: page
           team: fraud
           pager: primary
-          runbook: "https://runbooks.chronopay.local/fraud/drift-detector"
+          runbook: "https://runbooks.aevonbank.local/fraud/drift-detector"
         annotations:
           summary: "Fraud score drift PSI critical for {{ $labels.model_version }}"
           description: |
@@ -19,8 +19,8 @@ groups:
             fraud score distribution has diverged significantly from the
             training baseline. Investigate recent fraud rule changes, scoring
             regressions, or upstream traffic composition shifts.
-          runbook_url: "https://runbooks.chronopay.local/fraud/drift-detector"
-          dashboard_url: "https://grafana.chronopay.local/d/fraud-drift"
+          runbook_url: "https://runbooks.aevonbank.local/fraud/drift-detector"
+          dashboard_url: "https://grafana.aevonbank.local/d/fraud-drift"
 
       # PSI warning (>= 0.1) sustained for 30m
       - alert: FraudDriftPSIWarning
@@ -36,8 +36,8 @@ groups:
             fraud_drift_psi for model {{ $labels.model_version }} crossed the
             warning PSI threshold (>= 0.1) for at least 30 minutes. No page
             required but please triage within business hours.
-          runbook_url: "https://runbooks.chronopay.local/fraud/drift-detector"
-          dashboard_url: "https://grafana.chronopay.local/d/fraud-drift"
+          runbook_url: "https://runbooks.aevonbank.local/fraud/drift-detector"
+          dashboard_url: "https://grafana.aevonbank.local/d/fraud-drift"
 
       # KL divergence critical (>= 0.1) sustained for 10m
       - alert: FraudDriftKLCritical
@@ -48,15 +48,15 @@ groups:
           severity: page
           team: fraud
           pager: primary
-          runbook: "https://runbooks.chronopay.local/fraud/drift-detector"
+          runbook: "https://runbooks.aevonbank.local/fraud/drift-detector"
         annotations:
           summary: "Fraud score drift KL critical for {{ $labels.model_version }}"
           description: |
             fraud_drift_kl for model {{ $labels.model_version }} is above the
             critical KL threshold (>= 0.1) over a 10m window, indicating the
             live histogram materially differs from training.
-          runbook_url: "https://runbooks.chronopay.local/fraud/drift-detector"
-          dashboard_url: "https://grafana.chronopay.local/d/fraud-drift"
+          runbook_url: "https://runbooks.aevonbank.local/fraud/drift-detector"
+          dashboard_url: "https://grafana.aevonbank.local/d/fraud-drift"
 
       # KL divergence warning (>= 0.05) sustained for 30m
       - alert: FraudDriftKLWarning
@@ -71,8 +71,8 @@ groups:
           description: |
             fraud_drift_kl for model {{ $labels.model_version }} crossed the
             warning KL threshold (>= 0.05) for at least 30 minutes.
-          runbook_url: "https://runbooks.chronopay.local/fraud/drift-detector"
-          dashboard_url: "https://grafana.chronopay.local/d/fraud-drift"
+          runbook_url: "https://runbooks.aevonbank.local/fraud/drift-detector"
+          dashboard_url: "https://grafana.aevonbank.local/d/fraud-drift"
 
       # "no baseline" status (status gauge == 3) means a new model version
       # was deployed without re-establishing the baseline. This is almost
@@ -94,8 +94,8 @@ groups:
               - the existing baseline was explicitly cleared without replacement.
             Re-run the training distribution import or confirm the deployment
             pipeline is feeding baseline metrics.
-          runbook_url: "https://runbooks.chronopay.local/fraud/drift-detector"
-          dashboard_url: "https://grafana.chronopay.local/d/fraud-drift"
+          runbook_url: "https://runbooks.aevonbank.local/fraud/drift-detector"
+          dashboard_url: "https://grafana.aevonbank.local/d/fraud-drift"
 
       # Cardinality safety net: ensure the metric is not silently overflowing
       # (model_version label budget is 8).

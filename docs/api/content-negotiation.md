@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay API enforces consistent handling of `Content-Type` and `Accept` headers for JSON endpoints. This ensures all API interactions use proper JSON formatting and prevents content-type confusion attacks.
+Aevon Bank API enforces consistent handling of `Content-Type` and `Accept` headers for JSON endpoints. This ensures all API interactions use proper JSON formatting and prevents content-type confusion attacks.
 
 ## Changes Made
 

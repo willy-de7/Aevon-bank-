@@ -102,9 +102,9 @@ describe("OpenAPI Route Conformance", () => {
       swaggerDefinition: {
         openapi: "3.0.0",
         info: {
-          title: "ChronoPay API",
+          title: "Aevon Bank API",
           version: "1.0.0",
-          description: "API for ChronoPay payment and scheduling platform",
+          description: "API for Aevon Bank payment and scheduling platform",
         },
       },
       apis: ["./src/routes/*.ts", "./src/index.ts"],

@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay exposes a booking-intent creation endpoint for reserving a bookable slot before downstream payment or confirmation work occurs.
+Aevon Bank exposes a booking-intent creation endpoint for reserving a bookable slot before downstream payment or confirmation work occurs.
 
 ## Endpoint
 
@@ -16,8 +16,8 @@ This endpoint is protected by the `FF_CREATE_BOOKING_INTENT` feature flag. When 
 
 The current backend architecture assumes authentication is terminated by a trusted upstream layer. The backend consumes these headers:
 
-- `x-chronopay-user-id` required
-- `x-chronopay-role` required
+- `x-aevonbank-user-id` required
+- `x-aevonbank-role` required
 
 Allowed roles for booking intent creation:
 
@@ -86,7 +86,7 @@ Status: `201 Created`
 | `400` | `BAD_REQUEST` | `note must be a string when provided.` | note is not a string |
 | `400` | `BAD_REQUEST` | `note cannot be empty when provided.` | note is empty after trimming |
 | `400` | `BAD_REQUEST` | `note must be 500 characters or fewer.` | note exceeds 500 characters |
-| `401` | `UNAUTHORIZED` | `Authentication required` | Missing x-chronopay-user-id header |
+| `401` | `UNAUTHORIZED` | `Authentication required` | Missing x-aevonbank-user-id header |
 | `403` | `FORBIDDEN` | `Role is not authorized for this action` | Role not in [customer, admin] |
 | `403` | `FORBIDDEN` | `You cannot create a booking intent for your own slot.` | Self-booking attempt |
 | `404` | `NOT_FOUND` | `Selected slot was not found.` | Slot does not exist |

@@ -3,7 +3,7 @@ import { ConfigurationError, ForbiddenError, UnauthorizedError } from "../errors
 import { sendErrorResponse } from "../errors/sendError.js";
 import { defaultAuditLogger } from "../services/auditLogger.js";
 
-const ADMIN_TOKEN_HEADER = "x-chronopay-admin-token";
+const ADMIN_TOKEN_HEADER = "x-aevonbank-admin-token";
 
 type AdminTokenAuditAction = "AUTHZ_UNCONFIGURED" | "AUTHZ_MISSING" | "AUTHZ_FORBIDDEN";
 
@@ -31,7 +31,7 @@ function emitAdminTokenDeniedAudit(
 }
 
 export function requireAdminToken(req: Request, res: Response, next: NextFunction) {
-  const configuredToken = process.env.CHRONOPAY_ADMIN_TOKEN;
+  const configuredToken = process.env.AEVON_BANK_ADMIN_TOKEN;
 
   if (!configuredToken) {
     emitAdminTokenDeniedAudit(req, "AUTHZ_UNCONFIGURED", 503);

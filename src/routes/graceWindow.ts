@@ -4,7 +4,7 @@
  * Admin REST endpoints for per-slot-category no-show grace-window
  * configuration.
  *
- * All routes require a valid admin token (x-chronopay-admin-token header).
+ * All routes require a valid admin token (x-aevonbank-admin-token header).
  *
  * Endpoints
  * ---------
@@ -341,7 +341,7 @@ function parsePagination(req: Request): {
 function deriveActorId(req: Request): string {
   return (
     (req as any).auth?.userId ??
-    req.header("x-chronopay-admin-token") ??
+    req.header("x-aevonbank-admin-token") ??
     "admin"
   );
 }

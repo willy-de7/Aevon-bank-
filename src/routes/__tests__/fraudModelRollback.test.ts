@@ -31,7 +31,7 @@ import {
 // ─── Test setup ──────────────────────────────────────────────────────────────
 
 const ADMIN_TOKEN = "rollback-test-admin-token";
-process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
 function makeApp() {
   const app = express();
@@ -234,8 +234,8 @@ describe("approveRollback()", () => {
 
 describe("POST /api/v1/admin/fraud-models/rollback/initiate", () => {
   const headers = {
-    "x-chronopay-user-id": "admin-a",
-    "x-chronopay-role": "admin",
+    "x-aevonbank-user-id": "admin-a",
+    "x-aevonbank-role": "admin",
   };
 
   it("returns 401 without auth headers", async () => {
@@ -309,8 +309,8 @@ describe("POST /api/v1/admin/fraud-models/rollback/initiate", () => {
 // ─── HTTP: /rollback/approve ──────────────────────────────────────────────────
 
 describe("POST /api/v1/admin/fraud-models/rollback/approve", () => {
-  const initiatorHeaders = { "x-chronopay-user-id": "admin-a", "x-chronopay-role": "admin" };
-  const approverHeaders = { "x-chronopay-user-id": "admin-b", "x-chronopay-role": "admin" };
+  const initiatorHeaders = { "x-aevonbank-user-id": "admin-a", "x-aevonbank-role": "admin" };
+  const approverHeaders = { "x-aevonbank-user-id": "admin-b", "x-aevonbank-role": "admin" };
 
   it("returns 404 for unknown rollbackId", async () => {
     const res = await request(makeApp())
@@ -377,7 +377,7 @@ describe("GET /api/v1/admin/fraud-models/history", () => {
   it("returns empty history when no promotions recorded", async () => {
     const res = await request(makeApp())
       .get("/api/v1/admin/fraud-models/history")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(res.status).toBe(200);
     expect(res.body.history).toEqual([]);
   });
@@ -387,7 +387,7 @@ describe("GET /api/v1/admin/fraud-models/history", () => {
     promoteV2();
     const res = await request(makeApp())
       .get("/api/v1/admin/fraud-models/history")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(res.status).toBe(200);
     expect(res.body.history).toHaveLength(2);
     // newest first: v2 promotion is index 0

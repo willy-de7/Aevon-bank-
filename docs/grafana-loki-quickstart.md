@@ -1,6 +1,6 @@
-# Grafana Loki Quickstart for ChronoPay Structured Logs
+# Grafana Loki Quickstart for Aevon Bank Structured Logs
 
-ChronoPay emits **newline-delimited JSON** (NDJSON) via [pino](https://getpino.io/).
+Aevon Bank emits **newline-delimited JSON** (NDJSON) via [pino](https://getpino.io/).
 Every log line contains `req_id` and `trace_id` as top-level fields, making it
 trivial to correlate logs with traces and request flows in Loki.
 
@@ -13,9 +13,9 @@ trivial to correlate logs with traces and request flows in Loki.
   "req_id": "req_550e8400-e29b-41d4-a716-446655440000",
   "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
   "span_id": "00f067aa0ba902b7",
-  "service": "chronopay-backend",
+  "service": "aevon-bank-backend",
   "environment": "production",
-  "msg": "[ChronoPay] slot created"
+  "msg": "[Aevon Bank] slot created"
 }
 ```
 
@@ -92,14 +92,14 @@ clients:
   - url: http://loki:3100/loki/api/v1/push
 
 scrape_configs:
-  - job_name: chronopay-backend
+  - job_name: aevon-bank-backend
     static_configs:
       - targets:
           - localhost
         labels:
-          job: chronopay-backend
+          job: aevon-bank-backend
           environment: development
-          __path__: /var/log/chronopay/*.log
+          __path__: /var/log/aevonbank/*.log
 
     pipeline_stages:
       # Parse the NDJSON emitted by pino
@@ -127,7 +127,7 @@ scrape_configs:
 
 > **Tip:** If you are shipping logs over stdout (e.g., Docker / Kubernetes),
 > replace `__path__` with a `docker_sd_configs` or `kubernetes_sd_configs`
-> stanza that selects the `chronopay-backend` container.
+> stanza that selects the `aevon-bank-backend` container.
 
 ## 3. Add Loki as a Grafana data source
 
@@ -142,31 +142,31 @@ scrape_configs:
 ### All logs for a specific request
 
 ```logql
-{job="chronopay-backend"} | json | req_id = "req_550e8400-e29b-41d4-a716-446655440000"
+{job="aevon-bank-backend"} | json | req_id = "req_550e8400-e29b-41d4-a716-446655440000"
 ```
 
 ### All logs belonging to a distributed trace
 
 ```logql
-{job="chronopay-backend"} | json | trace_id = "4bf92f3577b34da6a3ce929d0e0e4736"
+{job="aevon-bank-backend"} | json | trace_id = "4bf92f3577b34da6a3ce929d0e0e4736"
 ```
 
 ### Error logs in the last 30 minutes
 
 ```logql
-{job="chronopay-backend", level="ERROR"} | json
+{job="aevon-bank-backend", level="ERROR"} | json
 ```
 
 ### Error rate by service over time (metric query)
 
 ```logql
-sum(rate({job="chronopay-backend", level="ERROR"}[1m])) by (service)
+sum(rate({job="aevon-bank-backend", level="ERROR"}[1m])) by (service)
 ```
 
 ### Slow requests (requires `durationMs` field)
 
 ```logql
-{job="chronopay-backend"} | json | durationMs > 1000
+{job="aevon-bank-backend"} | json | durationMs > 1000
 ```
 
 ### Correlate with Tempo traces
@@ -175,19 +175,19 @@ If you have Grafana Tempo configured, Grafana can auto-link logs to traces.
 In the Loki data source settings, set the **Derived fields** → **Internal link**
 to your Tempo data source using `trace_id` as the match expression.
 
-## 5. Running ChronoPay so pino writes to stdout
+## 5. Running Aevon Bank so pino writes to stdout
 
 In development pino uses `pino-pretty` for human-readable output. To get raw
 NDJSON (required for Loki ingestion), set `NODE_ENV=production`:
 
 ```bash
-NODE_ENV=production npm start | tee /var/log/chronopay/app.log
+NODE_ENV=production npm start | tee /var/log/aevonbank/app.log
 ```
 
 Or redirect stdout to a file and let Promtail tail it:
 
 ```bash
-NODE_ENV=production node dist/index.js >> /var/log/chronopay/app.log 2>&1 &
+NODE_ENV=production node dist/index.js >> /var/log/aevonbank/app.log 2>&1 &
 ```
 
 ## 6. Kubernetes / Helm
@@ -195,7 +195,7 @@ NODE_ENV=production node dist/index.js >> /var/log/chronopay/app.log 2>&1 &
 When running in Kubernetes, the recommended approach is to use the
 [Grafana Alloy](https://grafana.com/docs/alloy/) DaemonSet (or the legacy
 Promtail DaemonSet) to collect pod stdout and forward it to Loki.  Label your
-pod with `app: chronopay-backend` and configure the Alloy `loki.source.kubernetes`
+pod with `app: aevon-bank-backend` and configure the Alloy `loki.source.kubernetes`
 component to select it.
 
 All `req_id` and `trace_id` fields will be available as structured metadata
@@ -204,7 +204,7 @@ top level of each JSON line.
 
 ## 7. Security notes
 
-- ChronoPay **redacts** sensitive fields (`authorization`, `cookie`,
+- Aevon Bank **redacts** sensitive fields (`authorization`, `cookie`,
   `x-api-key`, `password`, `secret`, `token`) before they reach the logger.
   These fields are replaced with `[REDACTED]` or a masked value and will never
   appear in Loki.

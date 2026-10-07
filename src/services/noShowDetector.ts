@@ -212,7 +212,7 @@ function hashCoordinates(
   slotId: string,
 ): string {
   const key =
-    process.env.NO_SHOW_HASH_SECRET || "chronopay-noshow-default-secret";
+    process.env.NO_SHOW_HASH_SECRET || "aevonbank-noshow-default-secret";
   const payload = `${lat.toFixed(5)}|${lon.toFixed(5)}|${slotId}`;
   return createHmac("sha256", key).update(payload).digest("hex");
 }

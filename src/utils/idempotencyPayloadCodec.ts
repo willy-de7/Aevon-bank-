@@ -4,7 +4,7 @@ import {
   type IdempotencyRedisEncryptionConfig,
 } from "../config/env.js";
 
-const ENCRYPTION_CONTEXT = "chronopay:idempotency:redis-payload:v1";
+const ENCRYPTION_CONTEXT = "aevonbank:idempotency:redis-payload:v1";
 const NONCE_BYTES = 12;
 const ENCRYPTION_VERSION = "v1";
 const ENCRYPTION_PREFIX = "enc";

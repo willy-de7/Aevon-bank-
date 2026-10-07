@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay Backend implements **auth-aware rate limiting** to provide fair usage controls while minimizing collateral damage from shared IP addresses (NAT, corporate proxies). The limiter keys requests by authenticated principal (user ID or API key) when available, and falls back to IP address for unauthenticated traffic.
+Aevon Bank Backend implements **auth-aware rate limiting** to provide fair usage controls while minimizing collateral damage from shared IP addresses (NAT, corporate proxies). The limiter keys requests by authenticated principal (user ID or API key) when available, and falls back to IP address for unauthenticated traffic.
 
 ## Scope
 
@@ -16,7 +16,7 @@ This feature was implemented as a focused, self-contained change. Pre-existing T
 
 The rate limit key is generated in the following precedence:
 
-1. **Header-based user ID** (`x-chronopay-user-id`) → key: `rl:user:<userId>`
+1. **Header-based user ID** (`x-aevonbank-user-id`) → key: `rl:user:<userId>`
 2. **JWT user ID** (`req.user.sub` or `req.user.id`) → key: `rl:user:<userId>`
 3. **API key** (`x-api-key` hashed) → key: `rl:apiKey:<sha256hash>`
 4. **IP address** (`req.ip`, respects `trust proxy`) → key: `rl:ip:<ip>`
@@ -114,7 +114,7 @@ The rate limiter **must** be placed **after** authentication middleware. Otherwi
 
 ### Identity Spoofing Prevention
 
-- **Header-based auth** (`x-chronopay-user-id`): The system assumes these headers are set by a **trusted upstream** (API gateway, authentication service). If the API is directly exposed, an attacker could set any user ID and exhaust that user's quota (Denial-of-Service on the account). This is an architectural assumption – ensure such routes are behind a trusted proxy that validates and injects these headers.
+- **Header-based auth** (`x-aevonbank-user-id`): The system assumes these headers are set by a **trusted upstream** (API gateway, authentication service). If the API is directly exposed, an attacker could set any user ID and exhaust that user's quota (Denial-of-Service on the account). This is an architectural assumption – ensure such routes are behind a trusted proxy that validates and injects these headers.
 - **API keys**: The raw key is never stored; only its SHA-256 hash appears in Redis. Even if Redis is compromised, the raw keys cannot be recovered.
 - **JWT**: Token signature and claims are verified by `authenticate` middleware before `req.user` is populated.
 
@@ -194,7 +194,7 @@ To migrate, simply replace any usage of `createRateLimiter()` with `createAuthAw
 
 Certain internal services (e.g. payout workers, settlement reconcilers) must
 be able to bypass the fair-queue rate limiter without acquiring a user or API
-key identity. ChronoPay provides a **signed override header** mechanism for
+key identity. Aevon Bank provides a **signed override header** mechanism for
 this purpose.
 
 ### Design Goals

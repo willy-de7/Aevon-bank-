@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay uses Redis for two purposes:
+Aevon Bank uses Redis for two purposes:
 
 - **Idempotency key storage** (`src/utils/redis.ts`) — used by the idempotency middleware on mutating endpoints.
 - **Slot cache** (`src/cache/redisClient.ts`) — used by `slotCache.ts` to cache slot list responses.

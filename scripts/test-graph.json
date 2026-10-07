@@ -1,6 +1,6 @@
 {
   "__comment__": [
-    "Static file-to-test dependency graph for ChronoPay-Backend CI test selection.",
+    "Static file-to-test dependency graph for Aevon-Bank-Backend CI test selection.",
     "Keys are POSIX-style paths relative to the repo root.",
     "Values are arrays of test file paths to run when the key file changes.",
     "",

@@ -36,7 +36,7 @@ import {
 // ─── Shared fixtures ──────────────────────────────────────────────────────────
 
 const ADMIN_TOKEN = "test-admin-token";
-const ADMIN_HDR = { "x-chronopay-admin-token": ADMIN_TOKEN };
+const ADMIN_HDR = { "x-aevonbank-admin-token": ADMIN_TOKEN };
 const BASE = "/api/v1/admin/holiday-calendars";
 
 const VALID_CALENDAR = { region: "us-east", name: "US East Holidays" };
@@ -63,14 +63,14 @@ let app: ReturnType<typeof createApp>;
 let repo: InMemoryHolidayCalendarRepository;
 
 beforeEach(() => {
-  process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+  process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
   repo = new InMemoryHolidayCalendarRepository();
   setHolidayCalendarRepository(repo);
   app = createApp({ enableContentNegotiation: false });
 });
 
 afterEach(() => {
-  delete process.env.CHRONOPAY_ADMIN_TOKEN;
+  delete process.env.AEVON_BANK_ADMIN_TOKEN;
   repo.reset();
 });
 
@@ -100,7 +100,7 @@ describe("Auth guard — all holiday-calendar endpoints", () => {
 
   test.each(endpoints)("$method $path → 403 with wrong token", async ({ method, path }) => {
     const res = await (request(app) as any)[method](path)
-      .set("x-chronopay-admin-token", "bad-token")
+      .set("x-aevonbank-admin-token", "bad-token")
       .send({});
     expect(res.status).toBe(403);
   });

@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay validates environment variables centrally in `src/config/env.ts` before the application starts serving requests.
+Aevon Bank validates environment variables centrally in `src/config/env.ts` before the application starts serving requests.
 
 ## Where validation occurs
 

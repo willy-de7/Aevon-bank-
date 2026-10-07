@@ -4,7 +4,7 @@ import { slotService, SlotNotFoundError } from "../services/slotService.js";
 const SLOT_NOT_FOUND = "Slot not found";
 
 export type SlotDeleteAuth =
-  | { mode: "chronopay"; userId: string; role: string }
+  | { mode: "aevonbank"; userId: string; role: string }
   | { mode: "legacy"; userId: string };
 
 declare global {
@@ -16,35 +16,35 @@ declare global {
 }
 
 /**
- * DELETE /api/v1/slots/:id — supports x-chronopay-* (403 for non-owner) and x-user-id/x-role (404 for non-owner).
+ * DELETE /api/v1/slots/:id — supports x-aevonbank-* (403 for non-owner) and x-user-id/x-role (404 for non-owner).
  */
 export function authorizeSlotDelete(req: Request, res: Response, next: NextFunction): void {
-  const chronopayUserId = req.header("x-chronopay-user-id");
-  const chronopayRole = req.header("x-chronopay-role");
+  const aevonBankUserId = req.header("x-aevonbank-user-id");
+  const aevonBankRole = req.header("x-aevonbank-role");
   const legacyUserId = req.header("x-user-id");
   const legacyRole = req.header("x-role");
 
-  const useChronopay = chronopayUserId !== undefined || chronopayRole !== undefined;
+  const useAevonBank = aevonBankUserId !== undefined || aevonBankRole !== undefined;
   const useLegacy = legacyUserId !== undefined || legacyRole !== undefined;
 
-  if (!useChronopay && !useLegacy) {
+  if (!useAevonBank && !useLegacy) {
     res.status(401).json({ success: false, error: "Authentication required." });
     return;
   }
 
-  if (useChronopay) {
-    if (!chronopayUserId) {
+  if (useAevonBank) {
+    if (!aevonBankUserId) {
       res.status(401).json({ success: false, error: "Authentication required." });
       return;
     }
-    if (chronopayRole === "admin") {
+    if (aevonBankRole === "admin") {
       next();
       return;
     }
     req.slotDeleteAuth = {
-      mode: "chronopay",
-      userId: chronopayUserId,
-      role: chronopayRole ?? "customer",
+      mode: "aevonbank",
+      userId: aevonBankUserId,
+      role: aevonBankRole ?? "customer",
     };
     next();
     return;
@@ -85,7 +85,7 @@ export async function assertSlotDeleteAllowed(
     throw error;
   }
 
-  if (auth.mode === "chronopay" && slot.professional !== auth.userId) {
+  if (auth.mode === "aevonbank" && slot.professional !== auth.userId) {
     res.status(403).json({ success: false, error: "Insufficient permissions" });
     return false;
   }

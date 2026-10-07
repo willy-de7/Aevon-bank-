@@ -62,7 +62,7 @@ describe("Slot POST route payload limit", () => {
     // Verify the middleware is imported and used in the route file
     // eslint-disable-next-line unused-imports/no-unused-vars
     const slotsModule = await import("../routes/slots.js");
-    const slotsSource = await import("fs").then(fs => fs.readFileSync("c:\\Users\\EMMA\\Desktop\\chronopay\\src\\routes\\slots.ts", "utf-8"));
+    const slotsSource = await import("fs").then(fs => fs.readFileSync("c:\\Users\\EMMA\\Desktop\\aevonbank\\src\\routes\\slots.ts", "utf-8"));
     
     expect(slotsSource).toContain('payloadLimit');
     expect(slotsSource).toContain('ROUTE_PAYLOAD_LIMITS.slots');

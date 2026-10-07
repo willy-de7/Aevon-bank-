@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://example.com/log-schema.json",
-  "title": "ChronoPay Log Entry Schema",
-  "description": "Structured logging schema for ChronoPay backend services",
+  "title": "Aevon Bank Log Entry Schema",
+  "description": "Structured logging schema for Aevon Bank backend services",
   "version": "1.0.0",
   "type": "object",
   "properties": {

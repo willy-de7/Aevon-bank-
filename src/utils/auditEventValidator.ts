@@ -399,7 +399,7 @@ export function createAuditEvent(
     environment?: string;
   },
 ): AuditEventV1 {
-  const service = options?.service || "chronopay-backend";
+  const service = options?.service || "aevon-bank-backend";
   const environment = options?.environment || "dev";
 
   // Redact sensitive data before creating event
@@ -459,7 +459,7 @@ export function migrateLegacyEntry(
     environment?: string;
   },
 ): AuditEventV1 {
-  const service = options?.service || "chronopay-backend";
+  const service = options?.service || "aevon-bank-backend";
   const environment = options?.environment || "dev";
 
   // Extract method and body from metadata if present

@@ -24,10 +24,10 @@ import {
 } from "../../services/disputeAppeals.js";
 
 const ADMIN_TOKEN = "test-admin-token";
-process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
 const app = createApp({ enableTestRoutes: true });
-const adminHeaders = { "x-chronopay-admin-token": ADMIN_TOKEN };
+const adminHeaders = { "x-aevonbank-admin-token": ADMIN_TOKEN };
 
 function poolOfFour(): void {
   // Five distinct senior arbiters in tiers of unrelated tenants, plus

@@ -1,6 +1,6 @@
 # Redis Idempotency Payload Encryption
 
-ChronoPay can optionally encrypt idempotency payloads before writing them to Redis. This is intended for endpoints whose cached idempotent responses may contain sensitive data.
+Aevon Bank can optionally encrypt idempotency payloads before writing them to Redis. This is intended for endpoints whose cached idempotent responses may contain sensitive data.
 
 ## What is encrypted
 

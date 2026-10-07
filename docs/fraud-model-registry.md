@@ -40,7 +40,7 @@ interface RoutingSnapshot {
 
 ```
 POST /api/v1/admin/fraud-models/promote
-Headers: x-chronopay-admin-token: <token>
+Headers: x-aevonbank-admin-token: <token>
 Body:
 {
   "weights": { "<version>": <integer 0..100> },
@@ -91,7 +91,7 @@ A read-only companion endpoint:
 
 ```
 GET /api/v1/admin/fraud-models/list
-Headers: x-chronopay-admin-token: <token>
+Headers: x-aevonbank-admin-token: <token>
 → 200 { "success": true, "models": [ ... ] }
 ```
 
@@ -175,7 +175,7 @@ override pointing at the new champion version.
 ## Security notes
 
 - The promotion endpoint is gated by `requireAdminToken`, which checks the
-  `x-chronopay-admin-token` header against `process.env.CHRONOPAY_ADMIN_TOKEN`.
+  `x-aevonbank-admin-token` header against `process.env.AEVON_BANK_ADMIN_TOKEN`.
   Misconfigured deployments (no token configured) refuse every request.
 - Audit-first: the emit happens **before** the registry mutation. If the
   audit write fails (disk full, permission denied), the route still

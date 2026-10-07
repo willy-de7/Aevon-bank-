@@ -210,7 +210,7 @@ const isTestEnv = process.env.NODE_ENV === "test";
 const server = isTestEnv
   ? undefined
   : app.listen(PORT, () => {
-      logger.info({ port: PORT }, `ChronoPay API listening on http://localhost:${PORT}`);
+      logger.info({ port: PORT }, `Aevon Bank API listening on http://localhost:${PORT}`);
     });
 
 let _serverInstance: any = server;

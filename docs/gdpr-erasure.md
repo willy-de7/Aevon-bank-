@@ -2,7 +2,7 @@
 
 ## Overview
 
-The GDPR erasure orchestrator implements Article 17 of the GDPR ("right to erasure") for ChronoPay. It safely removes personal data across all PII-holding tables while preserving ledger integrity through the **null-with-hash tombstone pattern**.
+The GDPR erasure orchestrator implements Article 17 of the GDPR ("right to erasure") for Aevon Bank. It safely removes personal data across all PII-holding tables while preserving ledger integrity through the **null-with-hash tombstone pattern**.
 
 ## Architecture
 
@@ -102,7 +102,7 @@ In dry-run mode:
 
 ### `POST /api/v1/gdpr/erase`
 
-**Authentication:** `x-chronopay-user-id` + `x-chronopay-role` headers required.
+**Authentication:** `x-aevonbank-user-id` + `x-aevonbank-role` headers required.
 
 **Roles:**
 - `admin` — can perform live erasures and dry-runs.

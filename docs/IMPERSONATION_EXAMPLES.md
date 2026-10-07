@@ -267,7 +267,7 @@ ADMIN_TOKEN="${ADMIN_TOKEN:-your-admin-token}"
 API_URL="${API_URL:-http://localhost:3001}"
 
 curl -s \
-  -H "x-chronopay-admin-token: $ADMIN_TOKEN" \
+  -H "x-aevonbank-admin-token: $ADMIN_TOKEN" \
   "$API_URL/api/v1/admin/impersonation/sessions" \
   | jq '.sessions[] | select(.status == "active") | {sessionId, adminId, targetUserId, startedAt, requestCount, writeCount}'
 ```
@@ -288,7 +288,7 @@ if [ -z "$SESSION_ID" ]; then
 fi
 
 curl -s \
-  -H "x-chronopay-admin-token: $ADMIN_TOKEN" \
+  -H "x-aevonbank-admin-token: $ADMIN_TOKEN" \
   "$API_URL/api/v1/admin/impersonation/sessions/$SESSION_ID" \
   | jq '.'
 ```
@@ -305,7 +305,7 @@ ADMIN_TOKEN="${ADMIN_TOKEN:-your-admin-token}"
 API_URL="${API_URL:-http://localhost:3001}"
 
 curl -s \
-  -H "x-chronopay-admin-token: $ADMIN_TOKEN" \
+  -H "x-aevonbank-admin-token: $ADMIN_TOKEN" \
   "$API_URL/api/v1/admin/impersonation/sessions/$SESSION_ID" \
   > "$OUTPUT_FILE"
 
@@ -316,7 +316,7 @@ echo "Session exported to $OUTPUT_FILE"
 
 ```bash
 curl -s \
-  -H "x-chronopay-admin-token: $ADMIN_TOKEN" \
+  -H "x-aevonbank-admin-token: $ADMIN_TOKEN" \
   "http://localhost:3001/api/v1/admin/impersonation/sessions?adminId=admin@example.com&limit=20" \
   | jq '.sessions'
 ```
@@ -325,7 +325,7 @@ curl -s \
 
 ```bash
 curl -s \
-  -H "x-chronopay-admin-token: $ADMIN_TOKEN" \
+  -H "x-aevonbank-admin-token: $ADMIN_TOKEN" \
   "http://localhost:3001/api/v1/admin/impersonation/sessions?targetUserId=user123" \
   | jq '.sessions'
 ```

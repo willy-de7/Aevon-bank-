@@ -2,7 +2,7 @@
 /**
  * deploy-escrow.ts
  *
- * One-time deployment script for the ChronoPay Soroban escrow contract.
+ * One-time deployment script for the Aevon Bank Soroban escrow contract.
  *
  * Usage (dry run, no network call):
  *   npx ts-node src/scripts/deploy-escrow.ts --dry-run
@@ -103,7 +103,7 @@ async function main(): Promise<void> {
   try {
     const result = await deployContract(resolvedPath);
 
-    console.log("\n=== ChronoPay Escrow Contract Deployed ===");
+    console.log("\n=== Aevon Bank Escrow Contract Deployed ===");
     console.log(`  Contract address : ${result.contractAddress}`);
     console.log(`  WASM hash        : ${result.wasmHash}`);
     console.log(`  Deploy tx hash   : ${result.txHash}`);

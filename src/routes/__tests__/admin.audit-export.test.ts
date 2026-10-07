@@ -20,13 +20,13 @@ const AUDIT_EVENT = {
     body: { secret: "supersecret" },
     context: { actor: "admin" },
   },
-  service: "chronopay-backend",
+  service: "aevon-bank-backend",
   environment: "test",
 };
 
 afterEach(async () => {
-  delete process.env.CHRONOPAY_ADMIN_TOKEN;
-  delete process.env.CHRONOPAY_AUDIT_EXPORT_SECRET;
+  delete process.env.AEVON_BANK_ADMIN_TOKEN;
+  delete process.env.AEVON_BANK_AUDIT_EXPORT_SECRET;
   try {
     await fs.rm(LOG_DIR, { recursive: true, force: true });
   } catch {
@@ -36,8 +36,8 @@ afterEach(async () => {
 
 describe("Admin audit export API", () => {
   beforeEach(async () => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = "admin-secret";
-    process.env.CHRONOPAY_AUDIT_EXPORT_SECRET = "export-secret";
+    process.env.AEVON_BANK_ADMIN_TOKEN = "admin-secret";
+    process.env.AEVON_BANK_AUDIT_EXPORT_SECRET = "export-secret";
     await fs.mkdir(LOG_DIR, { recursive: true });
     await fs.writeFile(AUDIT_LOG_PATH, `${JSON.stringify(AUDIT_EVENT)}\n`, "utf8");
   });
@@ -51,7 +51,7 @@ describe("Admin audit export API", () => {
   it("creates a signed download URL and serves the JSONL export with integrity header", async () => {
     const createRes = await request(app)
       .post("/api/v1/admin/audit/export")
-      .set("x-chronopay-admin-token", "admin-secret")
+      .set("x-aevonbank-admin-token", "admin-secret")
       .send();
 
     expect(createRes.status).toBe(201);

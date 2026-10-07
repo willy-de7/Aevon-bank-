@@ -24,7 +24,7 @@ describe("webhook key rotation and admin promote", () => {
         delete process.env.SETTLEMENTS_WEBHOOK_SECRET;
         delete process.env.SETTLEMENTS_WEBHOOK_SECRET_PREVIOUS;
         delete process.env.SETTLEMENTS_WEBHOOK_SECRET_NEXT;
-        delete process.env.CHRONOPAY_ADMIN_TOKEN;
+        delete process.env.AEVON_BANK_ADMIN_TOKEN;
     });
 
     it("accepts previous secret during overlap window and rejects it after window closes", async () => {
@@ -69,7 +69,7 @@ describe("webhook key rotation and admin promote", () => {
     it("admin promote endpoint promotes NEXT to CURRENT and sets PREVIOUS", async () => {
         process.env.SETTLEMENTS_WEBHOOK_SECRET = "old-current";
         process.env.SETTLEMENTS_WEBHOOK_SECRET_NEXT = "new-current";
-        process.env.CHRONOPAY_ADMIN_TOKEN = "admintoken";
+        process.env.AEVON_BANK_ADMIN_TOKEN = "admintoken";
 
         const adminApp = express();
         adminApp.use(express.json());
@@ -77,7 +77,7 @@ describe("webhook key rotation and admin promote", () => {
 
         const res = await request(adminApp)
             .post("/api/v1/admin/webhooks/rotate")
-            .set("x-chronopay-admin-token", "admintoken")
+            .set("x-aevonbank-admin-token", "admintoken")
             .send();
 
         expect(res.status).toBe(200);

@@ -148,7 +148,7 @@ const createLoggerConfig = (): any => {
       bindings(bindings: any) {
         return {
           ...bindings,
-          service: process.env.SERVICE_NAME || "chronopay-backend",
+          service: process.env.SERVICE_NAME || "aevon-bank-backend",
           version: process.env.SERVICE_VERSION || "0.1.0",
           environment: process.env.NODE_ENV || "development",
           pid: process.pid,
@@ -219,7 +219,7 @@ const createLoggerConfig = (): any => {
     /**
      * Ensure error causes are serialized
      */
-    msgPrefix: "[ChronoPay] ",
+    msgPrefix: "[Aevon Bank] ",
   };
 
   /**

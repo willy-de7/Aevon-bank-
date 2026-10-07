@@ -50,7 +50,7 @@ function addHold(slotId: string, buyerId = "buyer-1", expiresAt = FUTURE) {
 }
 
 function authHeaders(userId: string, role = "professional") {
-  return { "x-chronopay-user-id": userId, "x-chronopay-role": role };
+  return { "x-aevonbank-user-id": userId, "x-aevonbank-role": role };
 }
 
 // ─── Setup ────────────────────────────────────────────────────────────────────
@@ -216,7 +216,7 @@ describe("GET /api/v1/slots/:id/reservations — auth guards", () => {
 
     const res = await request(app)
       .get(`/api/v1/slots/${slotId}/reservations`)
-      .set("x-chronopay-user-id", "alice");
+      .set("x-aevonbank-user-id", "alice");
 
     expect(res.status).toBe(401);
     expect(res.body.success).toBe(false);

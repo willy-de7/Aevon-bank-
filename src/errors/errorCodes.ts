@@ -1,5 +1,5 @@
 /**
- * Canonical ChronoPay API error code taxonomy.
+ * Canonical Aevon Bank API error code taxonomy.
  *
  * This module is the single source of truth for every error code that exits
  * the API surface. Codes are organized as a discriminated union that

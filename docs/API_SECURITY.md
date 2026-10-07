@@ -2,22 +2,22 @@
 
 ## Overview
 
-ChronoPay API implements a comprehensive authentication and authorization system with multiple security schemes to support different use cases while maintaining security best practices.
+Aevon Bank API implements a comprehensive authentication and authorization system with multiple security schemes to support different use cases while maintaining security best practices.
 
 ## Authentication Methods
 
 ### 1. Header-Based Authentication (Primary)
-**Scheme**: `chronoPayAuth`
+**Scheme**: `aevonBankAuth`
 
 **Headers Required**:
-- `x-chronopay-user-id`: User identifier (UUID or alphanumeric)
-- `x-chronopay-role`: User role (`customer`, `admin`, `professional`)
+- `x-aevonbank-user-id`: User identifier (UUID or alphanumeric)
+- `x-aevonbank-role`: User role (`customer`, `admin`, `professional`)
 
 **Usage**:
 ```http
 GET /api/v1/slots
-x-chronopay-user-id: user-123
-x-chronopay-role: customer
+x-aevonbank-user-id: user-123
+x-aevonbank-role: customer
 ```
 
 **Security Notes**:
@@ -63,17 +63,17 @@ x-api-key: sk_live_1234567890abcdef
 **Scheme**: `adminTokenAuth`
 
 **Header Required**:
-- `x-chronopay-admin-token`: Admin token
+- `x-aevonbank-admin-token`: Admin token
 
 **Usage**:
 ```http
 POST /api/v1/checkout/sessions/123/complete
-x-chronopay-admin-token: admin-secret-token
+x-aevonbank-admin-token: admin-secret-token
 ```
 
 **Security Notes**:
 - Used for administrative operations
-- Token configured via `CHRONOPAY_ADMIN_TOKEN` environment variable
+- Token configured via `AEVON_BANK_ADMIN_TOKEN` environment variable
 - Should be long, random, and kept secret
 
 ## Role-Based Access Control (RBAC)
@@ -167,14 +167,14 @@ Security features are covered by comprehensive tests in `src/__tests__/swagger.t
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `CHRONOPAY_ADMIN_TOKEN` | Admin token for administrative operations | Yes |
+| `AEVON_BANK_ADMIN_TOKEN` | Admin token for administrative operations | Yes |
 | `NODE_ENV` | Environment mode (development/production/test) | No |
 
 ## Migration Guide
 
 ### From Basic Auth to Header-Based Auth
-1. Replace username/password with `x-chronopay-user-id` header
-2. Add `x-chronopay-role` header for RBAC
+1. Replace username/password with `x-aevonbank-user-id` header
+2. Add `x-aevonbank-role` header for RBAC
 3. Update error handling for 401/403 responses
 4. Remove basic auth headers from requests
 

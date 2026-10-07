@@ -112,15 +112,15 @@ export type ReceiptsProvider = (userId: string) => Promise<GdprReceipt[]>;
 
 export class GdprExportService {
   private get ttlSeconds(): number {
-    return Number(process.env.CHRONOPAY_GDPR_EXPORT_TTL_SECONDS ?? DEFAULT_EXPORT_TTL_SECONDS);
+    return Number(process.env.AEVON_BANK_GDPR_EXPORT_TTL_SECONDS ?? DEFAULT_EXPORT_TTL_SECONDS);
   }
 
   private get secret(): string {
-    return process.env.CHRONOPAY_GDPR_EXPORT_SECRET || "";
+    return process.env.AEVON_BANK_GDPR_EXPORT_SECRET || "";
   }
 
   private get maxExportSize(): number {
-    return Number(process.env.CHRONOPAY_GDPR_EXPORT_MAX_BYTES ?? MAX_EXPORT_SIZE_BYTES);
+    return Number(process.env.AEVON_BANK_GDPR_EXPORT_MAX_BYTES ?? MAX_EXPORT_SIZE_BYTES);
   }
 
   constructor(

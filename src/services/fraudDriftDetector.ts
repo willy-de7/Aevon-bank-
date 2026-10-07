@@ -146,7 +146,7 @@ export interface FraudDriftAlarm {
 
 const DEFAULT_RUNBOOK_URL =
   process.env.FRAUD_DRIFT_RUNBOOK_URL ||
-  "https://runbooks.chronopay.local/fraud/drift-detector";
+  "https://runbooks.aevonbank.local/fraud/drift-detector";
 
 const DEFAULT_FLAP_COOLDOWN_MS =
   Number(process.env.FRAUD_DRIFT_FLAP_COOLDOWN_MS) || 30 * 60 * 1000; // 30 min

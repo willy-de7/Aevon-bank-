@@ -22,7 +22,7 @@ function buildApp() {
 }
 
 const app = buildApp();
-const ADMIN = { "x-chronopay-admin-token": "test-admin-token" };
+const ADMIN = { "x-aevonbank-admin-token": "test-admin-token" };
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -71,13 +71,13 @@ function makeMockService(overrides: Partial<Record<string, unknown>> = {}) {
 let mockSvc: ReturnType<typeof makeMockService>;
 
 beforeEach(() => {
-  process.env.CHRONOPAY_ADMIN_TOKEN = "test-admin-token";
+  process.env.AEVON_BANK_ADMIN_TOKEN = "test-admin-token";
   mockSvc = makeMockService();
   setDsrSlaService(mockSvc);
 });
 
 afterEach(() => {
-  delete process.env.CHRONOPAY_ADMIN_TOKEN;
+  delete process.env.AEVON_BANK_ADMIN_TOKEN;
 });
 
 // ─── Auth guard ───────────────────────────────────────────────────────────────

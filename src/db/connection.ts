@@ -124,7 +124,7 @@ export function getPool(): Pool {
       throw new Error(
         "DATABASE_URL environment variable is not set. " +
           "Set it to a PostgreSQL connection string, e.g. " +
-          "postgresql://user:password@localhost:5432/chronopay",
+          "postgresql://user:password@localhost:5432/aevonbank",
       );
     }
 

@@ -95,7 +95,7 @@ describe("requireFreshMfa middleware", () => {
     const res = await request(app)
       .get("/protected")
       .set("Authorization", `Bearer ${await accessToken("user-1")}`)
-      .set("x-chronopay-mfa", "   ");
+      .set("x-aevonbank-mfa", "   ");
     expect(res.status).toBe(401);
     expect(res.body).toEqual({ success: false, error: "Missing MFA challenge" });
   });
@@ -103,7 +103,7 @@ describe("requireFreshMfa middleware", () => {
   it("rejects when the request is not authenticated at all", async () => {
     const res = await request(buildNakedApp())
       .get("/naked")
-      .set("x-chronopay-mfa", await mfaToken("user-1"));
+      .set("x-aevonbank-mfa", await mfaToken("user-1"));
     expect(res.status).toBe(401);
     expect(res.body).toEqual({ success: false, error: "Authentication required" });
   });
@@ -112,7 +112,7 @@ describe("requireFreshMfa middleware", () => {
     const res = await request(app)
       .get("/protected")
       .set("Authorization", `Bearer ${await accessToken("user-1")}`)
-      .set("x-chronopay-mfa", await mfaToken("user-1"));
+      .set("x-aevonbank-mfa", await mfaToken("user-1"));
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ success: true });
   });
@@ -121,7 +121,7 @@ describe("requireFreshMfa middleware", () => {
     const res = await request(app)
       .get("/protected")
       .set("Authorization", `Bearer ${await accessToken("user-1")}`)
-      .set("x-chronopay-mfa", await mfaToken("user-2"));
+      .set("x-aevonbank-mfa", await mfaToken("user-2"));
     expect(res.status).toBe(403);
     expect(res.body).toEqual({ success: false, error: "Invalid MFA challenge" });
   });
@@ -130,7 +130,7 @@ describe("requireFreshMfa middleware", () => {
     const res = await request(app)
       .get("/protected")
       .set("Authorization", `Bearer ${await accessToken("user-1")}`)
-      .set("x-chronopay-mfa", await mfaToken("user-1", { secret: "not-the-challenge-secret" }));
+      .set("x-aevonbank-mfa", await mfaToken("user-1", { secret: "not-the-challenge-secret" }));
     expect(res.status).toBe(403);
   });
 
@@ -139,7 +139,7 @@ describe("requireFreshMfa middleware", () => {
     const res = await request(app)
       .get("/protected")
       .set("Authorization", `Bearer ${await accessToken("user-1")}`)
-      .set("x-chronopay-mfa", await mfaToken("user-1", { iatSec: staleIat, ttlSec: 3600 }));
+      .set("x-aevonbank-mfa", await mfaToken("user-1", { iatSec: staleIat, ttlSec: 3600 }));
     expect(res.status).toBe(401);
     expect(res.body).toEqual({ success: false, error: "MFA challenge has expired; please verify again" });
   });
@@ -150,7 +150,7 @@ describe("requireFreshMfa middleware", () => {
     const res = await request(app)
       .get("/protected")
       .set("Authorization", `Bearer ${await accessToken("user-1")}`)
-      .set("x-chronopay-mfa", await mfaToken("user-1", { iatSec: barelyFresh, ttlSec: 3600 }));
+      .set("x-aevonbank-mfa", await mfaToken("user-1", { iatSec: barelyFresh, ttlSec: 3600 }));
     expect(res.status).toBe(200);
   });
 
@@ -158,7 +158,7 @@ describe("requireFreshMfa middleware", () => {
     const res = await request(app)
       .get("/protected")
       .set("Authorization", `Bearer ${await accessToken("user-1")}`)
-      .set("x-chronopay-mfa", await mfaToken("user-1", { ttlSec: -10 }));
+      .set("x-aevonbank-mfa", await mfaToken("user-1", { ttlSec: -10 }));
     expect(res.status).toBe(403);
   });
 
@@ -170,7 +170,7 @@ describe("requireFreshMfa middleware", () => {
     const res = await request(app)
       .get("/protected")
       .set("Authorization", `Bearer ${await accessToken("user-1")}`)
-      .set("x-chronopay-mfa", await mfaToken("user-1"));
+      .set("x-aevonbank-mfa", await mfaToken("user-1"));
     expect(res.status).toBe(500);
     expect(res.body).toEqual({ success: false, error: "MFA is not configured" });
   });

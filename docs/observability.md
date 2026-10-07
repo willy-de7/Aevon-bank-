@@ -2,7 +2,7 @@
 
 ## Request Correlation IDs
 
-ChronoPay uses `X-Request-Id` for end-to-end request correlation.
+Aevon Bank uses `X-Request-Id` for end-to-end request correlation.
 
 - If a client sends `X-Request-Id`, the server validates and reuses it.
 - If absent or malformed, the server generates a new request ID.

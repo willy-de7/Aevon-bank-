@@ -294,7 +294,7 @@ router.post(
  */
 router.post(
   "/",
-  requireApiKey(process.env.CHRONOPAY_API_KEY),
+  requireApiKey(process.env.AEVON_BANK_API_KEY),
   requireFeatureFlag("CREATE_SLOT"),
   // Times that parse but are impossible (negative epoch, > 24h span) are
   // semantically unprocessable rather than malformed, so they answer 422.
@@ -359,7 +359,7 @@ router.post(
  */
 router.post(
   "/conflicts/preview",
-  requireApiKey(process.env.CHRONOPAY_API_KEY),
+  requireApiKey(process.env.AEVON_BANK_API_KEY),
   requireFeatureFlag("CREATE_SLOT"),
   validateBody(ConflictPreviewBodySchema),
   async (req: Request, res: Response) => {

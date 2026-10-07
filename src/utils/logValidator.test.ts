@@ -224,7 +224,7 @@ describe("Log schema validation", () => {
         span_id: "span-789",
         route: "/api/v1/pay",
         latencyMs: 45.6,
-        service: "chronopay-backend",
+        service: "aevon-bank-backend",
         version: "1.0.0",
         environment: "production",
         pid: 12345,

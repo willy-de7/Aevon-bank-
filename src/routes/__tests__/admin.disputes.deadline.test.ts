@@ -19,11 +19,11 @@ import {
 } from "../../scheduler/disputeDeadlineScheduler.js";
 
 const ADMIN_TOKEN = "test-admin-token";
-process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
 const app = createApp({ enableTestRoutes: true, enableContentNegotiation: false });
 const adminHeaders = {
-  "x-chronopay-admin-token": ADMIN_TOKEN,
+  "x-aevonbank-admin-token": ADMIN_TOKEN,
   "Content-Type": "application/json",
 };
 

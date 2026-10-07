@@ -2,7 +2,7 @@
  * memoHashCanonical.test.ts
  *
  * Tests for the Stellar memo hash canonicalization algorithm used to match
- * on-chain transaction memos against ChronoPay redemption receipts.
+ * on-chain transaction memos against Aevon Bank redemption receipts.
  *
  * Issue #434 – Add tests for Horizon memo hash canonicalization matching
  * redemption receipts.

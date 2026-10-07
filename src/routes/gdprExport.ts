@@ -67,7 +67,7 @@ export function createGdprExportRouter(
       const exportEntry = await service.getExport(token);
 
       res.setHeader("Content-Type", "application/json");
-      res.setHeader("Content-Disposition", "attachment; filename=chronopay-gdpr-export.json");
+      res.setHeader("Content-Disposition", "attachment; filename=aevonbank-gdpr-export.json");
       res.setHeader("X-GDPR-Export-Integrity-Sha256", exportEntry.integrity);
 
       return res.send(exportEntry.content);

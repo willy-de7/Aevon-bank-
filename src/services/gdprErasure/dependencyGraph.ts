@@ -61,7 +61,7 @@ export interface TableNode {
 // ─── Graph definition ─────────────────────────────────────────────────────────
 
 /**
- * The canonical FK dependency graph for ChronoPay PII tables.
+ * The canonical FK dependency graph for Aevon Bank PII tables.
  *
  * Ordering contract: tables with no dependents (leaves) come first; the
  * `users` root row is processed last so that its FK dependents are already

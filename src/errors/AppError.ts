@@ -1,5 +1,5 @@
 /**
- * Custom error classes for ChronoPay API.
+ * Custom error classes for Aevon Bank API.
  *
  * Every subclass binds to a canonical entry in `ERROR_TAXONOMY`. The error
  * envelope emitted on the wire is the flat shape produced by `toJSON()`:

@@ -100,8 +100,8 @@ describe("POST /api/v1/booking-intents idempotency", () => {
   });
 
   const actorHeaders = {
-    "x-chronopay-user-id": "customer-123",
-    "x-chronopay-role": "customer",
+    "x-aevonbank-user-id": "customer-123",
+    "x-aevonbank-role": "customer",
   };
 
   const url = "/api/v1/booking-intents";

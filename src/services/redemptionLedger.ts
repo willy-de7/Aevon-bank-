@@ -1,7 +1,7 @@
 /**
  * redemptionLedger.ts
  *
- * Idempotent, cryptographically-chained redemption ledger for ChronoPay
+ * Idempotent, cryptographically-chained redemption ledger for Aevon Bank
  * time-token redemptions.
  *
  * ## Guarantees

@@ -11,7 +11,7 @@ import { defaultAuditLogger } from "../../services/auditLogger.js";
 import { resetRolloutScheduleRegistry } from "../../flags/rolloutScheduleRegistry.js";
 
 const ADMIN_TOKEN = "test-admin-token-rollouts";
-process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
 function makeApp() {
   const app = express();
@@ -52,7 +52,7 @@ describe("flag rollout admin routes", () => {
     it("returns 403 with a wrong admin token", async () => {
       const res = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", "wrong-token")
+        .set("x-aevonbank-admin-token", "wrong-token")
         .send(BASE_PAYLOAD);
       expect(res.status).toBe(403);
     });
@@ -62,7 +62,7 @@ describe("flag rollout admin routes", () => {
     it("creates a schedule and emits an audit event", async () => {
       const res = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(BASE_PAYLOAD);
 
       expect(res.status).toBe(201);
@@ -80,7 +80,7 @@ describe("flag rollout admin routes", () => {
       const { steps: _steps, ...withoutSteps } = BASE_PAYLOAD;
       const res = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(withoutSteps);
 
       expect(res.status).toBe(400);
@@ -90,7 +90,7 @@ describe("flag rollout admin routes", () => {
     it("returns 400 with the registry's validation error code", async () => {
       const res = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ ...BASE_PAYLOAD, flag: "NOT_REAL" });
 
       expect(res.status).toBe(400);
@@ -107,7 +107,7 @@ describe("flag rollout admin routes", () => {
 
       const res = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(BASE_PAYLOAD);
 
       expect(res.status).toBe(500);
@@ -119,7 +119,7 @@ describe("flag rollout admin routes", () => {
 
       const res = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(BASE_PAYLOAD);
 
       expect(res.status).toBe(201);
@@ -128,12 +128,12 @@ describe("flag rollout admin routes", () => {
     it("returns 409 for a duplicate in-flight schedule", async () => {
       await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(BASE_PAYLOAD);
 
       const res = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(BASE_PAYLOAD);
 
       expect(res.status).toBe(409);
@@ -145,21 +145,21 @@ describe("flag rollout admin routes", () => {
     it("lists schedules with optional filters", async () => {
       await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(BASE_PAYLOAD);
       await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ ...BASE_PAYLOAD, tenantId: "tenant-b" });
 
       const all = await request(makeApp())
         .get("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
       expect(all.body.schedules).toHaveLength(2);
 
       const filtered = await request(makeApp())
         .get("/api/v1/admin/flag-rollouts?tenantId=tenant-b")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
       expect(filtered.body.schedules).toHaveLength(1);
       expect(filtered.body.schedules[0].tenantId).toBe("tenant-b");
     });
@@ -169,12 +169,12 @@ describe("flag rollout admin routes", () => {
     it("returns a single schedule", async () => {
       const created = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(BASE_PAYLOAD);
 
       const res = await request(makeApp())
         .get(`/api/v1/admin/flag-rollouts/${created.body.schedule.id}`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       expect(res.status).toBe(200);
       expect(res.body.schedule.id).toBe(created.body.schedule.id);
@@ -183,7 +183,7 @@ describe("flag rollout admin routes", () => {
     it("returns 404 for an unknown id", async () => {
       const res = await request(makeApp())
         .get("/api/v1/admin/flag-rollouts/does-not-exist")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
       expect(res.status).toBe(404);
       expect(res.body.code).toBe("NOT_FOUND");
     });
@@ -195,7 +195,7 @@ describe("flag rollout admin routes", () => {
       // this test is about the pause/resume state machine, not the catch-up.
       const created = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({
           ...BASE_PAYLOAD,
           steps: [
@@ -207,7 +207,7 @@ describe("flag rollout admin routes", () => {
 
       const paused = await request(makeApp())
         .post(`/api/v1/admin/flag-rollouts/${id}/pause`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ actor: "bob", reason: "investigating errors" });
       expect(paused.status).toBe(200);
       expect(paused.body.schedule.status).toBe("paused");
@@ -219,7 +219,7 @@ describe("flag rollout admin routes", () => {
 
       const resumed = await request(makeApp())
         .post(`/api/v1/admin/flag-rollouts/${id}/resume`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ actor: "bob" });
       expect(resumed.status).toBe(200);
       expect(resumed.body.schedule.status).toBe("pending");
@@ -228,18 +228,18 @@ describe("flag rollout admin routes", () => {
     it("returns 409 when pausing an already-paused schedule", async () => {
       const created = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(BASE_PAYLOAD);
       const id = created.body.schedule.id;
 
       await request(makeApp())
         .post(`/api/v1/admin/flag-rollouts/${id}/pause`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ actor: "bob" });
 
       const res = await request(makeApp())
         .post(`/api/v1/admin/flag-rollouts/${id}/pause`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ actor: "bob" });
       expect(res.status).toBe(409);
       expect(res.body.code).toBe("ALREADY_PAUSED");
@@ -248,13 +248,13 @@ describe("flag rollout admin routes", () => {
     it("returns 409 when resuming a schedule that is not paused", async () => {
       const created = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(BASE_PAYLOAD);
       const id = created.body.schedule.id;
 
       const res = await request(makeApp())
         .post(`/api/v1/admin/flag-rollouts/${id}/resume`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ actor: "bob" });
       expect(res.status).toBe(409);
       expect(res.body.code).toBe("INVALID_STATE_TRANSITION");
@@ -265,7 +265,7 @@ describe("flag rollout admin routes", () => {
     it("rolls back a schedule and marks it terminal", async () => {
       const created = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(BASE_PAYLOAD);
       const id = created.body.schedule.id;
 
@@ -275,7 +275,7 @@ describe("flag rollout admin routes", () => {
 
       const res = await request(makeApp())
         .post(`/api/v1/admin/flag-rollouts/${id}/rollback`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ actor: "bob", reason: "error rate spiked after step 1", toStepIndex: -1 });
 
       expect(res.status).toBe(200);
@@ -291,7 +291,7 @@ describe("flag rollout admin routes", () => {
     it("returns 400 when reason is missing", async () => {
       const created = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send(BASE_PAYLOAD);
       const id = created.body.schedule.id;
 
@@ -300,7 +300,7 @@ describe("flag rollout admin routes", () => {
 
       const res = await request(makeApp())
         .post(`/api/v1/admin/flag-rollouts/${id}/rollback`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ actor: "bob" });
 
       expect(res.status).toBe(400);
@@ -310,7 +310,7 @@ describe("flag rollout admin routes", () => {
     it("returns 404 for an unknown id", async () => {
       const res = await request(makeApp())
         .post("/api/v1/admin/flag-rollouts/does-not-exist/rollback")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ actor: "bob", reason: "some reason" });
       expect(res.status).toBe(404);
       expect(res.body.code).toBe("NOT_FOUND");

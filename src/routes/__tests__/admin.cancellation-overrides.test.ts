@@ -8,16 +8,16 @@ const app = express();
 app.use(express.json());
 app.use("/api/v1/admin", adminRouter);
 
-const adminHeaders = { "x-chronopay-admin-token": "test-admin-token" };
+const adminHeaders = { "x-aevonbank-admin-token": "test-admin-token" };
 
 describe("Admin Cancellation Override CRUD API", () => {
   beforeEach(() => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = "test-admin-token";
+    process.env.AEVON_BANK_ADMIN_TOKEN = "test-admin-token";
     defaultSupplierCancellationOverrideStore.reset();
   });
 
   afterEach(() => {
-    delete process.env.CHRONOPAY_ADMIN_TOKEN;
+    delete process.env.AEVON_BANK_ADMIN_TOKEN;
     defaultSupplierCancellationOverrideStore.reset();
   });
 

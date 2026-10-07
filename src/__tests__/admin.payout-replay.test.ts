@@ -50,8 +50,8 @@ describe("Dual-Admin Payout Replay Endpoints", () => {
       
       const res = await request(app)
         .post(`/api/v1/admin/payouts/${mockTransactionId}/replay`)
-        .set("x-chronopay-user-id", "admin-1")
-        .set("x-chronopay-role", "admin")
+        .set("x-aevonbank-user-id", "admin-1")
+        .set("x-aevonbank-role", "admin")
         .send({ reason: "Network issue during payout" });
         
       expect(res.status).toBe(202);
@@ -66,8 +66,8 @@ describe("Dual-Admin Payout Replay Endpoints", () => {
       
       const res = await request(app)
         .post(`/api/v1/admin/payouts/${mockTransactionId}/replay`)
-        .set("x-chronopay-user-id", "admin-1")
-        .set("x-chronopay-role", "admin")
+        .set("x-aevonbank-user-id", "admin-1")
+        .set("x-aevonbank-role", "admin")
         .send({ reason: "" });
         
       expect(res.status).toBe(400);
@@ -80,8 +80,8 @@ describe("Dual-Admin Payout Replay Endpoints", () => {
       
       const res = await request(app)
         .post(`/api/v1/admin/payouts/${mockTransactionId}/replay`)
-        .set("x-chronopay-user-id", "admin-1")
-        .set("x-chronopay-role", "admin")
+        .set("x-aevonbank-user-id", "admin-1")
+        .set("x-aevonbank-role", "admin")
         .send({ reason: "I want to replay" });
         
       expect(res.status).toBe(400);
@@ -112,8 +112,8 @@ describe("Dual-Admin Payout Replay Endpoints", () => {
 
       const res = await request(app)
         .post(`/api/v1/admin/payouts/${mockTransactionId}/replay/approve`)
-        .set("x-chronopay-user-id", "admin-2")
-        .set("x-chronopay-role", "admin")
+        .set("x-aevonbank-user-id", "admin-2")
+        .set("x-aevonbank-role", "admin")
         .send();
         
       expect(res.status).toBe(200);
@@ -134,8 +134,8 @@ describe("Dual-Admin Payout Replay Endpoints", () => {
 
       const res = await request(app)
         .post(`/api/v1/admin/payouts/${mockTransactionId}/replay/approve`)
-        .set("x-chronopay-user-id", "admin-1")
-        .set("x-chronopay-role", "admin")
+        .set("x-aevonbank-user-id", "admin-1")
+        .set("x-aevonbank-role", "admin")
         .send();
         
       expect(res.status).toBe(403);
@@ -158,8 +158,8 @@ describe("Dual-Admin Payout Replay Endpoints", () => {
 
       const res = await request(app)
         .post(`/api/v1/admin/payouts/${mockTransactionId}/replay/approve`)
-        .set("x-chronopay-user-id", "admin-2")
-        .set("x-chronopay-role", "admin")
+        .set("x-aevonbank-user-id", "admin-2")
+        .set("x-aevonbank-role", "admin")
         .send();
         
       expect(res.status).toBe(400);
@@ -179,8 +179,8 @@ describe("Dual-Admin Payout Replay Endpoints", () => {
 
       const res = await request(app)
         .post(`/api/v1/admin/payouts/${mockTransactionId}/replay/approve`)
-        .set("x-chronopay-user-id", "admin-2")
-        .set("x-chronopay-role", "customer") // non-admin role
+        .set("x-aevonbank-user-id", "admin-2")
+        .set("x-aevonbank-role", "customer") // non-admin role
         .send();
         
       expect(res.status).toBe(403);

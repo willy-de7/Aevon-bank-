@@ -14,8 +14,8 @@ Create a new booking intent for a specific slot.
 
 **Authentication:** Required
 
-- Header: `x-chronopay-user-id` (string, required)
-- Header: `x-chronopay-role` (string, required, one of: `customer`, `admin`)
+- Header: `x-aevonbank-user-id` (string, required)
+- Header: `x-aevonbank-role` (string, required, one of: `customer`, `admin`)
 
 **Rate Limit:** 10 requests per 15 minutes per IP
 
@@ -24,8 +24,8 @@ Create a new booking intent for a specific slot.
 ### Headers
 
 ```
-x-chronopay-user-id: customer-123
-x-chronopay-role: customer
+x-aevonbank-user-id: customer-123
+x-aevonbank-role: customer
 Idempotency-Key: booking-intent-123
 Content-Type: application/json
 ```
@@ -203,8 +203,8 @@ Unexpected server error.
 ```bash
 curl -X POST http://localhost:3001/api/v1/booking-intents \
   -H "Content-Type: application/json" \
-  -H "x-chronopay-user-id: customer-123" \
-  -H "x-chronopay-role: customer" \
+  -H "x-aevonbank-user-id: customer-123" \
+  -H "x-aevonbank-role: customer" \
   -d '{
     "slotId": "slot-100",
     "note": "Window seat please"
@@ -216,8 +216,8 @@ curl -X POST http://localhost:3001/api/v1/booking-intents \
 ```bash
 curl -X POST http://localhost:3001/api/v1/booking-intents \
   -H "Content-Type: application/json" \
-  -H "x-chronopay-user-id: customer-123" \
-  -H "x-chronopay-role: customer" \
+  -H "x-aevonbank-user-id: customer-123" \
+  -H "x-aevonbank-role: customer" \
   -d '{
     "slotId": "slot-100"
   }'

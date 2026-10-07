@@ -1,6 +1,6 @@
 # Tracing Conventions
 
-ChronoPay uses **AsyncLocalStorage**-based distributed tracing. Spans are
+Aevon Bank uses **AsyncLocalStorage**-based distributed tracing. Spans are
 lightweight in-process records; no external collector is required to run the
 service, but one can be plugged in via the exporter API.
 

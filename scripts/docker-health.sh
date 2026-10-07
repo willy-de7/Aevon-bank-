@@ -1,5 +1,5 @@
 #!/bin/bash
-# Docker Compose health check and utility script for ChronoPay Backend
+# Docker Compose health check and utility script for Aevon Bank Backend
 # Usage: ./scripts/docker-health.sh [command]
 
 set -e
@@ -11,8 +11,8 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Configuration
-COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME:-chronopay-backend}
-API_CONTAINER_NAME=${API_CONTAINER_NAME:-chronopay-api}
+COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME:-aevon-bank-backend}
+API_CONTAINER_NAME=${API_CONTAINER_NAME:-aevon-bank-api}
 HEALTH_ENDPOINT="http://localhost:3001/health"
 MAX_RETRIES=30
 RETRY_INTERVAL=2
@@ -101,7 +101,7 @@ check_container_health() {
 
 # Start services
 start_services() {
-    log_info "Starting ChronoPay Backend services..."
+    log_info "Starting Aevon Bank Backend services..."
     check_docker
     check_compose
     
@@ -126,7 +126,7 @@ start_services() {
     
     # Wait for health
     if wait_for_health; then
-        log_info "ChronoPay Backend is running at http://localhost:3001"
+        log_info "Aevon Bank Backend is running at http://localhost:3001"
         log_info "API Documentation available at http://localhost:3001/api-docs"
     else
         log_error "Failed to start services properly"
@@ -137,7 +137,7 @@ start_services() {
 
 # Stop services
 stop_services() {
-    log_info "Stopping ChronoPay Backend services..."
+    log_info "Stopping Aevon Bank Backend services..."
     local compose_cmd
     compose_cmd=$(get_compose_cmd)
     $compose_cmd down
@@ -146,7 +146,7 @@ stop_services() {
 
 # Restart services
 restart_services() {
-    log_info "Restarting ChronoPay Backend services..."
+    log_info "Restarting Aevon Bank Backend services..."
     stop_services
     start_services
 }

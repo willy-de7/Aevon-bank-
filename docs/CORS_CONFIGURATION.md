@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay-Backend implements production-grade CORS (Cross-Origin Resource Sharing) configuration with secure allowlist-based validation. This replaces the permissive default `cors()` middleware with a configurable, security-focused solution.
+Aevon-Bank-Backend implements production-grade CORS (Cross-Origin Resource Sharing) configuration with secure allowlist-based validation. This replaces the permissive default `cors()` middleware with a configurable, security-focused solution.
 
 ## Features
 
@@ -51,7 +51,7 @@ NODE_ENV=development
 #### Production
 ```bash
 NODE_ENV=production
-CORS_ALLOWED_ORIGINS=https://app.chronopay.com,https://*.chronopay.com
+CORS_ALLOWED_ORIGINS=https://app.aevonbank.com,https://*.aevonbank.com
 CORS_ALLOW_CREDENTIALS=true
 CORS_MAX_AGE=86400
 ```
@@ -59,7 +59,7 @@ CORS_MAX_AGE=86400
 #### Staging
 ```bash
 NODE_ENV=staging
-CORS_ALLOWED_ORIGINS=https://staging.chronopay.com,https://localhost:3000
+CORS_ALLOWED_ORIGINS=https://staging.aevonbank.com,https://localhost:3000
 CORS_ALLOWED_METHODS=GET,POST,PUT,DELETE,PATCH,OPTIONS
 CORS_ALLOWED_HEADERS=Content-Type,Authorization,X-Request-ID
 ```

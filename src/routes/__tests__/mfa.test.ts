@@ -261,7 +261,7 @@ describe("auth MFA routes", () => {
       const res = await request(app)
         .get("/api/v1/risky")
         .set("Authorization", `Bearer ${token}`)
-        .set("x-chronopay-mfa", verified.body.mfaToken);
+        .set("x-aevonbank-mfa", verified.body.mfaToken);
       expect(res.status).toBe(200);
       expect(res.body).toEqual({ success: true });
     });
@@ -281,7 +281,7 @@ describe("auth MFA routes", () => {
       const res = await request(app)
         .get("/api/v1/risky")
         .set("Authorization", `Bearer ${token}`)
-        .set("x-chronopay-mfa", verified.body.mfaToken);
+        .set("x-aevonbank-mfa", verified.body.mfaToken);
       expect(res.status).toBe(403);
     });
   });

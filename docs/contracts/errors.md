@@ -1,6 +1,6 @@
 # Contract Error Mapping
 
-This document describes how ChronoPay maps upstream contract client errors into deterministic API responses.
+This document describes how Aevon Bank maps upstream contract client errors into deterministic API responses.
 
 ## Goals
 

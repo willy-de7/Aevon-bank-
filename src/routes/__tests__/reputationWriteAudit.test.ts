@@ -19,7 +19,7 @@ import {
 } from "../../services/reputationWriteAudit.js";
 
 const ADMIN_TOKEN = "reputation-audit-test-token";
-process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
 function makeApp() {
   const app = express();
@@ -244,7 +244,7 @@ describe("GET /api/v1/admin/suppliers/:supplierId/reputation/history", () => {
   it("returns 200 with events array and total", async () => {
     const res = await request(makeApp())
       .get("/api/v1/admin/suppliers/sup-http/reputation/history")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.total).toBe(2);
@@ -254,7 +254,7 @@ describe("GET /api/v1/admin/suppliers/:supplierId/reputation/history", () => {
   it("returns empty list for unknown supplier", async () => {
     const res = await request(makeApp())
       .get("/api/v1/admin/suppliers/sup-nobody/reputation/history")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(res.status).toBe(200);
     expect(res.body.total).toBe(0);
     expect(res.body.events).toHaveLength(0);
@@ -263,14 +263,14 @@ describe("GET /api/v1/admin/suppliers/:supplierId/reputation/history", () => {
   it("returns 400 for invalid limit", async () => {
     const res = await request(makeApp())
       .get("/api/v1/admin/suppliers/sup-http/reputation/history?limit=999")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(res.status).toBe(400);
   });
 
   it("returns 400 for invalid since date", async () => {
     const res = await request(makeApp())
       .get("/api/v1/admin/suppliers/sup-http/reputation/history?since=not-a-date")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(res.status).toBe(400);
   });
 });

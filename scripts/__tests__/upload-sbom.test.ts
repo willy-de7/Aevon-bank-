@@ -49,7 +49,7 @@ describe("uploadSbom", () => {
   const baseOptions = {
     portalUrl: "https://sbom.example.com",
     apiKey: "test-key",
-    projectName: "chronopay-backend",
+    projectName: "aevon-bank-backend",
     projectVersion: "v1.2.3",
     sbomContent: VALID_CYCLONEDX,
     retryDelayMs: 0,

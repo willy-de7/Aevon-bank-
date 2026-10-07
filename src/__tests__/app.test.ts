@@ -45,7 +45,7 @@ describe("createApp", () => {
       const app = createApp({ enableDocs: false });
       const res = await request(app).get("/health").set("x-strict-health", "1");
       expect(res.status).toBe(200);
-      expect(res.body).toEqual({ status: "ok", service: "chronopay-backend" });
+      expect(res.body).toEqual({ status: "ok", service: "aevon-bank-backend" });
     });
 
     it("exposes Horizon health in /health when a horizonContractService is provided", async () => {

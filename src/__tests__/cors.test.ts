@@ -135,9 +135,9 @@ describe("getCORSConfig", () => {
 
   it("parses CORS_ALLOWED_ORIGINS in production", () => {
     process.env.NODE_ENV = "production";
-    process.env.CORS_ALLOWED_ORIGINS = "https://app.chronopay.com";
+    process.env.CORS_ALLOWED_ORIGINS = "https://app.aevonbank.com";
     const config = getCORSConfig();
-    expect(config.allowedOrigins).toEqual(["https://app.chronopay.com"]);
+    expect(config.allowedOrigins).toEqual(["https://app.aevonbank.com"]);
   });
 
   it("parses CORS_ALLOW_CREDENTIALS=false", () => {

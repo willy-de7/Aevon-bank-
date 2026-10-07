@@ -1,4 +1,4 @@
-# Idempotency in ChronoPay-Backend
+# Idempotency in Aevon-Bank-Backend
 
 Idempotency allows clients to safely retry requests without accidentally performing the same operation twice. This is particularly critical for payment and scheduling transactions where race conditions or network timeouts could result in duplicate records.
 

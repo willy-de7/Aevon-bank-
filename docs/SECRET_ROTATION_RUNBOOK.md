@@ -1,6 +1,6 @@
-# Secret Rotation Runbook: ChronoPay Backend
+# Secret Rotation Runbook: Aevon Bank Backend
 
-This document outlines the standard operating procedure for rotating sensitive secrets (e.g., JWT signing keys, API keys, Stellar secret keys) within the ChronoPay Backend architecture.
+This document outlines the standard operating procedure for rotating sensitive secrets (e.g., JWT signing keys, API keys, Stellar secret keys) within the Aevon Bank Backend architecture.
 
 ## Overview
 

@@ -1,6 +1,6 @@
 # Supplier payout quarantine
 
-ChronoPay now tracks repeated supplier payout failures and quarantines a payout after a configurable failure threshold is reached.
+Aevon Bank now tracks repeated supplier payout failures and quarantines a payout after a configurable failure threshold is reached.
 
 ## Behavior
 

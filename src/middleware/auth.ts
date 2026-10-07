@@ -11,11 +11,11 @@ import {
   type UserRole,
 } from "./rbac.js";
 
-export type ChronoPayRole = UserRole;
+export type AevonBankRole = UserRole;
 
 export interface AuthContext {
   userId: string;
-  role: ChronoPayRole;
+  role: AevonBankRole;
   claims: VerifiedJwtPayload;
 }
 
@@ -28,7 +28,7 @@ declare global {
   }
 }
 
-export function parseRole(value: unknown): ChronoPayRole | null {
+export function parseRole(value: unknown): AevonBankRole | null {
   const role = typeof value === "string" ? value.trim().toLowerCase() : "";
   if (isKnownRole(role)) {
     return role;
@@ -37,7 +37,7 @@ export function parseRole(value: unknown): ChronoPayRole | null {
   return null;
 }
 
-export function parseJwtRole(value: unknown): ChronoPayRole {
+export function parseJwtRole(value: unknown): AevonBankRole {
   return parseRole(value) ?? "customer";
 }
 
@@ -83,7 +83,7 @@ export function requireAuth(expectedIssuer?: string) {
 // Named export for the header-based auth used by booking-intents
 export { requireAuthenticatedActor as authenticateToken };
 
-export function requireAuthenticatedActor(allowedRoles: ChronoPayRole[]) {
+export function requireAuthenticatedActor(allowedRoles: AevonBankRole[]) {
   const requiredRoles = allowedRoles.map((role) => role.trim().toLowerCase());
   for (const requiredRole of requiredRoles) {
     if (!isKnownRole(requiredRole)) {
@@ -93,8 +93,8 @@ export function requireAuthenticatedActor(allowedRoles: ChronoPayRole[]) {
 
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = req.headers["x-chronopay-user-id"] as string | undefined;
-      const roleHeader = req.headers["x-chronopay-role"] as string | undefined;
+      const userId = req.headers["x-aevonbank-user-id"] as string | undefined;
+      const roleHeader = req.headers["x-aevonbank-role"] as string | undefined;
 
       if (!userId) {
         return res.status(401).json({ success: false, error: "Authentication required." });

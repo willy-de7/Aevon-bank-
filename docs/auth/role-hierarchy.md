@@ -1,6 +1,6 @@
 # RBAC Role Hierarchy
 
-ChronoPay role inheritance is data-driven from `src/config/roles.json`.
+Aevon Bank role inheritance is data-driven from `src/config/roles.json`.
 Each key is a role and each value is the list of roles it implies.
 
 Current hierarchy:

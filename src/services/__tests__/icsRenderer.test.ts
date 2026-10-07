@@ -92,7 +92,7 @@ describe("renderLegIcs", () => {
 
     expect(ics).toContain("BEGIN:VCALENDAR");
     expect(ics).toContain("VERSION:2.0");
-    expect(ics).toContain("PRODID:-//Chronopay//MultiLeg ICS//EN");
+    expect(ics).toContain("PRODID:-//Aevon Bank//MultiLeg ICS//EN");
     expect(ics).toContain("END:VCALENDAR");
     expect(ics).toContain("BEGIN:VEVENT");
     expect(ics).toContain("END:VEVENT");
@@ -129,13 +129,13 @@ describe("renderLegIcs", () => {
     expect(uid1).not.toBe(uid2);
   });
 
-  it("UID includes the leg id and chronopay domain", () => {
+  it("UID includes the leg id and aevonbank domain", () => {
     const booking = makeBooking();
     const leg = booking.legs[0];
     const ics = renderLegIcs({ booking, leg });
     const uid = getIcsProperty(ics, "UID");
     expect(uid).toContain("leg-1-");
-    expect(uid).toMatch(/@chronopay$/);
+    expect(uid).toMatch(/@aevonbank$/);
   });
 
   it("includes DTSTART and DTEND with UTC 'Z' suffix when no TZID", () => {

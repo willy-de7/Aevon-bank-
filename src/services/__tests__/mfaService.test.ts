@@ -29,12 +29,12 @@ function makeService() {
 describe("MfaService.enroll", () => {
   it("creates a pending enrollment and returns secret + otpauth URL", async () => {
     const { service, handle } = makeService();
-    const result = await service.enroll("user-1", { masterKey: MASTER_KEY, issuer: "ChronoPay" });
+    const result = await service.enroll("user-1", { masterKey: MASTER_KEY, issuer: "Aevon Bank" });
 
     expect(result.secret).toHaveLength(32);
     expect(base32Decode(result.secret)).toHaveLength(20);
     expect(result.otpauthUrl).toContain(`secret=${result.secret}`);
-    expect(result.otpauthUrl).toContain("issuer=ChronoPay");
+    expect(result.otpauthUrl).toContain("issuer=Aevon Bank");
     expect(result.digits).toBe(6);
     expect(result.period).toBe(30);
     expect(result.alreadyVerified).toBe(false);
@@ -91,7 +91,7 @@ describe("MfaService.verifyCode", () => {
     const result = await service.verifyCode("user-1", code, {
       masterKey: MASTER_KEY,
       challengeSecret: CHALLENGE_SECRET,
-      issuer: "ChronoPay",
+      issuer: "Aevon Bank",
       nowMs,
     });
 
@@ -227,8 +227,8 @@ describe("MfaService challenge tokens", () => {
   const nowMs = 1_700_000_000_000;
   const base = {
     challengeSecret: CHALLENGE_SECRET,
-    issuer: "ChronoPay",
-    audience: "chronopay-api",
+    issuer: "Aevon Bank",
+    audience: "aevon-bank-api",
     nowMs,
   };
 
@@ -253,8 +253,8 @@ describe("MfaService challenge tokens", () => {
     const { signJwt } = await import("../../utils/jwt.js");
     const forged = await signJwt({ sub: "user-1", iat: Math.floor(nowMs / 1000), mfa_at: Math.floor(nowMs / 1000) }, "jwt-secret-not-mfa-0000", {
       expiresInSec: 300,
-      issuer: "ChronoPay",
-      audience: "chronopay-api",
+      issuer: "Aevon Bank",
+      audience: "aevon-bank-api",
     });
 
     await expect(service.verifyChallenge(forged, { ...base })).rejects.toThrow(MfaChallengeInvalidError);
@@ -288,8 +288,8 @@ describe("MfaService challenge tokens", () => {
     const { signJwt } = await import("../../utils/jwt.js");
     const noClaim = await signJwt({ sub: "user-1", iat: Math.floor(nowMs / 1000) }, CHALLENGE_SECRET, {
       expiresInSec: 300,
-      issuer: "ChronoPay",
-      audience: "chronopay-api",
+      issuer: "Aevon Bank",
+      audience: "aevon-bank-api",
     });
 
     await expect(service.verifyChallenge(noClaim, { ...base })).rejects.toThrow(MfaChallengeInvalidError);
@@ -301,7 +301,7 @@ describe("MfaService challenge tokens", () => {
     const noSubject = await signJwt(
       { iat: Math.floor(nowMs / 1000), mfa_at: Math.floor(nowMs / 1000) },
       CHALLENGE_SECRET,
-      { expiresInSec: 300, issuer: "ChronoPay", audience: "chronopay-api" },
+      { expiresInSec: 300, issuer: "Aevon Bank", audience: "aevon-bank-api" },
     );
 
     await expect(service.verifyChallenge(noSubject, { ...base })).rejects.toThrow(MfaChallengeInvalidError);
@@ -320,7 +320,7 @@ describe("MfaService configuration errors", () => {
 
   it("issues and verifies challenges using environment-based defaults when options are omitted", async () => {
     process.env.MFA_CHALLENGE_SECRET = CHALLENGE_SECRET;
-    process.env.MFA_ISSUER = "ChronoPay";
+    process.env.MFA_ISSUER = "Aevon Bank";
     configService.refresh();
     await flushMicrotasks(20);
 

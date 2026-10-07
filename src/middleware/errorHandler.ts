@@ -1,5 +1,5 @@
 /**
- * Global error handling middleware for ChronoPay API.
+ * Global error handling middleware for Aevon Bank API.
  *
  * Emits the canonical flat error envelope:
  *   { success: false, code, error, requestId?, timestamp, details?, stack? }

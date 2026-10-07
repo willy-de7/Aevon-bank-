@@ -18,7 +18,7 @@ import adminRouter from "../admin.js";
 import { strikeService } from "../../services/strikeService.js";
 
 const ADMIN_TOKEN = "noshow-appeal-test-token";
-process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
 function makeApp() {
   const app = express();
@@ -41,7 +41,7 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     it("issues a no-show penalty strike", async () => {
       const res = await request(app)
         .post("/api/v1/admin/buyers/buyer-ns-1/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show: buyer did not attend booking", intentId: "intent-001", slotId: "slot-001" });
 
       expect(res.status).toBe(201);
@@ -62,7 +62,7 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
       // First, issue a strike
       const issueRes = await request(app)
         .post("/api/v1/admin/buyers/buyer-appeal-evidence/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show penalty" });
       const strikeId = issueRes.body.strike.id;
 
@@ -73,7 +73,7 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
       ];
       const appealRes = await request(app)
         .post(`/api/v1/admin/buyers/buyer-appeal-evidence/strikes/${strikeId}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "I was at the location but the app crashed", evidence });
 
       expect(appealRes.status).toBe(200);
@@ -87,13 +87,13 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     it("appeals without evidence (optional field)", async () => {
       const issueRes = await request(app)
         .post("/api/v1/admin/buyers/buyer-no-evidence/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show penalty" });
       const strikeId = issueRes.body.strike.id;
 
       const appealRes = await request(app)
         .post(`/api/v1/admin/buyers/buyer-no-evidence/strikes/${strikeId}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "I was present" });
 
       expect(appealRes.status).toBe(200);
@@ -103,20 +103,20 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     it("rejects duplicate appeal on an already appealed strike", async () => {
       const issueRes = await request(app)
         .post("/api/v1/admin/buyers/buyer-dup-appeal/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show" });
       const strikeId = issueRes.body.strike.id;
 
       // First appeal succeeds
       await request(app)
         .post(`/api/v1/admin/buyers/buyer-dup-appeal/strikes/${strikeId}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "First appeal" });
 
       // Duplicate appeal is rejected
       const dupRes = await request(app)
         .post(`/api/v1/admin/buyers/buyer-dup-appeal/strikes/${strikeId}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Second appeal" });
 
       expect(dupRes.status).toBe(400);
@@ -126,7 +126,7 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     it("rejects appeal of non-existent strike", async () => {
       const res = await request(app)
         .post("/api/v1/admin/buyers/buyer-x/strikes/non-existent-id/appeal")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show" });
 
       expect(res.status).toBe(404);
@@ -139,12 +139,12 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     it("returns strikes and suspension status", async () => {
       await request(app)
         .post("/api/v1/admin/buyers/buyer-get/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Strike 1" });
 
       const res = await request(app)
         .get("/api/v1/admin/buyers/buyer-get/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -160,19 +160,19 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
       // Issue and appeal a strike
       const issueRes = await request(app)
         .post("/api/v1/admin/buyers/buyer-arb/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show penalty" });
       const strikeId = issueRes.body.strike.id;
 
       await request(app)
         .post(`/api/v1/admin/buyers/buyer-arb/strikes/${strikeId}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Appeal reason", evidence: ["evidence-1"] });
 
       // Escalate to arbitration
       const escalateRes = await request(app)
         .post(`/api/v1/admin/strikes/${strikeId}/escalate`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       expect(escalateRes.status).toBe(200);
       expect(escalateRes.body.success).toBe(true);
@@ -184,7 +184,7 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
       // Verify it appears in the queue
       const queueRes = await request(app)
         .get("/api/v1/admin/strikes/arbitration/queue?status=pending")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       expect(queueRes.body.queue.length).toBe(1);
     });
@@ -192,14 +192,14 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     it("rejects escalation of a non-appealed strike", async () => {
       const issueRes = await request(app)
         .post("/api/v1/admin/buyers/buyer-no-appeal/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show" });
       const strikeId = issueRes.body.strike.id;
 
       // Try to escalate an active (not appealed) strike
       const res = await request(app)
         .post(`/api/v1/admin/strikes/${strikeId}/escalate`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       expect(res.status).toBe(409);
       expect(res.body.success).toBe(false);
@@ -208,24 +208,24 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     it("rejects duplicate escalation", async () => {
       const issueRes = await request(app)
         .post("/api/v1/admin/buyers/buyer-dup-esc/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show" });
       const strikeId = issueRes.body.strike.id;
 
       await request(app)
         .post(`/api/v1/admin/buyers/buyer-dup-esc/strikes/${strikeId}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Appeal" });
 
       // First escalation succeeds
       await request(app)
         .post(`/api/v1/admin/strikes/${strikeId}/escalate`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       // Duplicate fails
       const dupRes = await request(app)
         .post(`/api/v1/admin/strikes/${strikeId}/escalate`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       expect(dupRes.status).toBe(409);
     });
@@ -237,23 +237,23 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     it("overturns a strike and reinstates buyer", async () => {
       const issueRes = await request(app)
         .post("/api/v1/admin/buyers/buyer-overturn/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show" });
       const strikeId = issueRes.body.strike.id;
 
       await request(app)
         .post(`/api/v1/admin/buyers/buyer-overturn/strikes/${strikeId}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "I was present" });
 
       await request(app)
         .post(`/api/v1/admin/strikes/${strikeId}/escalate`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       // Overturn the strike
       const decideRes = await request(app)
         .post(`/api/v1/admin/strikes/${strikeId}/arbitration/decide`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ decision: "OVERTURNED" });
 
       expect(decideRes.status).toBe(200);
@@ -267,22 +267,22 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     it("upholds a strike and confirms penalty stands", async () => {
       const issueRes = await request(app)
         .post("/api/v1/admin/buyers/buyer-uphold/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show" });
       const strikeId = issueRes.body.strike.id;
 
       await request(app)
         .post(`/api/v1/admin/buyers/buyer-uphold/strikes/${strikeId}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Appeal" });
 
       await request(app)
         .post(`/api/v1/admin/strikes/${strikeId}/escalate`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       const decideRes = await request(app)
         .post(`/api/v1/admin/strikes/${strikeId}/arbitration/decide`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ decision: "UPHELD" });
 
       expect(decideRes.status).toBe(200);
@@ -293,7 +293,7 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     it("rejects decision with invalid value", async () => {
       const res = await request(app)
         .post("/api/v1/admin/strikes/some-strike/arbitration/decide")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ decision: "INVALID" });
 
       expect(res.status).toBe(400);
@@ -302,19 +302,19 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     it("rejects decision for non-escalated strike", async () => {
       const issueRes = await request(app)
         .post("/api/v1/admin/buyers/buyer-no-esc/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show" });
       const strikeId = issueRes.body.strike.id;
 
       await request(app)
         .post(`/api/v1/admin/buyers/buyer-no-esc/strikes/${strikeId}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Appeal" });
 
       // Try to decide without escalating
       const res = await request(app)
         .post(`/api/v1/admin/strikes/${strikeId}/arbitration/decide`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ decision: "UPHELD" });
 
       expect(res.status).toBe(409);
@@ -328,31 +328,31 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
       // Create two appeals and escalate them
       const issue1 = await request(app)
         .post("/api/v1/admin/buyers/buyer-q1/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show 1" });
       await request(app)
         .post(`/api/v1/admin/buyers/buyer-q1/strikes/${issue1.body.strike.id}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Appeal 1" });
       await request(app)
         .post(`/api/v1/admin/strikes/${issue1.body.strike.id}/escalate`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       const issue2 = await request(app)
         .post("/api/v1/admin/buyers/buyer-q2/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No-show 2" });
       await request(app)
         .post(`/api/v1/admin/buyers/buyer-q2/strikes/${issue2.body.strike.id}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Appeal 2" });
       await request(app)
         .post(`/api/v1/admin/strikes/${issue2.body.strike.id}/escalate`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       const queueRes = await request(app)
         .get("/api/v1/admin/strikes/arbitration/queue")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       expect(queueRes.status).toBe(200);
       expect(queueRes.body.queue.length).toBe(2);
@@ -361,7 +361,7 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
       // Filter by pending
       const pendingRes = await request(app)
         .get("/api/v1/admin/strikes/arbitration/queue?status=pending")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       expect(pendingRes.body.queue.length).toBe(2);
     });
@@ -373,7 +373,7 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     // 1. Issue strike
     const issueRes = await request(app)
       .post("/api/v1/admin/buyers/buyer-e2e/strikes")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({ reason: "No-show penalty", intentId: "intent-e2e", slotId: "slot-e2e" });
 
     expect(issueRes.status).toBe(201);
@@ -382,7 +382,7 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     // 2. Appeal with evidence
     const appealRes = await request(app)
       .post(`/api/v1/admin/buyers/buyer-e2e/strikes/${strikeId}/appeal`)
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({
         reason: "GPS shows I was at the venue",
         evidence: ["gps-screenshot.png", "chat-with-host.png"],
@@ -395,7 +395,7 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     // 3. Escalate to arbitration queue
     const escalateRes = await request(app)
       .post(`/api/v1/admin/strikes/${strikeId}/escalate`)
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
     expect(escalateRes.status).toBe(200);
     expect(escalateRes.body.queueItem.status).toBe("pending");
@@ -403,14 +403,14 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     // 4. Verify item is in the queue
     const queueRes = await request(app)
       .get("/api/v1/admin/strikes/arbitration/queue?status=pending")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
     expect(queueRes.body.queue.some((item: any) => item.strikeId === strikeId)).toBe(true);
 
     // 5. Decide: overturn the strike
     const decideRes = await request(app)
       .post(`/api/v1/admin/strikes/${strikeId}/arbitration/decide`)
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({ decision: "OVERTURNED" });
 
     expect(decideRes.status).toBe(200);
@@ -420,14 +420,14 @@ describe("No-Show Penalty Appeal & Arbitration Workflow", () => {
     // 6. Verify the decided item is not in the pending queue
     const pendingAfter = await request(app)
       .get("/api/v1/admin/strikes/arbitration/queue?status=pending")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
     expect(pendingAfter.body.queue.some((item: any) => item.strikeId === strikeId)).toBe(false);
 
     // 7. Verify it appears in full queue
     const allAfter = await request(app)
       .get("/api/v1/admin/strikes/arbitration/queue")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
     const decidedItem = allAfter.body.queue.find((item: any) => item.strikeId === strikeId);
     expect(decidedItem).toBeDefined();

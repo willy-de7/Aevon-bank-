@@ -1,4 +1,4 @@
-# ChronoPay API — Header Validation Reference
+# Aevon Bank API — Header Validation Reference
 
 > **Module:** `src/middleware/headerValidation.ts`  
 > **Applies to:** All routes that use idempotency, request tracing, or webhook signature verification.
@@ -7,7 +7,7 @@
 
 ## Overview
 
-ChronoPay enforces strict validation rules on key HTTP request headers. The goals are:
+Aevon Bank enforces strict validation rules on key HTTP request headers. The goals are:
 
 1. **Security** — Prevent header-injection attacks (CRLF, null-byte), log-pollution, and Redis key-space abuse.
 2. **Consistency** — Ensure that all consumers of these headers receive values in a predictable, safe format.
@@ -102,7 +102,7 @@ X-Request-Id: req\r\nX-Injected: evil
 | Allowed chars    | Hex digits `[a-fA-F0-9]`, optionally prefixed with `sha256=` |
 | HTTP error       | `400 Bad Request` when absent or invalid |
 
-**Purpose:** HMAC-SHA256 signature header sent by the webhook originator to authenticate the payload. ChronoPay supports both raw hex digests and the GitHub-style `sha256=<hex>` format.
+**Purpose:** HMAC-SHA256 signature header sent by the webhook originator to authenticate the payload. Aevon Bank supports both raw hex digests and the GitHub-style `sha256=<hex>` format.
 
 **Valid examples:**
 ```

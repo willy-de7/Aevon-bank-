@@ -2,7 +2,7 @@
  * memoHashCanonical.ts
  *
  * Canonical algorithm for deriving and verifying the Stellar memo hash that
- * backs a ChronoPay redemption receipt.
+ * backs a Aevon Bank redemption receipt.
  *
  * ## Canonicalization contract
  *

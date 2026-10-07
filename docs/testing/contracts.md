@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the API contract test suite for ChronoPay Backend. Contract tests validate the public API's behavior (status codes, response envelopes, headers, pagination, error handling) without making real external calls. They provide a deterministic, fast baseline for regression detection as features evolve.
+This document describes the API contract test suite for Aevon Bank Backend. Contract tests validate the public API's behavior (status codes, response envelopes, headers, pagination, error handling) without making real external calls. They provide a deterministic, fast baseline for regression detection as features evolve.
 
 ## What Are Contract Tests?
 

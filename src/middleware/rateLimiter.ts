@@ -30,7 +30,7 @@ import { fairQueueBurnRateTotal, fairQueueWaitTimeSeconds } from "../metrics.js"
 export function generateRateLimitKey(req: Request | null | undefined): string {
   const safeReq = req && typeof req === 'object' ? (req as Partial<Request> & { auth?: { userId?: unknown }; user?: { sub?: unknown; id?: unknown }; apiKeyId?: unknown }) : undefined;
 
-  // Header-based identity (x-chronopay-user-id) — highest priority
+  // Header-based identity (x-aevonbank-user-id) — highest priority
   const authUserId = safeReq?.auth?.userId;
   if (isNonEmptyValue(authUserId)) {
     return `rl:user:${String(authUserId)}`;

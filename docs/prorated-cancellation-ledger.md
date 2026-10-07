@@ -1,6 +1,6 @@
 # Prorated-Cancellation Reversal Ledger
 
-Issue: [#489 — Add prorated-cancellation ledger reversal supporting partial escrow release](https://github.com/Chronopay-Org/ChronoPay-Backend/issues/489)
+Issue: [#489 — Add prorated-cancellation ledger reversal supporting partial escrow release](https://github.com/AevonBank-Org/Aevon-Bank-Backend/issues/489)
 
 ## Overview
 

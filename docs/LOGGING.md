@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay Backend uses **pino**, a high-performance JSON logging library, for production-grade structured logging. This guide covers implementation details, usage patterns, and best practices.
+Aevon Bank Backend uses **pino**, a high-performance JSON logging library, for production-grade structured logging. This guide covers implementation details, usage patterns, and best practices.
 
 ## Features
 
@@ -95,8 +95,8 @@ authLogger.info('Token validated');
 
 Example output:
 ```
-[12:34:56.789] INFO (chronopay-backend): User logged in
-    service: "chronopay-backend"
+[12:34:56.789] INFO (aevon-bank-backend): User logged in
+    service: "aevon-bank-backend"
     version: "0.1.0"
     environment: "development"
     userId: "user-123"
@@ -110,7 +110,7 @@ Example output:
 
 Example output:
 ```json
-{"level":"INFO","time":"2026-03-24T12:34:56.789Z","pid":123,"hostname":"server-1","service":"chronopay-backend","version":"0.1.0","environment":"production","userId":"user-123","msg":"User logged in"}
+{"level":"INFO","time":"2026-03-24T12:34:56.789Z","pid":123,"hostname":"server-1","service":"aevon-bank-backend","version":"0.1.0","environment":"production","userId":"user-123","msg":"User logged in"}
 ```
 
 ### Test (NODE_ENV=test)
@@ -179,7 +179,7 @@ All HTTP requests are automatically logged with standardized fields:
 ### Identity Fields
 
 Identity fields (`userId`, `apiKeyId`) are populated from:
-1. Auth middleware (via `x-chronopay-user-id` header)
+1. Auth middleware (via `x-aevonbank-user-id` header)
 2. API key middleware (via `x-api-key` header)
 3. Custom `x-api-key-id` header
 
@@ -527,7 +527,7 @@ src/
 Environment variables:
 
 - `NODE_ENV`: Controls log level and format (`development`, `production`, `test`)
-- `SERVICE_NAME`: Service identifier (default: `chronopay-backend`)
+- `SERVICE_NAME`: Service identifier (default: `aevon-bank-backend`)
 - `SERVICE_VERSION`: Service version (default: `0.1.0`)
 - `HOSTNAME`: Server hostname (auto-detected if not set)
 
@@ -543,4 +543,4 @@ For questions or issues related to logging:
 
 **Version**: 1.0.0  
 **Last Updated**: March 24, 2026  
-**Maintainer**: ChronoPay Backend Team
+**Maintainer**: Aevon Bank Backend Team

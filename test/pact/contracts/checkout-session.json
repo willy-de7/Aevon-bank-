@@ -1,6 +1,6 @@
 {
   "consumer": "frontend-client",
-  "provider": "chronopay-backend",
+  "provider": "aevon-bank-backend",
   "interactions": [
     {
       "description": "creates a checkout session",

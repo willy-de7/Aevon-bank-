@@ -113,7 +113,7 @@ function isAllDayRange(startMs: number, endMs: number): boolean {
 export function renderLegIcs(options: IcsRenderOptions): string {
   const { booking, leg, canceled = false, tzid, organizerName, organizerEmail, description } = options;
 
-  const uid = `${leg.legId}-${randomUUID()}@chronopay`;
+  const uid = `${leg.legId}-${randomUUID()}@aevonbank`;
   const now = new Date();
   const isAllDay = isAllDayRange(leg.startTime, leg.endTime);
 
@@ -126,7 +126,7 @@ export function renderLegIcs(options: IcsRenderOptions): string {
   const lines: string[] = [];
   lines.push("BEGIN:VCALENDAR");
   lines.push("VERSION:2.0");
-  lines.push("PRODID:-//Chronopay//MultiLeg ICS//EN");
+  lines.push("PRODID:-//Aevon Bank//MultiLeg ICS//EN");
   lines.push(`METHOD:${method}`);
   lines.push("CALSCALE:GREGORIAN");
   lines.push("BEGIN:VEVENT");

@@ -25,7 +25,7 @@ const EXAMPLE_EVENT = {
     body: { message: "hello" },
     context: { userId: "user-1" },
   },
-  service: "chronopay-backend",
+  service: "aevon-bank-backend",
   environment: "test",
 };
 
@@ -64,10 +64,10 @@ describe("AuditExportService", () => {
   let service: AuditExportService;
 
   beforeEach(async () => {
-    process.env.CHRONOPAY_AUDIT_EXPORT_SECRET = "audit-secret";
+    process.env.AEVON_BANK_AUDIT_EXPORT_SECRET = "audit-secret";
     // Use a large budget so DP noise doesn't interfere with pre-existing tests.
-    process.env.CHRONOPAY_DP_EPSILON = "1";
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "chronopay-audit-export-"));
+    process.env.AEVON_BANK_DP_EPSILON = "1";
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "aevonbank-audit-export-"));
     const auditLogFile = path.join(tempDir, "audit.log");
     logger = new AuditLogger({ filePath: auditLogFile, environment: "test" });
     await fs.writeFile(auditLogFile, `${JSON.stringify(EXAMPLE_EVENT)}\n`, "utf8");
@@ -80,10 +80,10 @@ describe("AuditExportService", () => {
   });
 
   afterEach(async () => {
-    delete process.env.CHRONOPAY_AUDIT_EXPORT_SECRET;
-    delete process.env.CHRONOPAY_AUDIT_EXPORT_TTL_SECONDS;
-    delete process.env.CHRONOPAY_DP_EPSILON;
-    delete process.env.CHRONOPAY_DP_ENABLED;
+    delete process.env.AEVON_BANK_AUDIT_EXPORT_SECRET;
+    delete process.env.AEVON_BANK_AUDIT_EXPORT_TTL_SECONDS;
+    delete process.env.AEVON_BANK_DP_EPSILON;
+    delete process.env.AEVON_BANK_DP_ENABLED;
     try {
       await fs.rm(tempDir, { recursive: true, force: true });
     } catch {
@@ -127,7 +127,7 @@ describe("AuditExportService", () => {
     const { downloadUrl } = await service.createExport("https://example.com");
     const token = new URL(downloadUrl).searchParams.get("token")!;
     const [exportId] = Buffer.from(token, "base64url").toString("utf8").split(":");
-    const expiredToken = makeToken(exportId, Date.now() - 1000, process.env.CHRONOPAY_AUDIT_EXPORT_SECRET!);
+    const expiredToken = makeToken(exportId, Date.now() - 1000, process.env.AEVON_BANK_AUDIT_EXPORT_SECRET!);
 
     await expect(service.getExport(expiredToken)).rejects.toThrow("Export token expired");
   });
@@ -160,15 +160,15 @@ describe("AuditExportService — DP analytics summary", () => {
   }
 
   beforeEach(async () => {
-    process.env.CHRONOPAY_AUDIT_EXPORT_SECRET = "audit-secret";
-    process.env.CHRONOPAY_DP_EPSILON = "1";
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "chronopay-dp-test-"));
+    process.env.AEVON_BANK_AUDIT_EXPORT_SECRET = "audit-secret";
+    process.env.AEVON_BANK_DP_EPSILON = "1";
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "aevonbank-dp-test-"));
   });
 
   afterEach(async () => {
-    delete process.env.CHRONOPAY_AUDIT_EXPORT_SECRET;
-    delete process.env.CHRONOPAY_DP_EPSILON;
-    delete process.env.CHRONOPAY_DP_ENABLED;
+    delete process.env.AEVON_BANK_AUDIT_EXPORT_SECRET;
+    delete process.env.AEVON_BANK_DP_EPSILON;
+    delete process.env.AEVON_BANK_DP_ENABLED;
     try {
       await fs.rm(tempDir, { recursive: true, force: true });
     } catch {
@@ -212,7 +212,7 @@ describe("AuditExportService — DP analytics summary", () => {
   it("differentialPrivacy metadata has mechanism=laplace and correct epsilon", async () => {
     const auditLogFile = path.join(tempDir, "audit.log");
     await fs.writeFile(auditLogFile, `${JSON.stringify(EXAMPLE_EVENT)}\n`, "utf8");
-    process.env.CHRONOPAY_DP_EPSILON = "0.5";
+    process.env.AEVON_BANK_DP_EPSILON = "0.5";
     const service = makeService(auditLogFile);
 
     const { downloadUrl } = await service.createExport("https://example.com");
@@ -317,7 +317,7 @@ describe("AuditExportService — DP analytics summary", () => {
   // -------------------------------------------------------------------------
 
   it("when DP is disabled, summary carries dpDisabled=true and exact counts", async () => {
-    process.env.CHRONOPAY_DP_ENABLED = "false";
+    process.env.AEVON_BANK_DP_ENABLED = "false";
     const auditLogFile = path.join(tempDir, "audit.log");
     await fs.writeFile(auditLogFile, `${JSON.stringify(EXAMPLE_EVENT)}\n`, "utf8");
     const service = makeService(auditLogFile);
@@ -342,7 +342,7 @@ describe("AuditExportService — DP analytics summary", () => {
     const auditLogFile = path.join(tempDir, "audit.log");
     await fs.writeFile(auditLogFile, `${JSON.stringify(EXAMPLE_EVENT)}\n`, "utf8");
     // Budget of exactly 1.0 — first export consumes it, second should fail.
-    process.env.CHRONOPAY_DP_EPSILON = "1";
+    process.env.AEVON_BANK_DP_EPSILON = "1";
     const service = makeService(auditLogFile, { audit_events: 1.0 });
 
     await service.createExport("https://example.com"); // consumes 1.0 — OK
@@ -352,7 +352,7 @@ describe("AuditExportService — DP analytics summary", () => {
   it("budget tracker accumulates epsilon across multiple exports", async () => {
     const auditLogFile = path.join(tempDir, "audit.log");
     await fs.writeFile(auditLogFile, `${JSON.stringify(EXAMPLE_EVENT)}\n`, "utf8");
-    process.env.CHRONOPAY_DP_EPSILON = "1";
+    process.env.AEVON_BANK_DP_EPSILON = "1";
     const tracker = new EpsilonBudgetTracker(
       new InMemoryBudgetStore(),
       () => {},
@@ -376,7 +376,7 @@ describe("AuditExportService — DP analytics summary", () => {
   it("budget alarm fires (warning) when crossing 80% threshold across exports", async () => {
     const auditLogFile = path.join(tempDir, "audit.log");
     await fs.writeFile(auditLogFile, `${JSON.stringify(EXAMPLE_EVENT)}\n`, "utf8");
-    process.env.CHRONOPAY_DP_EPSILON = "1";
+    process.env.AEVON_BANK_DP_EPSILON = "1";
 
     const alarms: Array<{ level: string }> = [];
     const tracker = new EpsilonBudgetTracker(

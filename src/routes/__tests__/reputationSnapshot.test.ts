@@ -22,7 +22,7 @@ import {
 } from "../../services/reputationSnapshotService.js";
 
 const ADMIN_TOKEN = "snapshot-test-admin-token";
-process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
 function makeApp() {
   const app = express();
@@ -208,7 +208,7 @@ describe("POST /api/v1/admin/reputation/snapshots/run", () => {
   it("returns 400 when suppliers is missing", async () => {
     const res = await request(makeApp())
       .post("/api/v1/admin/reputation/snapshots/run")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({});
     expect(res.status).toBe(400);
   });
@@ -216,7 +216,7 @@ describe("POST /api/v1/admin/reputation/snapshots/run", () => {
   it("returns 400 when suppliers is empty array", async () => {
     const res = await request(makeApp())
       .post("/api/v1/admin/reputation/snapshots/run")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({ suppliers: [] });
     expect(res.status).toBe(400);
   });
@@ -224,7 +224,7 @@ describe("POST /api/v1/admin/reputation/snapshots/run", () => {
   it("returns 400 when a supplier has an invalid score", async () => {
     const res = await request(makeApp())
       .post("/api/v1/admin/reputation/snapshots/run")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({ suppliers: [{ supplierId: "sup-1", score: "not-a-number" }] });
     expect(res.status).toBe(400);
   });
@@ -232,7 +232,7 @@ describe("POST /api/v1/admin/reputation/snapshots/run", () => {
   it("returns 400 for an invalid snapshotDate", async () => {
     const res = await request(makeApp())
       .post("/api/v1/admin/reputation/snapshots/run")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({ suppliers: [{ supplierId: "sup-1", score: 80 }], snapshotDate: "not-a-date" });
     expect(res.status).toBe(400);
   });
@@ -240,7 +240,7 @@ describe("POST /api/v1/admin/reputation/snapshots/run", () => {
   it("returns 200 with written count on success", async () => {
     const res = await request(makeApp())
       .post("/api/v1/admin/reputation/snapshots/run")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({ suppliers: [{ supplierId: "sup-1", score: 85 }, { supplierId: "sup-2", score: 60 }] });
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
@@ -256,12 +256,12 @@ describe("POST /api/v1/admin/reputation/snapshots/run", () => {
     };
     await request(makeApp())
       .post("/api/v1/admin/reputation/snapshots/run")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send(body);
 
     const res2 = await request(makeApp())
       .post("/api/v1/admin/reputation/snapshots/run")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send(body);
     expect(res2.status).toBe(200);
     expect(res2.body.written).toBe(0);
@@ -291,7 +291,7 @@ describe("GET /api/v1/admin/reputation/snapshots", () => {
   it("returns all snapshots", async () => {
     const res = await request(makeApp())
       .get("/api/v1/admin/reputation/snapshots")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(res.status).toBe(200);
     expect(res.body.total).toBe(3);
   });
@@ -299,7 +299,7 @@ describe("GET /api/v1/admin/reputation/snapshots", () => {
   it("filters by supplierId", async () => {
     const res = await request(makeApp())
       .get("/api/v1/admin/reputation/snapshots?supplierId=sup-a")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(res.status).toBe(200);
     expect(res.body.total).toBe(2);
     expect(res.body.snapshots.every((s: { supplierId: string }) => s.supplierId === "sup-a")).toBe(true);
@@ -308,7 +308,7 @@ describe("GET /api/v1/admin/reputation/snapshots", () => {
   it("filters by since", async () => {
     const res = await request(makeApp())
       .get("/api/v1/admin/reputation/snapshots?since=2025-07-02")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(res.status).toBe(200);
     expect(res.body.snapshots.every((s: { snapshotDate: string }) => s.snapshotDate >= "2025-07-02")).toBe(true);
   });
@@ -316,7 +316,7 @@ describe("GET /api/v1/admin/reputation/snapshots", () => {
   it("returns 400 for invalid limit", async () => {
     const res = await request(makeApp())
       .get("/api/v1/admin/reputation/snapshots?limit=999")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(res.status).toBe(400);
   });
 });

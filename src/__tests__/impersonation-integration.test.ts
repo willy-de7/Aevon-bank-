@@ -253,7 +253,7 @@ describe("Impersonation Session Recording (Integration)", () => {
     let adminApp: express.Express;
 
     beforeEach(() => {
-      process.env.CHRONOPAY_ADMIN_TOKEN = TEST_ADMIN_TOKEN;
+      process.env.AEVON_BANK_ADMIN_TOKEN = TEST_ADMIN_TOKEN;
       adminApp = createApp({
         enableDocs: false,
         dbPool: null,
@@ -262,7 +262,7 @@ describe("Impersonation Session Recording (Integration)", () => {
     });
 
     afterEach(() => {
-      delete process.env.CHRONOPAY_ADMIN_TOKEN;
+      delete process.env.AEVON_BANK_ADMIN_TOKEN;
     });
 
     it("should list impersonation sessions via admin API", async () => {
@@ -279,7 +279,7 @@ describe("Impersonation Session Recording (Integration)", () => {
 
       const response = await request(adminApp)
         .get("/api/v1/admin/impersonation/sessions")
-        .set("x-chronopay-admin-token", TEST_ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", TEST_ADMIN_TOKEN)
         .set("Content-Type", "application/json")
         .expect(200);
 
@@ -301,7 +301,7 @@ describe("Impersonation Session Recording (Integration)", () => {
 
       const response = await request(adminApp)
         .get("/api/v1/admin/impersonation/sessions?targetUserId=user-alpha")
-        .set("x-chronopay-admin-token", TEST_ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", TEST_ADMIN_TOKEN)
         .set("Content-Type", "application/json")
         .expect(200);
 
@@ -319,7 +319,7 @@ describe("Impersonation Session Recording (Integration)", () => {
 
       const response = await request(adminApp)
         .get(`/api/v1/admin/impersonation/sessions/${session.sessionId}`)
-        .set("x-chronopay-admin-token", TEST_ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", TEST_ADMIN_TOKEN)
         .set("Content-Type", "application/json")
         .expect(200);
 
@@ -339,7 +339,7 @@ describe("Impersonation Session Recording (Integration)", () => {
         .post(
           `/api/v1/admin/impersonation/sessions/${session.sessionId}/close`,
         )
-        .set("x-chronopay-admin-token", TEST_ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", TEST_ADMIN_TOKEN)
         .set("Content-Type", "application/json")
         .send({})
         .expect(200);
@@ -354,7 +354,7 @@ describe("Impersonation Session Recording (Integration)", () => {
     it("should return 404 for non-existent session", async () => {
       await request(adminApp)
         .get("/api/v1/admin/impersonation/sessions/non-existent-id")
-        .set("x-chronopay-admin-token", TEST_ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", TEST_ADMIN_TOKEN)
         .set("Content-Type", "application/json")
         .expect(404);
     });
@@ -367,7 +367,7 @@ describe("Impersonation Session Recording (Integration)", () => {
     let adminApp: express.Express;
 
     beforeEach(() => {
-      process.env.CHRONOPAY_ADMIN_TOKEN = TEST_ADMIN_TOKEN;
+      process.env.AEVON_BANK_ADMIN_TOKEN = TEST_ADMIN_TOKEN;
       adminApp = createApp({
         enableDocs: false,
         dbPool: null,
@@ -376,13 +376,13 @@ describe("Impersonation Session Recording (Integration)", () => {
     });
 
     afterEach(() => {
-      delete process.env.CHRONOPAY_ADMIN_TOKEN;
+      delete process.env.AEVON_BANK_ADMIN_TOKEN;
     });
 
     it("should reject invalid since timestamp with 400", async () => {
       const response = await request(adminApp)
         .get("/api/v1/admin/impersonation/sessions?since=not-a-date")
-        .set("x-chronopay-admin-token", TEST_ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", TEST_ADMIN_TOKEN)
         .set("Content-Type", "application/json")
         .expect(400);
 
@@ -393,7 +393,7 @@ describe("Impersonation Session Recording (Integration)", () => {
     it("should reject invalid limit (> 200) with 400", async () => {
       const response = await request(adminApp)
         .get("/api/v1/admin/impersonation/sessions?limit=999")
-        .set("x-chronopay-admin-token", TEST_ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", TEST_ADMIN_TOKEN)
         .set("Content-Type", "application/json")
         .expect(400);
 
@@ -404,7 +404,7 @@ describe("Impersonation Session Recording (Integration)", () => {
     it("should reject negative offset with 400", async () => {
       const response = await request(adminApp)
         .get("/api/v1/admin/impersonation/sessions?offset=-1")
-        .set("x-chronopay-admin-token", TEST_ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", TEST_ADMIN_TOKEN)
         .set("Content-Type", "application/json")
         .expect(400);
 
@@ -417,7 +417,7 @@ describe("Impersonation Session Recording (Integration)", () => {
         .post(
           "/api/v1/admin/impersonation/sessions/no-such-session/close",
         )
-        .set("x-chronopay-admin-token", TEST_ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", TEST_ADMIN_TOKEN)
         .set("Content-Type", "application/json")
         .send({})
         .expect(404);
@@ -436,7 +436,7 @@ describe("Impersonation Session Recording (Integration)", () => {
 
       const response = await request(adminApp)
         .get("/api/v1/admin/impersonation/sessions?limit=2&offset=0")
-        .set("x-chronopay-admin-token", TEST_ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", TEST_ADMIN_TOKEN)
         .set("Content-Type", "application/json")
         .expect(200);
 
@@ -459,7 +459,7 @@ describe("Impersonation Session Recording (Integration)", () => {
         .get(
           "/api/v1/admin/impersonation/sessions?adminId=specific-admin",
         )
-        .set("x-chronopay-admin-token", TEST_ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", TEST_ADMIN_TOKEN)
         .set("Content-Type", "application/json")
         .expect(200);
 

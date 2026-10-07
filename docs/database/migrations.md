@@ -1,6 +1,6 @@
 # Database Migrations
 
-ChronoPay uses a custom migration framework with built-in drift detection and safety checks.
+Aevon Bank uses a custom migration framework with built-in drift detection and safety checks.
 
 ## Quick Start
 

@@ -18,11 +18,11 @@ import crypto from "crypto";
  * base64, see env.ts). It never touches the database.
  */
 
-export const MFA_ENCRYPTION_INFO = "chronopay-mfa-totp-secret";
+export const MFA_ENCRYPTION_INFO = "aevonbank-mfa-totp-secret";
 export const MFA_GCM_IV_BYTES = 12;
 export const MFA_GCM_TAG_BYTES = 16;
 export const MFA_KDF_SALT_BYTES = 16;
-export const MFA_GCM_AAD = Buffer.from("chronopay-mfa-enrollment/v1", "ascii");
+export const MFA_GCM_AAD = Buffer.from("aevonbank-mfa-enrollment/v1", "ascii");
 
 export interface EncryptedSecretMaterial {
   ciphertext: Buffer;

@@ -178,7 +178,7 @@ router.get("/audit/export/download", async (req: Request, res: Response) => {
 
     const exportEntry = await auditExportService.getExport(token);
     res.setHeader("Content-Type", "application/x-ndjson");
-    res.setHeader("Content-Disposition", "attachment; filename=chronopay-audit-export.ndjson");
+    res.setHeader("Content-Disposition", "attachment; filename=aevonbank-audit-export.ndjson");
     res.setHeader("X-Audit-Export-Integrity-Sha256", exportEntry.integrity);
     return res.send(exportEntry.content);
   } catch (error: any) {
@@ -1630,7 +1630,7 @@ router.post(
 
 // ─── Holiday Calendar Admin API ───────────────────────────────────────────────
 //
-// All routes require the x-chronopay-admin-token header.
+// All routes require the x-aevonbank-admin-token header.
 // The service instance can be replaced via setHolidayCalendarRepository()
 // to inject an in-memory repo in tests without a live database.
 //
@@ -1706,7 +1706,7 @@ router.post("/holiday-calendars", requireAdminToken, async (req: Request, res: R
       return res.status(400).json({ success: false, error: "name is required" });
     }
 
-    const changedBy = req.auth?.userId ?? req.header("x-chronopay-admin-token")?.slice(0, 8);
+    const changedBy = req.auth?.userId ?? req.header("x-aevonbank-admin-token")?.slice(0, 8);
     const calendar = await getHolidayCalendarService().createCalendar({
       region,
       name,
@@ -1749,7 +1749,7 @@ router.patch("/holiday-calendars/:id", requireAdminToken, async (req: Request, r
       return res.status(400).json({ success: false, error: "name must be a non-empty string" });
     }
 
-    const changedBy = req.auth?.userId ?? req.header("x-chronopay-admin-token")?.slice(0, 8);
+    const changedBy = req.auth?.userId ?? req.header("x-aevonbank-admin-token")?.slice(0, 8);
     const calendar = await getHolidayCalendarService().updateCalendar(req.params.id, {
       name,
       description,
@@ -1801,7 +1801,7 @@ router.post("/holiday-calendars/:id/entries", requireAdminToken, async (req: Req
       return res.status(400).json({ success: false, error: "end_date is required (YYYY-MM-DD)" });
     }
 
-    const changedBy = req.auth?.userId ?? req.header("x-chronopay-admin-token")?.slice(0, 8);
+    const changedBy = req.auth?.userId ?? req.header("x-aevonbank-admin-token")?.slice(0, 8);
     const entry = await getHolidayCalendarService().addEntry(req.params.id, {
       name,
       startDate: start_date,
@@ -1826,7 +1826,7 @@ router.delete(
   requireAdminToken,
   async (req: Request, res: Response) => {
     try {
-      const changedBy = req.auth?.userId ?? req.header("x-chronopay-admin-token")?.slice(0, 8);
+      const changedBy = req.auth?.userId ?? req.header("x-aevonbank-admin-token")?.slice(0, 8);
       await getHolidayCalendarService().deleteEntry(req.params.id, req.params.entryId, changedBy);
       return res.status(200).json({ success: true, message: "Entry deleted" });
     } catch (err) {
@@ -1854,7 +1854,7 @@ router.delete(
  */
 router.post("/holiday-calendars/import/yaml", requireAdminToken, async (req: Request, res: Response) => {
   try {
-    const changedBy = req.auth?.userId ?? req.header("x-chronopay-admin-token")?.slice(0, 8);
+    const changedBy = req.auth?.userId ?? req.header("x-aevonbank-admin-token")?.slice(0, 8);
     const calendar = await getHolidayCalendarService().importFromYaml(req.body, {
       changedBy,
       changeNote: req.body?.changeNote,
@@ -1916,7 +1916,7 @@ router.post(
       if (isNaN(version) || version < 1) {
         return res.status(400).json({ success: false, error: "version must be a positive integer" });
       }
-      const changedBy = req.auth?.userId ?? req.header("x-chronopay-admin-token")?.slice(0, 8);
+      const changedBy = req.auth?.userId ?? req.header("x-aevonbank-admin-token")?.slice(0, 8);
       const calendar = await getHolidayCalendarService().rollbackToRevision(
         req.params.id,
         version,
@@ -2049,7 +2049,7 @@ router.post(
     try {
       const { buyerId } = req.params;
       const { reason, clearActiveStrikes } = req.body ?? {};
-      const adminId = req.auth?.userId ?? req.header("x-chronopay-admin-token") ?? "admin";
+      const adminId = req.auth?.userId ?? req.header("x-aevonbank-admin-token") ?? "admin";
 
       const result = await strikeService.reinstateBuyer(
         buyerId,
@@ -2149,7 +2149,7 @@ router.post(
     try {
       const { strikeId } = req.params;
       const { decision } = req.body ?? {};
-      const decidedBy = req.auth?.userId ?? req.header("x-chronopay-admin-token") ?? "admin";
+      const decidedBy = req.auth?.userId ?? req.header("x-aevonbank-admin-token") ?? "admin";
 
       if (!decision || !["UPHELD", "OVERTURNED"].includes(decision)) {
         return res.status(400).json({

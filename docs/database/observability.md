@@ -2,7 +2,7 @@
 
 ## Slow-query logging and metrics
 
-ChronoPay instruments every query wrapped with `instrumentQuery()` and emits structured logs and Prometheus metrics when a query exceeds a configurable threshold.
+Aevon Bank instruments every query wrapped with `instrumentQuery()` and emits structured logs and Prometheus metrics when a query exceeds a configurable threshold.
 
 ### Configuration
 
@@ -22,7 +22,7 @@ When a query exceeds the threshold, a `WARN`-level structured log is emitted via
 ```json
 {
   "level": "WARN",
-  "msg": "[ChronoPay] slow query detected",
+  "msg": "[Aevon Bank] slow query detected",
   "query": "SELECT * FROM slots WHERE ...",
   "durationMs": 823,
   "threshold": 500

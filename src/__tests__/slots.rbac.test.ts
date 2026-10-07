@@ -99,7 +99,7 @@ describe("DELETE /api/v1/slots/:id — RBAC", () => {
     resetSlotStore();
   });
 
-  it("rejects unauthenticated request (missing x-chronopay-user-id) with 401", async () => {
+  it("rejects unauthenticated request (missing x-aevonbank-user-id) with 401", async () => {
     const slotId = await seedSlot();
     const res = await request(app).delete(`/api/v1/slots/${slotId}`);
     expect(res.status).toBe(401);
@@ -110,8 +110,8 @@ describe("DELETE /api/v1/slots/:id — RBAC", () => {
     const slotId = await seedSlot("alice");
     const res = await request(app)
       .delete(`/api/v1/slots/${slotId}`)
-      .set("x-chronopay-user-id", "bob")
-      .set("x-chronopay-role", "customer");
+      .set("x-aevonbank-user-id", "bob")
+      .set("x-aevonbank-role", "customer");
     expect(res.status).toBe(403);
     expect(res.body.success).toBe(false);
   });
@@ -120,8 +120,8 @@ describe("DELETE /api/v1/slots/:id — RBAC", () => {
     const slotId = await seedSlot("alice");
     const res = await request(app)
       .delete(`/api/v1/slots/${slotId}`)
-      .set("x-chronopay-user-id", "alice")
-      .set("x-chronopay-role", "customer");
+      .set("x-aevonbank-user-id", "alice")
+      .set("x-aevonbank-role", "customer");
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.deletedSlotId).toBe(slotId);
@@ -131,8 +131,8 @@ describe("DELETE /api/v1/slots/:id — RBAC", () => {
     const slotId = await seedSlot("alice");
     const res = await request(app)
       .delete(`/api/v1/slots/${slotId}`)
-      .set("x-chronopay-user-id", "admin-user")
-      .set("x-chronopay-role", "admin");
+      .set("x-aevonbank-user-id", "admin-user")
+      .set("x-aevonbank-role", "admin");
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.deletedSlotId).toBe(slotId);
@@ -141,8 +141,8 @@ describe("DELETE /api/v1/slots/:id — RBAC", () => {
   it("returns 404 when targeting a non-existent slot", async () => {
     const res = await request(app)
       .delete("/api/v1/slots/9999")
-      .set("x-chronopay-user-id", "alice")
-      .set("x-chronopay-role", "customer");
+      .set("x-aevonbank-user-id", "alice")
+      .set("x-aevonbank-role", "customer");
     expect(res.status).toBe(404);
   });
 
@@ -150,8 +150,8 @@ describe("DELETE /api/v1/slots/:id — RBAC", () => {
     const slotId = await seedSlot("alice");
     await request(app)
       .delete(`/api/v1/slots/${slotId}`)
-      .set("x-chronopay-user-id", "alice")
-      .set("x-chronopay-role", "customer");
+      .set("x-aevonbank-user-id", "alice")
+      .set("x-aevonbank-role", "customer");
 
     const getRes = await request(app).get(`/api/v1/slots/${slotId}`);
     expect(getRes.status).toBe(404);

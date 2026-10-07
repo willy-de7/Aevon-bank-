@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay Backend implements a fine-grained Role-Based Access Control (RBAC) system using a permission catalog with wildcard grant syntax. This allows operations teams to express least-privilege access policies precisely and audit permission changes effectively.
+Aevon Bank Backend implements a fine-grained Role-Based Access Control (RBAC) system using a permission catalog with wildcard grant syntax. This allows operations teams to express least-privilege access policies precisely and audit permission changes effectively.
 
 ## Architecture
 

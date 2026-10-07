@@ -66,22 +66,22 @@ function makeApp(opts: {
 
 function asAdmin() {
   return {
-    "x-chronopay-user-id": "admin-user-1",
-    "x-chronopay-role": "admin",
+    "x-aevonbank-user-id": "admin-user-1",
+    "x-aevonbank-role": "admin",
   };
 }
 
 function asAuditor() {
   return {
-    "x-chronopay-user-id": "auditor-user-1",
-    "x-chronopay-role": "auditor",
+    "x-aevonbank-user-id": "auditor-user-1",
+    "x-aevonbank-role": "auditor",
   };
 }
 
 function asCustomer() {
   return {
-    "x-chronopay-user-id": "customer-1",
-    "x-chronopay-role": "customer",
+    "x-aevonbank-user-id": "customer-1",
+    "x-aevonbank-role": "customer",
   };
 }
 
@@ -259,7 +259,7 @@ describe("POST /api/v1/gdpr/erase — success", () => {
     const { app } = makeApp({});
     const res = await request(app)
       .post("/api/v1/gdpr/erase")
-      .set({ "x-chronopay-user-id": "admin-xyz", "x-chronopay-role": "admin" })
+      .set({ "x-aevonbank-user-id": "admin-xyz", "x-aevonbank-role": "admin" })
       .send({ subjectId: "user-123" });
 
     expect(res.body.receipt.requestedBy).toBe("admin-xyz");

@@ -1,6 +1,6 @@
-# chronopay-backend
+# aevon-bank-backend
 
-API backend for **ChronoPay** - time tokenization and scheduling marketplace on Stellar.
+API backend for **Aevon Bank** - time tokenization and scheduling marketplace on Stellar.
 
 ## What's in this repo
 
@@ -20,7 +20,7 @@ API backend for **ChronoPay** - time tokenization and scheduling marketplace on 
 ```bash
 # Clone the repo (or use your fork)
 git clone <repo-url>
-cd chronopay-backend
+cd aevon-bank-backend
 
 # Setup (choose one):
 
@@ -52,7 +52,7 @@ docker-compose logs -f
 
 ## Environment validation
 
-ChronoPay validates environment variables centrally at startup through `src/config/env.ts`.
+Aevon Bank validates environment variables centrally at startup through `src/config/env.ts`.
 
 Currently validated variables used by `src`:
 
@@ -118,7 +118,7 @@ Additional reviewer-focused notes live in:
 
 ## Database Migrations
 
-ChronoPay includes a migration framework with drift detection and safety checks.
+Aevon Bank includes a migration framework with drift detection and safety checks.
 
 ### Quick Commands
 
@@ -189,7 +189,7 @@ Detailed API contracts and endpoint documentation:
 
 ## API (slot listing)
 
-- `GET /health` — Health check; returns `{ status: "ok", service: "chronopay-backend" }`
+- `GET /health` — Health check; returns `{ status: "ok", service: "aevon-bank-backend" }`
 - `GET /api/v1/slots` — List time slots with pagination
   - Query parameters:
     - `page` (integer, default `1`, min `1`)
@@ -216,13 +216,13 @@ Detailed API contracts and endpoint documentation:
 
 ## Rate Limiting
 
-ChronoPay Backend implements **auth-aware rate limiting** to ensure fair usage while minimizing collateral damage from shared IP addresses (NAT, corporate proxies). The limiter keys requests by authenticated principal (user ID or API key) when available, and falls back to IP for unauthenticated traffic.
+Aevon Bank Backend implements **auth-aware rate limiting** to ensure fair usage while minimizing collateral damage from shared IP addresses (NAT, corporate proxies). The limiter keys requests by authenticated principal (user ID or API key) when available, and falls back to IP for unauthenticated traffic.
 
 ### Key Strategy
 
 Priority order for rate-limit key generation:
 
-1. **Header-based user ID** (`x-chronopay-user-id`) → `rl:user:<userId>`
+1. **Header-based user ID** (`x-aevonbank-user-id`) → `rl:user:<userId>`
 2. **JWT user ID** (`req.user.sub` or `req.user.id`) → `rl:user:<userId>`
 3. **API key** (SHA-256 hash of `x-api-key`) → `rl:apiKey:<hash>`
 4. **IP address** (`req.ip`, respects `TRUST_PROXY`) → `rl:ip:<ip>`
@@ -270,7 +270,7 @@ RateLimit: limit=100, remaining=85, reset=1711072800
 
 ### Middleware Usage
 
-**Header-based auth** (`x-chronopay-user-id`):
+**Header-based auth** (`x-aevonbank-user-id`):
 
 ```ts
 router.post(
@@ -300,7 +300,7 @@ When running behind a reverse proxy or load balancer, set `TRUST_PROXY=true`. Ex
 ### Security Notes
 
 - **Auth-before-rate-limit**: The rate limiter must be placed **after** authentication middleware; otherwise it falls back to IP-based keys.
-- **Header trust**: Header-based auth assumes a trusted upstream validates `x-chronopay-user-id`. Direct exposure without a gateway allows spoofing.
+- **Header trust**: Header-based auth assumes a trusted upstream validates `x-aevonbank-user-id`. Direct exposure without a gateway allows spoofing.
 - **API key hashing**: Raw API keys are never stored; Redis keys contain only SHA-256 hashes.
 - **Redis**: All instances share a single Redis store (`rl:` namespace). Ensure Redis is not publicly accessible.
 
@@ -310,7 +310,7 @@ See [`docs/rate-limiting.md`](docs/rate-limiting.md) for deep dive, troubleshoot
 
 ## Feature Flags
 
-ChronoPay backend uses environment-driven feature flags for safe rollout and rapid disable.
+Aevon Bank backend uses environment-driven feature flags for safe rollout and rapid disable.
 For the enforced registry and guarded-route mapping, see [`docs/feature-flags.md`](docs/feature-flags.md).
 
 ### Configuration

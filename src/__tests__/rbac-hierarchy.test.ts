@@ -115,14 +115,14 @@ describe("RBAC role hierarchy", () => {
 
     await request(app)
       .get("/support-action")
-      .set("x-chronopay-user-id", "admin-1")
-      .set("x-chronopay-role", "admin")
+      .set("x-aevonbank-user-id", "admin-1")
+      .set("x-aevonbank-role", "admin")
       .expect(200);
 
     await request(app)
       .get("/support-action")
-      .set("x-chronopay-user-id", "auditor-1")
-      .set("x-chronopay-role", "auditor")
+      .set("x-aevonbank-user-id", "auditor-1")
+      .set("x-aevonbank-role", "auditor")
       .expect(403);
 
     expect(auditSpy).toHaveBeenCalledWith(
@@ -141,8 +141,8 @@ describe("RBAC role hierarchy", () => {
 
     await request(app)
       .get("/customer-action")
-      .set("x-chronopay-user-id", "user-1")
-      .set("x-chronopay-role", "hacker")
+      .set("x-aevonbank-user-id", "user-1")
+      .set("x-aevonbank-role", "hacker")
       .expect(400);
 
     expect(auditSpy).toHaveBeenCalledWith(

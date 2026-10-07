@@ -1,6 +1,6 @@
 # Capacity Planning Peak Replayer
 
-The capacity simulator replays historical traffic peaks against ChronoPay's infrastructure to
+The capacity simulator replays historical traffic peaks against Aevon Bank's infrastructure to
 help the team predict headroom, plan capacity changes, and validate that SLO budgets survive
 peak load—all without touching the real Stellar network.
 

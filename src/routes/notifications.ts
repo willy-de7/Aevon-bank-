@@ -6,7 +6,7 @@
  * POST /api/v1/notifications/sms
  *   Sends an SMS notification.
  *   Protected by feature flag FF_SMS_NOTIFICATIONS.
- *   Requires authentication via x-chronopay-user-id and x-chronopay-role headers.
+ *   Requires authentication via x-aevonbank-user-id and x-aevonbank-role headers.
  *   Rate-limited per authenticated principal.
  */
 

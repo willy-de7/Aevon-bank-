@@ -1,6 +1,6 @@
 # PII Redaction in Logger
 
-> **Issue:** [#593 – Add PII-redaction transformer to logger for booking payloads](https://github.com/Chronopay-Org/ChronoPay-Backend/issues/593)
+> **Issue:** [#593 – Add PII-redaction transformer to logger for booking payloads](https://github.com/AevonBank-Org/Aevon-Bank-Backend/issues/593)
 
 ## Overview
 

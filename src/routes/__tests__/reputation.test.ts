@@ -62,8 +62,8 @@ describe("Reputation Transparency API - GET /api/v1/suppliers/:supplierId/reputa
   it("should allow admin role access to view any supplier's reputation signals", async () => {
     const res = await request(app)
       .get("/api/v1/suppliers/supplier-101/reputation/signals")
-      .set("x-chronopay-user-id", "admin-user")
-      .set("x-chronopay-role", "admin");
+      .set("x-aevonbank-user-id", "admin-user")
+      .set("x-aevonbank-role", "admin");
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);

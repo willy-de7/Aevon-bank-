@@ -4,7 +4,7 @@ import adminRouter from "../admin.js";
 import { strikeService } from "../../services/strikeService.js";
 
 const ADMIN_TOKEN = "strike-test-admin-token";
-process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
 function makeApp() {
   const app = express();
@@ -33,7 +33,7 @@ describe("Admin Buyer Strike & Suspension Routes", () => {
     it("issues a strike successfully when authorized", async () => {
       const res = await request(app)
         .post("/api/v1/admin/buyers/buyer-1/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "No show for booking", intentId: "intent-123", slotId: "slot-456" });
 
       expect(res.status).toBe(201);
@@ -47,19 +47,19 @@ describe("Admin Buyer Strike & Suspension Routes", () => {
       // 1st strike
       await request(app)
         .post("/api/v1/admin/buyers/buyer-suspend/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Strike 1" });
 
       // 2nd strike
       await request(app)
         .post("/api/v1/admin/buyers/buyer-suspend/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Strike 2" });
 
       // 3rd strike
       const res = await request(app)
         .post("/api/v1/admin/buyers/buyer-suspend/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Strike 3" });
 
       expect(res.status).toBe(201);
@@ -74,7 +74,7 @@ describe("Admin Buyer Strike & Suspension Routes", () => {
 
       const res = await request(app)
         .get("/api/v1/admin/buyers/buyer-get-test/strikes")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -95,7 +95,7 @@ describe("Admin Buyer Strike & Suspension Routes", () => {
 
       const res = await request(app)
         .post(`/api/v1/admin/buyers/buyer-appeal-route/strikes/${s3.strike.id}/appeal`)
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "System error during checkin" });
 
       expect(res.status).toBe(200);
@@ -108,7 +108,7 @@ describe("Admin Buyer Strike & Suspension Routes", () => {
     it("returns 400 when appeal reason is missing", async () => {
       const res = await request(app)
         .post("/api/v1/admin/buyers/b1/strikes/s1/appeal")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({});
 
       expect(res.status).toBe(400);
@@ -124,7 +124,7 @@ describe("Admin Buyer Strike & Suspension Routes", () => {
 
       const res = await request(app)
         .post("/api/v1/admin/buyers/buyer-reinstate-route/reinstate")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ reason: "Admin override after review", clearActiveStrikes: true });
 
       expect(res.status).toBe(200);
@@ -141,14 +141,14 @@ describe("Admin Buyer Strike & Suspension Routes", () => {
     it("retrieves and updates strike config", async () => {
       const getRes = await request(app)
         .get("/api/v1/admin/strikes/config")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN);
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN);
 
       expect(getRes.status).toBe(200);
       expect(getRes.body.config.maxStrikesThreshold).toBe(3);
 
       const putRes = await request(app)
         .put("/api/v1/admin/strikes/config")
-        .set("x-chronopay-admin-token", ADMIN_TOKEN)
+        .set("x-aevonbank-admin-token", ADMIN_TOKEN)
         .send({ maxStrikesThreshold: 4 });
 
       expect(putRes.status).toBe(200);

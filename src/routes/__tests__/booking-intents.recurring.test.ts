@@ -15,8 +15,8 @@ describe("POST /api/v1/booking-intents (recurring / RRULE)", () => {
   const app = createApp({ apiKey: "test-api-key" });
 
   const headers = (userId = "recurring-buyer-1", role = "customer") => ({
-    "x-chronopay-user-id": userId,
-    "x-chronopay-role": role,
+    "x-aevonbank-user-id": userId,
+    "x-aevonbank-role": role,
   });
 
   const RULE_SLOT_A = `DTSTART:20300317T174640Z\nRRULE:FREQ=DAILY;COUNT=1`;
@@ -48,7 +48,7 @@ describe("POST /api/v1/booking-intents (recurring / RRULE)", () => {
     it("returns 401 when the buyer is unauthenticated", async () => {
       const response = await request(app)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-role", "customer")
+        .set("x-aevonbank-role", "customer")
         .send({ rrule: RULE_SLOT_A });
 
       expect(response.status).toBe(401);

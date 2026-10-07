@@ -23,15 +23,15 @@ describe("requireAdminToken", () => {
 
   afterEach(() => {
     auditSpy.mockRestore();
-    delete process.env.CHRONOPAY_ADMIN_TOKEN;
+    delete process.env.AEVON_BANK_ADMIN_TOKEN;
   });
 
   it("lets a request through with the configured token", async () => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+    process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
     const res = await request(appWithAdminTokenRoute())
       .get("/admin-action")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .expect(200);
 
     expect(res.body).toEqual({ success: true });
@@ -39,7 +39,7 @@ describe("requireAdminToken", () => {
   });
 
   it("returns 401 with an AUTHZ_MISSING audit when the token header is absent", async () => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+    process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
     const res = await request(appWithAdminTokenRoute()).get("/admin-action").expect(401);
 
@@ -56,11 +56,11 @@ describe("requireAdminToken", () => {
   });
 
   it("returns 403 with an AUTHZ_FORBIDDEN audit for a wrong token", async () => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+    process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
     const res = await request(appWithAdminTokenRoute())
       .get("/admin-action")
-      .set("x-chronopay-admin-token", "attacker-token")
+      .set("x-aevonbank-admin-token", "attacker-token")
       .expect(403);
 
     expect(res.body).toMatchObject({
@@ -77,11 +77,11 @@ describe("requireAdminToken", () => {
   });
 
   it("returns 503 with an AUTHZ_UNCONFIGURED audit when no token is configured", async () => {
-    delete process.env.CHRONOPAY_ADMIN_TOKEN;
+    delete process.env.AEVON_BANK_ADMIN_TOKEN;
 
     const res = await request(appWithAdminTokenRoute())
       .get("/admin-action")
-      .set("x-chronopay-admin-token", "any-token")
+      .set("x-aevonbank-admin-token", "any-token")
       .expect(503);
 
     expect(res.body).toMatchObject({
@@ -96,12 +96,12 @@ describe("requireAdminToken", () => {
   });
 
   it("denies access without crashing when the audit logger rejects", async () => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+    process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
     auditSpy.mockRejectedValue(new Error("audit backend down"));
 
     const res = await request(appWithAdminTokenRoute())
       .get("/admin-action")
-      .set("x-chronopay-admin-token", "wrong-token")
+      .set("x-aevonbank-admin-token", "wrong-token")
       .expect(403);
 
     expect(res.body).toMatchObject({
@@ -111,11 +111,11 @@ describe("requireAdminToken", () => {
   });
 
   it("falls back to the socket address for audit events when req.ip is absent", () => {
-    process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+    process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
     const middleware = requireAdminToken;
     const req = {
-      header: (name: string) => (name === "x-chronopay-admin-token" ? "wrong-token" : undefined),
+      header: (name: string) => (name === "x-aevonbank-admin-token" ? "wrong-token" : undefined),
       ip: undefined,
       socket: { remoteAddress: "10.0.0.11" },
       originalUrl: "/admin-action",

@@ -69,7 +69,7 @@ router.post(
  * POST /api/v1/auth/mfa/verify
  * Validates a TOTP code for the authenticated user and, on success, returns a
  * short-lived MFA challenge token. The token is passed as
- * `x-chronopay-mfa: <token>` to routes protected by `requireFreshMfa`.
+ * `x-aevonbank-mfa: <token>` to routes protected by `requireFreshMfa`.
  * Replay protection rejects re-using the same time-window code (409).
  *
  * Responses:

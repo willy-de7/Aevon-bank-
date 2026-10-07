@@ -31,7 +31,7 @@ import {
  * database and route tests can exercise the full flow with a fake repository.
  */
 
-export const MFA_DEFAULT_ISSUER = "ChronoPay";
+export const MFA_DEFAULT_ISSUER = "Aevon Bank";
 
 export interface EnrollMfaResult {
   secret: string;

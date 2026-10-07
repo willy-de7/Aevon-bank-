@@ -8,7 +8,7 @@ services:
   api:
     build:
       target: builder  # Use builder stage for dev (includes dev dependencies)
-    container_name: chronopay-api-dev
+    container_name: aevon-bank-api-dev
     restart: "no"
     ports:
       - "${PORT:-3001}:3001"
@@ -47,5 +47,5 @@ services:
           memory: 256M
     # Development labels
     labels:
-      - "com.chronopay.service=api"
-      - "com.chronopay.environment=development"
+      - "com.aevonbank.service=api"
+      - "com.aevonbank.environment=development"

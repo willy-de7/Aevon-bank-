@@ -1,8 +1,8 @@
-# ChronoPay Backend Architecture
+# Aevon Bank Backend Architecture
 
 ## Overview
 
-ChronoPay is an Express/TypeScript API. This document defines the intended layering, where each concern lives, and the conventions every contributor should follow. It reflects the actual structure of `src/` as of this writing.
+Aevon Bank is an Express/TypeScript API. This document defines the intended layering, where each concern lives, and the conventions every contributor should follow. It reflects the actual structure of `src/` as of this writing.
 
 ---
 
@@ -198,7 +198,7 @@ Applied at the route level. Never imported inside services or repositories.
 
 | File | Purpose |
 |---|---|
-| `auth.ts` | Parses `x-chronopay-user-id` / `x-chronopay-role` headers into `req.auth` |
+| `auth.ts` | Parses `x-aevonbank-user-id` / `x-aevonbank-role` headers into `req.auth` |
 | `apiKeyAuth.ts` | Validates `x-api-key` header |
 | `validation.ts` | `validateRequiredFields()` — checks body/query/params fields are present |
 | `checkout-validation.ts` | Checkout-specific schema validation |

@@ -55,7 +55,7 @@ Custom categories are supported — just use any string as the `category` value.
 
 ## Admin API
 
-All endpoints require the `x-chronopay-admin-token` header.
+All endpoints require the `x-aevonbank-admin-token` header.
 
 ---
 
@@ -244,7 +244,7 @@ Supports the same `limit` / `offset` pagination.
 
 ## Security
 
-- All endpoints require a valid admin token (`x-chronopay-admin-token`).
+- All endpoints require a valid admin token (`x-aevonbank-admin-token`).
 - Every write (create, update, delete) is recorded in an append-only
   `slot_category_grace_window_history` table and emitted as a structured audit
   event via the application audit logger.

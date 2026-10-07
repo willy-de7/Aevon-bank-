@@ -103,7 +103,7 @@ up.
 ## Admin API
 
 All routes are mounted at `/api/v1/admin/flag-rollouts` and require the
-`x-chronopay-admin-token` header (same gate as `/api/v1/admin/fraud-models`,
+`x-aevonbank-admin-token` header (same gate as `/api/v1/admin/fraud-models`,
 see `src/middleware/authorization.ts`). Mutating actions take an explicit
 `actor` field in the request body rather than deriving an actor identity
 from the admin token itself, so the shared admin secret is never recorded as

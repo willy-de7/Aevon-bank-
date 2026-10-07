@@ -27,7 +27,7 @@ Tiers follow **inclusive-lower, exclusive-upper** boundaries:
 
 ## API Reference
 
-All endpoints require admin authentication via `x-chronopay-admin-token` header.
+All endpoints require admin authentication via `x-aevonbank-admin-token` header.
 
 ### `GET /api/v1/admin/cancellation-overrides`
 

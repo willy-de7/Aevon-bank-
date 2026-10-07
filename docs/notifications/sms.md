@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay sends SMS notifications through a provider abstraction that supports multiple backends, automatic failover, bounded retries, and strict phone number redaction in all logs.
+Aevon Bank sends SMS notifications through a provider abstraction that supports multiple backends, automatic failover, bounded retries, and strict phone number redaction in all logs.
 
 ## Architecture
 
@@ -67,7 +67,7 @@ TWILIO_AUTH_TOKEN=your_auth_token
 TWILIO_FROM_NUMBER=+15005550006
 VONAGE_API_KEY=your_key
 VONAGE_API_SECRET=your_secret
-VONAGE_FROM_NAME=ChronoPay
+VONAGE_FROM_NAME=Aevon Bank
 ```
 
 Missing required variables cause a startup failure with an aggregated error message. No partial startup occurs.

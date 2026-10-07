@@ -57,8 +57,8 @@ describe("booking intents endpoints", () => {
     it("returns 404 when intent does not exist", async () => {
       const res = await request(app)
         .get("/api/v1/booking-intents/intent-999")
-        .set("x-chronopay-user-id", "user1")
-        .set("x-chronopay-role", "customer");
+        .set("x-aevonbank-user-id", "user1")
+        .set("x-aevonbank-role", "customer");
       expect(res.status).toBe(404);
       expect(res.body.success).toBe(false);
     });
@@ -67,8 +67,8 @@ describe("booking intents endpoints", () => {
       repo.create({ ...BASE_INTENT, customerId: "other-user" });
       const res = await request(app)
         .get("/api/v1/booking-intents/intent-1")
-        .set("x-chronopay-user-id", "user1")
-        .set("x-chronopay-role", "customer");
+        .set("x-aevonbank-user-id", "user1")
+        .set("x-aevonbank-role", "customer");
       expect(res.status).toBe(404);
       expect(res.body.success).toBe(false);
     });
@@ -77,8 +77,8 @@ describe("booking intents endpoints", () => {
       repo.create({ ...BASE_INTENT, customerId: "user1" });
       const res = await request(app)
         .get("/api/v1/booking-intents/intent-1")
-        .set("x-chronopay-user-id", "user1")
-        .set("x-chronopay-role", "customer");
+        .set("x-aevonbank-user-id", "user1")
+        .set("x-aevonbank-role", "customer");
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.intent.id).toBe("intent-1");
@@ -89,8 +89,8 @@ describe("booking intents endpoints", () => {
       repo.create({ ...BASE_INTENT, customerId: "other-user" });
       const res = await request(app)
         .get("/api/v1/booking-intents/intent-1")
-        .set("x-chronopay-user-id", "admin1")
-        .set("x-chronopay-role", "admin");
+        .set("x-aevonbank-user-id", "admin1")
+        .set("x-aevonbank-role", "admin");
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.intent.id).toBe("intent-1");
@@ -113,8 +113,8 @@ describe("booking intents endpoints", () => {
 
       const res = await request(app)
         .get("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", "user1")
-        .set("x-chronopay-role", "customer");
+        .set("x-aevonbank-user-id", "user1")
+        .set("x-aevonbank-role", "customer");
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.intents).toHaveLength(2);
@@ -129,8 +129,8 @@ describe("booking intents endpoints", () => {
 
       const res = await request(app)
         .get("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", "admin1")
-        .set("x-chronopay-role", "admin");
+        .set("x-aevonbank-user-id", "admin1")
+        .set("x-aevonbank-role", "admin");
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.intents).toHaveLength(2);
@@ -139,8 +139,8 @@ describe("booking intents endpoints", () => {
     it("returns an empty array when the customer has no intents", async () => {
       const res = await request(app)
         .get("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", "user1")
-        .set("x-chronopay-role", "customer");
+        .set("x-aevonbank-user-id", "user1")
+        .set("x-aevonbank-role", "customer");
       expect(res.status).toBe(200);
       expect(res.body.intents).toEqual([]);
     });
@@ -173,8 +173,8 @@ describe("booking intents endpoints", () => {
       const res = await request(app)
         .post(`/api/v1/booking-intents/${intent.id}/no-show`)
         .send({ reason: "Buyer did not arrive", forfeitRatio: 0.2 })
-        .set("x-chronopay-user-id", "pro-1")
-        .set("x-chronopay-role", "professional");
+        .set("x-aevonbank-user-id", "pro-1")
+        .set("x-aevonbank-role", "professional");
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -194,8 +194,8 @@ describe("booking intents endpoints", () => {
       const res = await request(app)
         .post(`/api/v1/booking-intents/${intent.id}/no-show`)
         .send({ reason: "No show" })
-        .set("x-chronopay-user-id", "user1")
-        .set("x-chronopay-role", "customer");
+        .set("x-aevonbank-user-id", "user1")
+        .set("x-aevonbank-role", "customer");
 
       expect(res.status).toBe(403);
       expect(res.body.success).toBe(false);
@@ -211,8 +211,8 @@ describe("booking intents endpoints", () => {
       const res = await request(app)
         .post(`/api/v1/booking-intents/${intent.id}/no-show`)
         .send({ forfeitRatio: 2 })
-        .set("x-chronopay-user-id", "pro-1")
-        .set("x-chronopay-role", "professional");
+        .set("x-aevonbank-user-id", "pro-1")
+        .set("x-aevonbank-role", "professional");
 
       expect(res.status).toBe(400);
       expect(res.body.success).toBe(false);
@@ -255,8 +255,8 @@ describe("POST /:id/refund", () => {
     const res = await request(app)
       .post(`/api/v1/booking-intents/${intent.id}/refund`)
       .send({ cancelledAtMs: 400, reason: "customer_cancel" })
-      .set("x-chronopay-user-id", "user1")
-      .set("x-chronopay-role", "customer");
+      .set("x-aevonbank-user-id", "user1")
+      .set("x-aevonbank-role", "customer");
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
@@ -288,8 +288,8 @@ describe("POST /:id/refund", () => {
     const res = await request(app)
       .post(`/api/v1/booking-intents/${intent.id}/refund`)
       .send({ cancelledAtMs: "bad" })
-      .set("x-chronopay-user-id", "user1")
-      .set("x-chronopay-role", "customer");
+      .set("x-aevonbank-user-id", "user1")
+      .set("x-aevonbank-role", "customer");
 
     expect(res.status).toBe(400);
     expect(res.body.success).toBe(false);

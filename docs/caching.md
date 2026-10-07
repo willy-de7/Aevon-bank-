@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay-Backend uses Redis for caching frequently accessed data to improve performance and reduce database load. This document describes the cache key schema, invalidation strategy, and security considerations.
+Aevon-Bank-Backend uses Redis for caching frequently accessed data to improve performance and reduce database load. This document describes the cache key schema, invalidation strategy, and security considerations.
 
 ## Cache Key Schema
 

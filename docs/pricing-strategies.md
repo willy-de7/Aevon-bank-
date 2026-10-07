@@ -1,6 +1,6 @@
 # Pricing Strategies
 
-ChronoPay supports dynamic pricing on time slots. Suppliers opt in by attaching a `pricingStrategy` object to a slot. When a booking intent is created the price is resolved once and snapshotted onto the intent for auditability — the resolved price never changes even if the slot's strategy is later updated.
+Aevon Bank supports dynamic pricing on time slots. Suppliers opt in by attaching a `pricingStrategy` object to a slot. When a booking intent is created the price is resolved once and snapshotted onto the intent for auditability — the resolved price never changes even if the slot's strategy is later updated.
 
 ## How it works
 

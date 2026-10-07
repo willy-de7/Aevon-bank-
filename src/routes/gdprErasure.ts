@@ -5,7 +5,7 @@
  *
  * ## Security
  *
- * - Requires `x-chronopay-user-id` + `x-chronopay-role` headers.
+ * - Requires `x-aevonbank-user-id` + `x-aevonbank-role` headers.
  * - Only `admin` role may trigger live erasure.
  * - `auditor` role may use `dryRun: true` only; live erasure returns 403.
  *

@@ -14,11 +14,11 @@ import {
  * The client proves step-up authentication by sending the challenge token
  * issued by `POST /api/v1/auth/mfa/verify` in a dedicated header:
  *
- *   x-chronopay-mfa: <token>
+ *   x-aevonbank-mfa: <token>
  *
  * A dedicated header (rather than the `Authorization` scheme) keeps this
  * compatible with the `Bearer`-based access JWT and mirrors the existing
- * `x-chronopay-*` internal-auth headers. The token is:
+ * `x-aevonbank-*` internal-auth headers. The token is:
  *  - signed with the dedicated `MFA_CHALLENGE_SECRET`,
  *  - bound to the authenticated user's subject,
  *  - considered valid for at most `maxAgeMs` (freshness), defaulting to the
@@ -42,7 +42,7 @@ export interface RequireFreshMfaOptions {
 
 export function requireFreshMfa(options: RequireFreshMfaOptions = {}) {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const raw = req.headers["x-chronopay-mfa"];
+    const raw = req.headers["x-aevonbank-mfa"];
     const header = Array.isArray(raw) ? raw[0] : raw;
     const token = typeof header === "string" ? header.trim() : "";
 

@@ -17,7 +17,7 @@ Response `200`:
 {
   "success": true,
   "secret": "JBSWY3DPEHPK3PXP",
-  "otpauthUrl": "otpauth://totp/ChronoPay:user@example.com?secret=JBSWY3DPEHPK3PXP&issuer=ChronoPay&digits=6&period=30&algorithm=SHA1",
+  "otpauthUrl": "otpauth://totp/Aevon Bank:user@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Aevon Bank&digits=6&period=30&algorithm=SHA1",
   "digits": 6,
   "period": 30,
   "algorithm": "SHA1",
@@ -63,7 +63,7 @@ Errors:
 Challenges are carried in a dedicated header — never `Authorization` (which stays `Bearer`):
 
 ```
-x-chronopay-mfa: <mfaToken>
+x-aevonbank-mfa: <mfaToken>
 ```
 
 `requireFreshMfa` mounts after `requireAuth` and validates the token signature, subject match, and
@@ -103,7 +103,7 @@ router.post("/wire", requireAuth(), requireFreshMfa({ maxAgeMs: 5 * 60 * 1000 })
 | --- | --- | --- | --- |
 | `MFA_ENCRYPTION_KEY` | 32-byte master key (hex or base64) encrypting secrets at rest | Yes* | — |
 | `MFA_CHALLENGE_SECRET` | Secret signing the short-lived challenge tokens | Yes* | — |
-| `MFA_ISSUER` | Label used in `otpauth://` URLs | No | `ChronoPay` |
+| `MFA_ISSUER` | Label used in `otpauth://` URLs | No | `Aevon Bank` |
 | `MFA_FRESHNESS_MS` | Freshness window after a successful verify | No | `900000` (15 min) |
 | `MFA_WINDOW_PERIODS` | Accepted 30s windows (including current) | No | `1` |
 | `MFA_CHALLENGE_TTL_SEC` | Challenge token lifetime | No | `300` |

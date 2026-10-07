@@ -156,10 +156,10 @@ describe("verifyTotpCode", () => {
 
 describe("buildOtpauthUri", () => {
   it("builds a well-formed otpauth URI", () => {
-    const uri = buildOtpauthUri("ChronoPay", "user-123", "JBSWY3DPEHPK3PXP");
+    const uri = buildOtpauthUri("Aevon Bank", "user-123", "JBSWY3DPEHPK3PXP");
     expect(uri.startsWith("otpauth://totp/")).toBe(true);
     expect(uri).toContain("secret=JBSWY3DPEHPK3PXP");
-    expect(uri).toContain("issuer=ChronoPay");
+    expect(uri).toContain("issuer=Aevon Bank");
     expect(uri).toContain("digits=6");
     expect(uri).toContain("period=30");
     expect(uri).toContain("algorithm=SHA1");
@@ -171,7 +171,7 @@ describe("buildOtpauthUri", () => {
   });
 
   it("honours custom digits/period", () => {
-    const uri = buildOtpauthUri("ChronoPay", "u", "AAAA", { digits: 8, period: 60 });
+    const uri = buildOtpauthUri("Aevon Bank", "u", "AAAA", { digits: 8, period: 60 });
     expect(uri).toContain("digits=8");
     expect(uri).toContain("period=60");
   });

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the implementation of end-to-end OpenTelemetry tracing with W3C traceparent header propagation and automatic database/cache span instrumentation for the ChronoPay backend.
+This document describes the implementation of end-to-end OpenTelemetry tracing with W3C traceparent header propagation and automatic database/cache span instrumentation for the Aevon Bank backend.
 
 ## Key Features
 

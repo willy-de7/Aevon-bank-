@@ -19,7 +19,7 @@ import adminRouter from "../admin.js";
 import { defaultAuditLogger } from "../../services/auditLogger.js";
 
 const ADMIN_TOKEN = "test-admin-token-1";
-process.env.CHRONOPAY_ADMIN_TOKEN = ADMIN_TOKEN;
+process.env.AEVON_BANK_ADMIN_TOKEN = ADMIN_TOKEN;
 
 import {
   FraudModelRegistry,
@@ -78,7 +78,7 @@ describe("POST /api/v1/admin/fraud-models/promote", () => {
   it("returns 403 with a wrong admin token", async () => {
     const res = await request(makeApp())
       .post("/api/v1/admin/fraud-models/promote")
-      .set("x-chronopay-admin-token", "wrong-token")
+      .set("x-aevonbank-admin-token", "wrong-token")
       .send({ weights: { v1: 100, v2: 0 }, tenantOverrides: {} });
     expect(res.status).toBe(403);
   });
@@ -86,7 +86,7 @@ describe("POST /api/v1/admin/fraud-models/promote", () => {
   it("returns 400 when weights do not sum to 100", async () => {
     const res = await request(makeApp())
       .post("/api/v1/admin/fraud-models/promote")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({ weights: { v1: 80, v2: 30 }, tenantOverrides: {} });
     expect(res.status).toBe(400);
     expect(res.body.code).toBe("WEIGHTS_DO_NOT_SUM");
@@ -107,7 +107,7 @@ describe("POST /api/v1/admin/fraud-models/promote", () => {
   it("returns 400 when an override references an unknown version", async () => {
     const res = await request(makeApp())
       .post("/api/v1/admin/fraud-models/promote")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({ weights: { v1: 100, v2: 0 }, tenantOverrides: { tenantA: "ghost" } });
     expect(res.status).toBe(400);
     expect(res.body.code).toBe("INVALID_OVERRIDE");
@@ -116,7 +116,7 @@ describe("POST /api/v1/admin/fraud-models/promote", () => {
   it("returns 400 when weights reference an unregistered version", async () => {
     const res = await request(makeApp())
       .post("/api/v1/admin/fraud-models/promote")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({ weights: { v1: 50, ghost: 50 }, tenantOverrides: {} });
     expect(res.status).toBe(400);
     expect(res.body.code).toBe("UNKNOWN_VERSION");
@@ -125,7 +125,7 @@ describe("POST /api/v1/admin/fraud-models/promote", () => {
   it("returns 200, promotes the registry, and emits a FRAUD_MODEL_PROMOTED audit event", async () => {
     const res = await request(makeApp())
       .post("/api/v1/admin/fraud-models/promote")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({
         weights: { v1: 70, v2: 30 },
         tenantOverrides: { tenantA: "v2" },
@@ -155,7 +155,7 @@ describe("POST /api/v1/admin/fraud-models/promote", () => {
   it("returns 400 when body is missing weights", async () => {
     const res = await request(makeApp())
       .post("/api/v1/admin/fraud-models/promote")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({ tenantOverrides: {} });
     expect(res.status).toBe(400);
     expect(res.body.code).toBe("BAD_REQUEST");
@@ -164,7 +164,7 @@ describe("POST /api/v1/admin/fraud-models/promote", () => {
   it("captures actorIp + resource in the audit envelope", async () => {
     await request(makeApp())
       .post("/api/v1/admin/fraud-models/promote")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .set("x-forwarded-for", "203.0.113.42")
       .send({
         weights: { v1: 70, v2: 30 },
@@ -182,11 +182,11 @@ describe("POST /api/v1/admin/fraud-models/promote", () => {
   it("registers new model via the listing endpoint after promotion", async () => {
     await request(makeApp())
       .post("/api/v1/admin/fraud-models/promote")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN)
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN)
       .send({ weights: { v1: 70, v2: 30 }, tenantOverrides: {} });
     const list = await request(makeApp())
       .get("/api/v1/admin/fraud-models/list")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(list.status).toBe(200);
     expect(list.body.models).toHaveLength(2);
   });
@@ -206,7 +206,7 @@ describe("GET /api/v1/admin/fraud-models/list", () => {
   it("returns the registered list", async () => {
     const res = await request(makeApp())
       .get("/api/v1/admin/fraud-models/list")
-      .set("x-chronopay-admin-token", ADMIN_TOKEN);
+      .set("x-aevonbank-admin-token", ADMIN_TOKEN);
     expect(res.status).toBe(200);
     expect(
       res.body.models

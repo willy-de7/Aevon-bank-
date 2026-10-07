@@ -583,7 +583,7 @@ describe("redact utility", () => {
           port: 5432,
           username: "admin",
           password: "super-secret-password",
-          database: "chronopay",
+          database: "aevonbank",
           ssl: true,
           poolMin: 10,
           poolMax: 100,

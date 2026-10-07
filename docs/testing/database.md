@@ -9,7 +9,7 @@ The DB Test Harness is designed to be **destructive**—it will drop and recreat
 To prevent accidental data loss in production, the harness enforces the following strict checks before executing any destructive operations:
 1. `NODE_ENV` must exactly equal `"test"`.
 2. The `DATABASE_URL` environment variable must be set.
-3. The `DATABASE_URL` must contain the string `"test"` (e.g., `postgres://user:pass@localhost:5432/chronopay_test`).
+3. The `DATABASE_URL` must contain the string `"test"` (e.g., `postgres://user:pass@localhost:5432/aevon_bank_test`).
 
 If these conditions are not met, the harness will throw a **Security Error** and abort.
 
@@ -52,7 +52,7 @@ describe("Database Migrations", () => {
   beforeAll(async () => {
     // Ensure environment is set correctly for testing
     process.env.NODE_ENV = "test";
-    process.env.DATABASE_URL = "postgres://postgres:postgres@localhost:5432/chronopay_test";
+    process.env.DATABASE_URL = "postgres://postgres:postgres@localhost:5432/aevon_bank_test";
   });
 
   afterAll(async () => {

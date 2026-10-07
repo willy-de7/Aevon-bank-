@@ -19,7 +19,7 @@ describe("requireFreshMfa middleware — unexpected failures", () => {
 
     const spy = jest.spyOn(mfaService, "verifyChallenge").mockRejectedValueOnce(new Error("boom"));
 
-    const res = await request(app).get("/protected").set("x-chronopay-mfa", "some-token");
+    const res = await request(app).get("/protected").set("x-aevonbank-mfa", "some-token");
     expect(res.status).toBe(500);
     expect(res.body).toEqual({ success: false, error: "Failed to verify MFA challenge" });
 

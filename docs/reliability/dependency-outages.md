@@ -1,6 +1,6 @@
 # Dependency Outage Handling
 
-This document describes how ChronoPay handles Redis and database outages consistently and safely.
+This document describes how Aevon Bank handles Redis and database outages consistently and safely.
 
 ## Overview
 

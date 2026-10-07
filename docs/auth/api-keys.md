@@ -1,6 +1,6 @@
 # API Keys and `apiKeyId`
 
-ChronoPay Backend supports API key authentication through the `x-api-key` header. To avoid logging or storing raw secret key values, the service derives a stable, non-reversible `apiKeyId` from the incoming API key.
+Aevon Bank Backend supports API key authentication through the `x-api-key` header. To avoid logging or storing raw secret key values, the service derives a stable, non-reversible `apiKeyId` from the incoming API key.
 
 ## Purpose
 
@@ -17,7 +17,7 @@ ChronoPay Backend supports API key authentication through the `x-api-key` header
 
 ## Derivation
 
-ChronoPay derives `apiKeyId` using a secure one-way hash:
+Aevon Bank derives `apiKeyId` using a secure one-way hash:
 
 - Algorithm: `sha256`
 - Output format: `apiKey_<hex digest>`
@@ -35,7 +35,7 @@ This approach is deterministic for the same key, but non-reversible.
 
 The application currently validates API keys using the runtime configuration passed to the application factory:
 
-- `CHRONOPAY_API_KEY` is expected when the service is started.
+- `AEVON_BANK_API_KEY` is expected when the service is started.
 - In test mode, the integration harness uses `test-api-key` by default.
 
 ## Notes for developers

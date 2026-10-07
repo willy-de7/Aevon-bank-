@@ -21,8 +21,8 @@
  *   observability pipeline.
  *
  * # Epsilon budget configuration
- * Set per-dataset budgets via the `CHRONOPAY_DP_EPSILON_BUDGET_<DATASET>` env
- * var (e.g. `CHRONOPAY_DP_EPSILON_BUDGET_AUDIT_EVENTS=10`), or pass them
+ * Set per-dataset budgets via the `AEVON_BANK_DP_EPSILON_BUDGET_<DATASET>` env
+ * var (e.g. `AEVON_BANK_DP_EPSILON_BUDGET_AUDIT_EVENTS=10`), or pass them
  * explicitly to the constructor.  The fallback default is controlled by
  * `DEFAULT_EPSILON_BUDGET` below.
  *
@@ -278,8 +278,8 @@ export class EpsilonBudgetTracker {
       return this.budgetOverrides.get(datasetId)!;
     }
 
-    // 2. Environment variable: CHRONOPAY_DP_EPSILON_BUDGET_<DATASET_UPPER>.
-    const envKey = `CHRONOPAY_DP_EPSILON_BUDGET_${datasetId.toUpperCase().replace(/[^A-Z0-9]/g, "_")}`;
+    // 2. Environment variable: AEVON_BANK_DP_EPSILON_BUDGET_<DATASET_UPPER>.
+    const envKey = `AEVON_BANK_DP_EPSILON_BUDGET_${datasetId.toUpperCase().replace(/[^A-Z0-9]/g, "_")}`;
     const envVal = process.env[envKey];
     if (envVal !== undefined) {
       const parsed = Number(envVal);

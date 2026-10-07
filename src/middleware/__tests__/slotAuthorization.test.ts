@@ -4,7 +4,7 @@
  * Covers the public surface of `src/middleware/slotAuthorization.ts`:
  *   - `SlotDeleteAuth` (exported discriminated-union type + the
  *     `Request.slotDeleteAuth` global augmentation it backs)
- *   - `authorizeSlotDelete` (dual x-chronopay-* / x-user-id header contract)
+ *   - `authorizeSlotDelete` (dual x-aevonbank-* / x-user-id header contract)
  *   - `assertSlotDeleteAllowed` (ownership check with intentional
  *     403-for-non-owner vs 404-masking divergence between the two modes)
  *
@@ -90,9 +90,9 @@ beforeEach(() => {
 // ─── SlotDeleteAuth type contract ─────────────────────────────────────────────
 
 describe("SlotDeleteAuth", () => {
-  it("accepts a chronopay auth shape with a role", () => {
-    const auth: SlotDeleteAuth = { mode: "chronopay", userId: "u-1", role: "customer" };
-    expect(auth.mode).toBe("chronopay");
+  it("accepts a aevonbank auth shape with a role", () => {
+    const auth: SlotDeleteAuth = { mode: "aevonbank", userId: "u-1", role: "customer" };
+    expect(auth.mode).toBe("aevonbank");
   });
 
   it("accepts a legacy auth shape without a role", () => {
@@ -103,15 +103,15 @@ describe("SlotDeleteAuth", () => {
 
   it("narrows on the discriminant", () => {
     const auths: SlotDeleteAuth[] = [
-      { mode: "chronopay", userId: "u-1", role: "admin" },
+      { mode: "aevonbank", userId: "u-1", role: "admin" },
       { mode: "legacy", userId: "u-2" },
     ];
-    const chronopay = auths.filter((a) => a.mode === "chronopay");
+    const aevonbank = auths.filter((a) => a.mode === "aevonbank");
     const legacy = auths.filter((a) => a.mode === "legacy");
-    expect(chronopay).toHaveLength(1);
+    expect(aevonbank).toHaveLength(1);
     expect(legacy).toHaveLength(1);
-    // `role` is only reachable on the chronopay branch of the union.
-    expect(chronopay[0]?.role).toBe("admin");
+    // `role` is only reachable on the aevonbank branch of the union.
+    expect(aevonbank[0]?.role).toBe("admin");
   });
 
   it("augments Express Request with an optional slotDeleteAuth field", () => {
@@ -138,23 +138,23 @@ describe("authorizeSlotDelete — unauthenticated requests", () => {
     expect(req.slotDeleteAuth).toBeUndefined();
   });
 
-  it("returns 401 when only the chronopay role header is present", () => {
+  it("returns 401 when only the aevonbank role header is present", () => {
     const res = makeRes();
     const next = makeNext();
 
-    authorizeSlotDelete(makeReq({ "x-chronopay-role": "customer" }), res, next);
+    authorizeSlotDelete(makeReq({ "x-aevonbank-role": "customer" }), res, next);
 
     expect(res.statusCode).toBe(401);
     expect(res.body).toEqual({ success: false, error: "Authentication required." });
     expect(next).not.toHaveBeenCalled();
   });
 
-  it("returns 401 when the chronopay user id header is an empty string", () => {
+  it("returns 401 when the aevonbank user id header is an empty string", () => {
     const res = makeRes();
     const next = makeNext();
 
     authorizeSlotDelete(
-      makeReq({ "x-chronopay-user-id": "", "x-chronopay-role": "admin" }),
+      makeReq({ "x-aevonbank-user-id": "", "x-aevonbank-role": "admin" }),
       res,
       next,
     );
@@ -187,11 +187,11 @@ describe("authorizeSlotDelete — unauthenticated requests", () => {
   });
 });
 
-// ─── authorizeSlotDelete — chronopay mode ─────────────────────────────────────
+// ─── authorizeSlotDelete — aevonbank mode ─────────────────────────────────────
 
-describe("authorizeSlotDelete — x-chronopay-* mode", () => {
-  it("attaches chronopay auth and calls next for a non-admin owner", () => {
-    const req = makeReq({ "x-chronopay-user-id": OWNER, "x-chronopay-role": "customer" });
+describe("authorizeSlotDelete — x-aevonbank-* mode", () => {
+  it("attaches aevonbank auth and calls next for a non-admin owner", () => {
+    const req = makeReq({ "x-aevonbank-user-id": OWNER, "x-aevonbank-role": "customer" });
     const res = makeRes();
     const next = makeNext();
 
@@ -200,7 +200,7 @@ describe("authorizeSlotDelete — x-chronopay-* mode", () => {
     expect(next).toHaveBeenCalledTimes(1);
     expect(next).toHaveBeenCalledWith();
     expect(req.slotDeleteAuth).toEqual({
-      mode: "chronopay",
+      mode: "aevonbank",
       userId: OWNER,
       role: "customer",
     });
@@ -209,33 +209,33 @@ describe("authorizeSlotDelete — x-chronopay-* mode", () => {
   });
 
   it("defaults the role to 'customer' when the role header is absent", () => {
-    const req = makeReq({ "x-chronopay-user-id": OWNER });
+    const req = makeReq({ "x-aevonbank-user-id": OWNER });
     const res = makeRes();
 
     authorizeSlotDelete(req, res, makeNext());
 
     expect(req.slotDeleteAuth).toEqual({
-      mode: "chronopay",
+      mode: "aevonbank",
       userId: OWNER,
       role: "customer",
     });
   });
 
   it("preserves an explicit non-admin role verbatim", () => {
-    const req = makeReq({ "x-chronopay-user-id": OWNER, "x-chronopay-role": "professional" });
+    const req = makeReq({ "x-aevonbank-user-id": OWNER, "x-aevonbank-role": "professional" });
     const res = makeRes();
 
     authorizeSlotDelete(req, res, makeNext());
 
     expect(req.slotDeleteAuth).toEqual({
-      mode: "chronopay",
+      mode: "aevonbank",
       userId: OWNER,
       role: "professional",
     });
   });
 
   it("bypasses the ownership check for the admin role and attaches no auth", () => {
-    const req = makeReq({ "x-chronopay-user-id": OTHER, "x-chronopay-role": "admin" });
+    const req = makeReq({ "x-aevonbank-user-id": OTHER, "x-aevonbank-role": "admin" });
     const res = makeRes();
     const next = makeNext();
 
@@ -246,48 +246,48 @@ describe("authorizeSlotDelete — x-chronopay-* mode", () => {
   });
 
   it("treats 'Admin' (wrong case) as a normal, non-admin role", () => {
-    const req = makeReq({ "x-chronopay-user-id": OWNER, "x-chronopay-role": "Admin" });
+    const req = makeReq({ "x-aevonbank-user-id": OWNER, "x-aevonbank-role": "Admin" });
     const res = makeRes();
 
     authorizeSlotDelete(req, res, makeNext());
 
     expect(req.slotDeleteAuth).toEqual({
-      mode: "chronopay",
+      mode: "aevonbank",
       userId: OWNER,
       role: "Admin",
     });
   });
 
   it("treats a padded 'admin ' as a normal, non-admin role", () => {
-    const req = makeReq({ "x-chronopay-user-id": OWNER, "x-chronopay-role": "admin " });
+    const req = makeReq({ "x-aevonbank-user-id": OWNER, "x-aevonbank-role": "admin " });
     const res = makeRes();
 
     authorizeSlotDelete(req, res, makeNext());
 
     expect(req.slotDeleteAuth).toEqual({
-      mode: "chronopay",
+      mode: "aevonbank",
       userId: OWNER,
       role: "admin ",
     });
   });
 
   it("does not trim or reject a whitespace-only user id", () => {
-    const req = makeReq({ "x-chronopay-user-id": "   " });
+    const req = makeReq({ "x-aevonbank-user-id": "   " });
     const res = makeRes();
 
     authorizeSlotDelete(req, res, makeNext());
 
     expect(req.slotDeleteAuth).toEqual({
-      mode: "chronopay",
+      mode: "aevonbank",
       userId: "   ",
       role: "customer",
     });
   });
 
-  it("prefers chronopay headers over legacy admin headers", () => {
+  it("prefers aevonbank headers over legacy admin headers", () => {
     const req = makeReq({
-      "x-chronopay-user-id": OWNER,
-      "x-chronopay-role": "customer",
+      "x-aevonbank-user-id": OWNER,
+      "x-aevonbank-role": "customer",
       "x-user-id": OTHER,
       "x-role": "admin",
     });
@@ -297,21 +297,21 @@ describe("authorizeSlotDelete — x-chronopay-* mode", () => {
     authorizeSlotDelete(req, res, next);
 
     expect(req.slotDeleteAuth).toEqual({
-      mode: "chronopay",
+      mode: "aevonbank",
       userId: OWNER,
       role: "customer",
     });
     expect(next).toHaveBeenCalledTimes(1);
   });
 
-  it("rejects when chronopay headers are empty even if legacy headers are admin", () => {
+  it("rejects when aevonbank headers are empty even if legacy headers are admin", () => {
     const res = makeRes();
     const next = makeNext();
 
     authorizeSlotDelete(
       makeReq({
-        "x-chronopay-user-id": "",
-        "x-chronopay-role": "customer",
+        "x-aevonbank-user-id": "",
+        "x-aevonbank-role": "customer",
         "x-user-id": OWNER,
         "x-role": "admin",
       }),
@@ -397,9 +397,9 @@ describe("assertSlotDeleteAllowed", () => {
     expect(res.body).toBeUndefined();
   });
 
-  it("returns true for a chronopay owner", async () => {
+  it("returns true for a aevonbank owner", async () => {
     const req = makeReq();
-    req.slotDeleteAuth = { mode: "chronopay", userId: OWNER, role: "customer" };
+    req.slotDeleteAuth = { mode: "aevonbank", userId: OWNER, role: "customer" };
     const res = makeRes();
     findById.mockResolvedValue(slotOwnedBy(OWNER));
 
@@ -409,9 +409,9 @@ describe("assertSlotDeleteAllowed", () => {
     expect(res.body).toBeUndefined();
   });
 
-  it("returns 403 'Insufficient permissions' for a chronopay non-owner", async () => {
+  it("returns 403 'Insufficient permissions' for a aevonbank non-owner", async () => {
     const req = makeReq();
-    req.slotDeleteAuth = { mode: "chronopay", userId: OTHER, role: "customer" };
+    req.slotDeleteAuth = { mode: "aevonbank", userId: OTHER, role: "customer" };
     const res = makeRes();
     findById.mockResolvedValue(slotOwnedBy(OWNER));
 
@@ -445,11 +445,11 @@ describe("assertSlotDeleteAllowed", () => {
   });
 
   it("diverges on status code for the same non-owner depending on mode", async () => {
-    const chronopayReq = makeReq();
-    chronopayReq.slotDeleteAuth = { mode: "chronopay", userId: OTHER, role: "customer" };
-    const chronopayRes = makeRes();
+    const aevonBankReq = makeReq();
+    aevonBankReq.slotDeleteAuth = { mode: "aevonbank", userId: OTHER, role: "customer" };
+    const aevonBankRes = makeRes();
     findById.mockResolvedValue(slotOwnedBy(OWNER));
-    await assertSlotDeleteAllowed(chronopayReq, chronopayRes, SLOT_ID);
+    await assertSlotDeleteAllowed(aevonBankReq, aevonBankRes, SLOT_ID);
 
     const legacyReq = makeReq();
     legacyReq.slotDeleteAuth = { mode: "legacy", userId: OTHER };
@@ -457,13 +457,13 @@ describe("assertSlotDeleteAllowed", () => {
     findById.mockResolvedValue(slotOwnedBy(OWNER));
     await assertSlotDeleteAllowed(legacyReq, legacyRes, SLOT_ID);
 
-    expect(chronopayRes.statusCode).toBe(403);
+    expect(aevonBankRes.statusCode).toBe(403);
     expect(legacyRes.statusCode).toBe(404);
   });
 
   it("returns 404 'Slot not found' when the service raises SlotNotFoundError", async () => {
     const req = makeReq();
-    req.slotDeleteAuth = { mode: "chronopay", userId: OWNER, role: "customer" };
+    req.slotDeleteAuth = { mode: "aevonbank", userId: OWNER, role: "customer" };
     const res = makeRes();
     findById.mockRejectedValue(new SlotNotFoundError(SLOT_ID));
 
@@ -487,7 +487,7 @@ describe("assertSlotDeleteAllowed", () => {
 
   it("rethrows unexpected service errors and writes no response", async () => {
     const req = makeReq();
-    req.slotDeleteAuth = { mode: "chronopay", userId: OWNER, role: "customer" };
+    req.slotDeleteAuth = { mode: "aevonbank", userId: OWNER, role: "customer" };
     const res = makeRes();
     const boom = new Error("db exploded");
     findById.mockRejectedValue(boom);
@@ -511,7 +511,7 @@ describe("assertSlotDeleteAllowed", () => {
 
   it("does not mutate the attached auth", async () => {
     const req = makeReq();
-    const auth: SlotDeleteAuth = { mode: "chronopay", userId: OTHER, role: "customer" };
+    const auth: SlotDeleteAuth = { mode: "aevonbank", userId: OTHER, role: "customer" };
     req.slotDeleteAuth = auth;
     findById.mockResolvedValue(slotOwnedBy(OWNER));
 
@@ -542,7 +542,7 @@ describe("authorizeSlotDelete → assertSlotDeleteAllowed state transitions", ()
   });
 
   it("admin → no auth attached → guard allows without a lookup", async () => {
-    const req = makeReq({ "x-chronopay-user-id": OTHER, "x-chronopay-role": "admin" });
+    const req = makeReq({ "x-aevonbank-user-id": OTHER, "x-aevonbank-role": "admin" });
     const res = makeRes();
     const next = makeNext();
 
@@ -554,12 +554,12 @@ describe("authorizeSlotDelete → assertSlotDeleteAllowed state transitions", ()
     expect(findById).not.toHaveBeenCalled();
   });
 
-  it("chronopay owner → auth attached → guard allows and writes nothing", async () => {
-    const req = makeReq({ "x-chronopay-user-id": OWNER, "x-chronopay-role": "customer" });
+  it("aevonbank owner → auth attached → guard allows and writes nothing", async () => {
+    const req = makeReq({ "x-aevonbank-user-id": OWNER, "x-aevonbank-role": "customer" });
     const res = makeRes();
 
     authorizeSlotDelete(req, res, makeNext());
-    expect(req.slotDeleteAuth).toEqual({ mode: "chronopay", userId: OWNER, role: "customer" });
+    expect(req.slotDeleteAuth).toEqual({ mode: "aevonbank", userId: OWNER, role: "customer" });
 
     findById.mockResolvedValue(slotOwnedBy(OWNER));
     await expect(assertSlotDeleteAllowed(req, res, SLOT_ID)).resolves.toBe(true);
@@ -568,8 +568,8 @@ describe("authorizeSlotDelete → assertSlotDeleteAllowed state transitions", ()
     expect(res.body).toBeUndefined();
   });
 
-  it("chronopay non-owner → auth attached → guard stops with 403", async () => {
-    const req = makeReq({ "x-chronopay-user-id": OTHER, "x-chronopay-role": "customer" });
+  it("aevonbank non-owner → auth attached → guard stops with 403", async () => {
+    const req = makeReq({ "x-aevonbank-user-id": OTHER, "x-aevonbank-role": "customer" });
     const res = makeRes();
 
     authorizeSlotDelete(req, res, makeNext());

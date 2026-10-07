@@ -1,6 +1,6 @@
 # Pricing Strategies
 
-ChronoPay supports dynamic pricing on booking intents. Suppliers can opt into one of three strategies. The resolved price and all inputs are **snapshotted** onto the intent at creation time, making resolution deterministic and auditable.
+Aevon Bank supports dynamic pricing on booking intents. Suppliers can opt into one of three strategies. The resolved price and all inputs are **snapshotted** onto the intent at creation time, making resolution deterministic and auditable.
 
 ## Strategies
 

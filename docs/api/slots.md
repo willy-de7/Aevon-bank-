@@ -80,7 +80,7 @@ Lists all available slots. Results are served from Redis cache when available (T
 
 **Authentication**
 
-- Optional: `x-chronopay-user-id` and `x-chronopay-role` headers for authenticated access
+- Optional: `x-aevonbank-user-id` and `x-aevonbank-role` headers for authenticated access
 
 **Responses**
 
@@ -177,7 +177,7 @@ Returns a single slot by ID. Attempts to read from cache first, then falls back 
 
 **Authentication**
 
-- Optional: `x-chronopay-user-id` and `x-chronopay-role` headers for authenticated access
+- Optional: `x-aevonbank-user-id` and `x-aevonbank-role` headers for authenticated access
 
 **Parameters**
 
@@ -219,7 +219,7 @@ Updates an existing slot. Requires admin token authentication.
 
 **Authentication**
 
-- Required: `x-chronopay-admin-token` header
+- Required: `x-aevonbank-admin-token` header
 
 **Parameters**
 
@@ -243,10 +243,10 @@ At least one field must be provided.
 |---|---|---|---|
 | `200 OK` | - | Slot updated | Update successful |
 | `400 Bad Request` | `BAD_REQUEST` | slotId must be a positive integer | Invalid ID format |
-| `400 Bad Request` | `BAD_REQUEST` | Missing required header: x-chronopay-admin-token | Missing admin token |
+| `400 Bad Request` | `BAD_REQUEST` | Missing required header: x-aevonbank-admin-token | Missing admin token |
 | `400 Bad Request` | `BAD_REQUEST` | update payload must include at least one field | No fields provided |
 | `400 Bad Request` | `BAD_REQUEST` | Slot validation error | Service layer validation failed |
-| `401 Unauthorized` | `UNAUTHORIZED` | Missing required header: x-chronopay-admin-token | Missing admin token |
+| `401 Unauthorized` | `UNAUTHORIZED` | Missing required header: x-aevonbank-admin-token | Missing admin token |
 | `403 Forbidden` | `FORBIDDEN` | Invalid admin token | Invalid admin token |
 | `404 Not Found` | `NOT_FOUND` | Slot {id} was not found | Slot does not exist |
 | `409 Conflict` | `CONFLICT` | Slot overlaps with an existing reservation | Updated range conflicts |

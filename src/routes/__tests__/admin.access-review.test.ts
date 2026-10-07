@@ -23,11 +23,11 @@ const app = buildApp();
 beforeEach(() => {
   accessReviewService.clear();
   // Set admin token globally so middleware can do proper auth checks
-  process.env.CHRONOPAY_ADMIN_TOKEN = "test-admin-token";
+  process.env.AEVON_BANK_ADMIN_TOKEN = "test-admin-token";
 });
 
 afterEach(() => {
-  delete process.env.CHRONOPAY_ADMIN_TOKEN;
+  delete process.env.AEVON_BANK_ADMIN_TOKEN;
 });
 
 describe("Admin Access Review API", () => {
@@ -42,7 +42,7 @@ describe("Admin Access Review API", () => {
     it("returns 403 with invalid admin token", async () => {
       const res = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "wrong-token");
+        .set("x-aevonbank-admin-token", "wrong-token");
       expect(res.status).toBe(403);
     });
 
@@ -71,7 +71,7 @@ describe("Admin Access Review API", () => {
     it("creates a snapshot and returns valid grant data", async () => {
       const res = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(201);
       expect(res.body.success).toBe(true);
@@ -87,11 +87,11 @@ describe("Admin Access Review API", () => {
     it("creates a forced snapshot when force=true", async () => {
       const res1 = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const res2 = await request(app)
         .post("/api/v1/admin/access-review/snapshots?force=true")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res2.body.snapshot.snapshotId).not.toBe(res1.body.snapshot.snapshotId);
     });
@@ -99,11 +99,11 @@ describe("Admin Access Review API", () => {
     it("returns existing snapshot without force", async () => {
       const res1 = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const res2 = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res2.body.snapshot.snapshotId).toBe(res1.body.snapshot.snapshotId);
     });
@@ -111,11 +111,11 @@ describe("Admin Access Review API", () => {
     it("lists snapshots", async () => {
       await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const res = await request(app)
         .get("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -125,11 +125,11 @@ describe("Admin Access Review API", () => {
     it("returns snapshot summaries", async () => {
       await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const res = await request(app)
         .get("/api/v1/admin/access-review/snapshots?summaries=true")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(200);
       expect(res.body.summaries).toBeDefined();
@@ -139,13 +139,13 @@ describe("Admin Access Review API", () => {
     it("gets a snapshot by ID", async () => {
       const createRes = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const snapshotId = createRes.body.snapshot.snapshotId;
 
       const res = await request(app)
         .get(`/api/v1/admin/access-review/snapshots/${snapshotId}`)
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(200);
       expect(res.body.snapshot.snapshotId).toBe(snapshotId);
@@ -154,7 +154,7 @@ describe("Admin Access Review API", () => {
     it("returns 404 for non-existent snapshot", async () => {
       const res = await request(app)
         .get("/api/v1/admin/access-review/snapshots/non-existent")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(404);
     });
@@ -162,13 +162,13 @@ describe("Admin Access Review API", () => {
     it("generates JSON report for a snapshot", async () => {
       const createRes = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const snapshotId = createRes.body.snapshot.snapshotId;
 
       const res = await request(app)
         .get(`/api/v1/admin/access-review/snapshots/${snapshotId}/report`)
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(200);
       expect(res.headers["content-type"]).toContain("application/json");
@@ -180,13 +180,13 @@ describe("Admin Access Review API", () => {
     it("generates CSV report for a snapshot", async () => {
       const createRes = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const snapshotId = createRes.body.snapshot.snapshotId;
 
       const res = await request(app)
         .get(`/api/v1/admin/access-review/snapshots/${snapshotId}/report?format=csv`)
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(200);
       expect(res.headers["content-type"]).toContain("text/csv");
@@ -196,13 +196,13 @@ describe("Admin Access Review API", () => {
     it("creates an attestation for a snapshot", async () => {
       const createRes = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const snapshotId = createRes.body.snapshot.snapshotId;
 
       const res = await request(app)
         .post(`/api/v1/admin/access-review/snapshots/${snapshotId}/attestations`)
-        .set("x-chronopay-admin-token", "test-admin-token")
+        .set("x-aevonbank-admin-token", "test-admin-token")
         .send({ reviewer: "reviewer-alice", outcome: "approved" });
 
       expect(res.status).toBe(201);
@@ -213,13 +213,13 @@ describe("Admin Access Review API", () => {
     it("returns 400 when attestation is missing reviewer", async () => {
       const createRes = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const snapshotId = createRes.body.snapshot.snapshotId;
 
       const res = await request(app)
         .post(`/api/v1/admin/access-review/snapshots/${snapshotId}/attestations`)
-        .set("x-chronopay-admin-token", "test-admin-token")
+        .set("x-aevonbank-admin-token", "test-admin-token")
         .send({ outcome: "approved" });
 
       expect(res.status).toBe(400);
@@ -229,13 +229,13 @@ describe("Admin Access Review API", () => {
     it("returns 400 when attestation outcome is invalid", async () => {
       const createRes = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const snapshotId = createRes.body.snapshot.snapshotId;
 
       const res = await request(app)
         .post(`/api/v1/admin/access-review/snapshots/${snapshotId}/attestations`)
-        .set("x-chronopay-admin-token", "test-admin-token")
+        .set("x-aevonbank-admin-token", "test-admin-token")
         .send({ reviewer: "alice", outcome: "invalid" });
 
       expect(res.status).toBe(400);
@@ -244,18 +244,18 @@ describe("Admin Access Review API", () => {
     it("returns 400 on duplicate attestation", async () => {
       const createRes = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const snapshotId = createRes.body.snapshot.snapshotId;
 
       await request(app)
         .post(`/api/v1/admin/access-review/snapshots/${snapshotId}/attestations`)
-        .set("x-chronopay-admin-token", "test-admin-token")
+        .set("x-aevonbank-admin-token", "test-admin-token")
         .send({ reviewer: "alice", outcome: "approved" });
 
       const res = await request(app)
         .post(`/api/v1/admin/access-review/snapshots/${snapshotId}/attestations`)
-        .set("x-chronopay-admin-token", "test-admin-token")
+        .set("x-aevonbank-admin-token", "test-admin-token")
         .send({ reviewer: "alice", outcome: "approved" });
 
       expect(res.status).toBe(400);
@@ -265,18 +265,18 @@ describe("Admin Access Review API", () => {
     it("lists attestations", async () => {
       const createRes = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const snapshotId = createRes.body.snapshot.snapshotId;
 
       await request(app)
         .post(`/api/v1/admin/access-review/snapshots/${snapshotId}/attestations`)
-        .set("x-chronopay-admin-token", "test-admin-token")
+        .set("x-aevonbank-admin-token", "test-admin-token")
         .send({ reviewer: "alice", outcome: "approved" });
 
       const res = await request(app)
         .get("/api/v1/admin/access-review/attestations")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(200);
       expect(res.body.total).toBeGreaterThan(0);
@@ -285,18 +285,18 @@ describe("Admin Access Review API", () => {
     it("filters attestations by snapshotId", async () => {
       const createRes = await request(app)
         .post("/api/v1/admin/access-review/snapshots")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       const snapshotId = createRes.body.snapshot.snapshotId;
 
       await request(app)
         .post(`/api/v1/admin/access-review/snapshots/${snapshotId}/attestations`)
-        .set("x-chronopay-admin-token", "test-admin-token")
+        .set("x-aevonbank-admin-token", "test-admin-token")
         .send({ reviewer: "alice", outcome: "approved" });
 
       const res = await request(app)
         .get(`/api/v1/admin/access-review/attestations?snapshotId=${snapshotId}`)
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(200);
       expect(res.body.total).toBe(1);
@@ -305,7 +305,7 @@ describe("Admin Access Review API", () => {
     it("detects gaps", async () => {
       const res = await request(app)
         .get("/api/v1/admin/access-review/gaps")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(200);
       expect(res.body.gaps).toBeDefined();
@@ -316,7 +316,7 @@ describe("Admin Access Review API", () => {
     it("generates JSON bundled report", async () => {
       const res = await request(app)
         .get("/api/v1/admin/access-review/bundled-report")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(200);
       expect(res.headers["content-type"]).toContain("application/json");
@@ -325,7 +325,7 @@ describe("Admin Access Review API", () => {
     it("generates CSV bundled report", async () => {
       const res = await request(app)
         .get("/api/v1/admin/access-review/bundled-report?format=csv")
-        .set("x-chronopay-admin-token", "test-admin-token");
+        .set("x-aevonbank-admin-token", "test-admin-token");
 
       expect(res.status).toBe(200);
       expect(res.headers["content-type"]).toContain("text/csv");

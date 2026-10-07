@@ -121,9 +121,9 @@ function registerSwaggerDocs(app: express.Express) {
       swaggerDefinition: {
         openapi: "3.0.0",
         info: {
-          title: "ChronoPay API",
+          title: "Aevon Bank API",
           version: "1.0.0",
-          description: "API for ChronoPay payment and scheduling platform",
+          description: "API for Aevon Bank payment and scheduling platform",
         },
         components: {
           securitySchemes: {
@@ -135,12 +135,12 @@ function registerSwaggerDocs(app: express.Express) {
               description: "JWT token for user authentication (obtained from auth service)",
             },
             // Header-based authentication (current implementation)
-            chronoPayAuth: {
+            aevonBankAuth: {
               type: "apiKey",
               in: "header",
-              name: "x-chronopay-user-id",
+              name: "x-aevonbank-user-id",
               description:
-                "User ID header for authentication (must be paired with x-chronopay-role)",
+                "User ID header for authentication (must be paired with x-aevonbank-role)",
             },
             // API Key authentication
             apiKeyAuth: {
@@ -153,7 +153,7 @@ function registerSwaggerDocs(app: express.Express) {
             adminTokenAuth: {
               type: "apiKey",
               in: "header",
-              name: "x-chronopay-admin-token",
+              name: "x-aevonbank-admin-token",
               description: "Admin token for administrative operations",
             },
           },
@@ -187,7 +187,7 @@ function registerSwaggerDocs(app: express.Express) {
                       enum: [
                         "Authentication required",
                         "Missing API key",
-                        "Missing required header: x-chronopay-admin-token",
+                        "Missing required header: x-aevonbank-admin-token",
                       ],
                     },
                   },
@@ -235,7 +235,7 @@ function registerSwaggerDocs(app: express.Express) {
         },
         security: [
           // Default security requirement - can be overridden per endpoint
-          { chronoPayAuth: [] },
+          { aevonBankAuth: [] },
         ],
       },
       apis: chooseApis(),
@@ -311,7 +311,7 @@ export function createApp(options: AppFactoryOptions = {}) {
 
   // Health check (liveness — cheap, no deps)
   app.get("/health", (_req, res) => {
-    const health = { status: "ok", service: "chronopay-backend" };
+    const health = { status: "ok", service: "aevon-bank-backend" };
     // Only include timestamp/version if not in a strict test environment that expects exactly two fields
     if (_req.header("x-strict-health")) {
       return res.json(health);
@@ -340,7 +340,7 @@ export function createApp(options: AppFactoryOptions = {}) {
   app.get("/ready", (_req, res) => {
     res.json({
       status: "ready",
-      service: "chronopay-backend",
+      service: "aevon-bank-backend",
       timestamp: new Date().toISOString(),
     });
   });
@@ -348,7 +348,7 @@ export function createApp(options: AppFactoryOptions = {}) {
   app.get("/live", (_req, res) => {
     res.json({
       status: "alive",
-      service: "chronopay-backend",
+      service: "aevon-bank-backend",
       timestamp: new Date().toISOString(),
     });
   });

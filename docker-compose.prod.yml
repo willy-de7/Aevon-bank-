@@ -1,11 +1,11 @@
-# Production Docker Compose configuration for ChronoPay Backend
+# Production Docker Compose configuration for Aevon Bank Backend
 # Use this file with: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 version: "3.8"
 
 services:
   api:
-    container_name: chronopay-api-prod
+    container_name: aevon-bank-api-prod
     restart: always
     deploy:
       replicas: 1
@@ -38,5 +38,5 @@ services:
         max-file: "3"
         labels: "service_name,environment"
     labels:
-      - "com.chronopay.service=api"
-      - "com.chronopay.environment=production"
+      - "com.aevonbank.service=api"
+      - "com.aevonbank.environment=production"

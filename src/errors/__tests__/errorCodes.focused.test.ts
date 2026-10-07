@@ -42,7 +42,7 @@ describe("errorCodes focused public-contract behavior", () => {
       // @ts-expect-error Internal codes must not be assignable to PublicErrorCode.
       const internalCode: PublicErrorCode = "DB_ERROR";
       // @ts-expect-error Unknown codes must not be assignable to PublicErrorCode.
-      const unknownCode: PublicErrorCode = "NOT_A_CHRONOPAY_CODE";
+      const unknownCode: PublicErrorCode = "NOT_AN_AEVON_BANK_CODE";
 
       expect(PUBLIC_ERROR_CODES).not.toContain(internalCode);
       expect(PUBLIC_ERROR_CODES).not.toContain(unknownCode);

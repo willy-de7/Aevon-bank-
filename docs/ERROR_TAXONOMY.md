@@ -2,7 +2,7 @@
 
 ## Overview
 
-ChronoPay's error code taxonomy is a typed, discriminated union system that distinguishes between **public-facing error codes** (stable API contract) and **internal-only codes** (transient implementation details). All error messages are routed through i18n keys instead of hardcoded literals.
+Aevon Bank's error code taxonomy is a typed, discriminated union system that distinguishes between **public-facing error codes** (stable API contract) and **internal-only codes** (transient implementation details). All error messages are routed through i18n keys instead of hardcoded literals.
 
 **Key Benefits:**
 

@@ -21,7 +21,7 @@
  * cannot be inferred from the published totals. Parameters:
  *
  *   - **epsilon** (ε): controls noise magnitude. Lower ε → more noise → stronger
- *     privacy. Configured via `CHRONOPAY_DP_EPSILON` env var (default 1.0).
+ *     privacy. Configured via `AEVON_BANK_DP_EPSILON` env var (default 1.0).
  *   - **sensitivity**: fixed at 1 for COUNT queries (adding/removing one event
  *     changes any aggregate by at most 1).
  *
@@ -30,7 +30,7 @@
  * blocked and a {@link BudgetExhaustedError} is thrown.
  *
  * ## Disabling DP
- * Set `CHRONOPAY_DP_ENABLED=false` to skip noise (useful for local dev/debug).
+ * Set `AEVON_BANK_DP_ENABLED=false` to skip noise (useful for local dev/debug).
  * The analytics summary is still included but will show exact counts.
  *
  * @module auditExportService
@@ -62,7 +62,7 @@ import {
 /** Dataset identifier used for budget accounting. */
 const AUDIT_DATASET_ID = "audit_events";
 
-/** Default epsilon per export when CHRONOPAY_DP_EPSILON is not set. */
+/** Default epsilon per export when AEVON_BANK_DP_EPSILON is not set. */
 const DEFAULT_DP_EPSILON = 1.0;
 
 /** L1 sensitivity for a COUNT query: adding/removing 1 record changes count by 1. */
@@ -112,7 +112,7 @@ export interface AuditAnalyticsSummary {
   /** Full description of the DP parameters and mechanism used. */
   differentialPrivacy: DifferentialPrivacyMetadata;
   /**
-   * When DP is disabled (CHRONOPAY_DP_ENABLED=false) this flag is true so
+   * When DP is disabled (AEVON_BANK_DP_ENABLED=false) this flag is true so
    * consumers know exact counts are present.
    */
   dpDisabled?: true;
@@ -181,16 +181,16 @@ function parseToken(token: string, secret: string): { exportId: string; expiresA
 
 export class AuditExportService {
   private get ttlSeconds(): number {
-    return Number(process.env.CHRONOPAY_AUDIT_EXPORT_TTL_SECONDS ?? DEFAULT_EXPORT_TTL_SECONDS);
+    return Number(process.env.AEVON_BANK_AUDIT_EXPORT_TTL_SECONDS ?? DEFAULT_EXPORT_TTL_SECONDS);
   }
 
   private get secret(): string {
-    return process.env.CHRONOPAY_AUDIT_EXPORT_SECRET || "";
+    return process.env.AEVON_BANK_AUDIT_EXPORT_SECRET || "";
   }
 
   /** Epsilon for Laplace noise on this export. Validated at call time. */
   private get dpEpsilon(): number {
-    const raw = process.env.CHRONOPAY_DP_EPSILON;
+    const raw = process.env.AEVON_BANK_DP_EPSILON;
     if (raw !== undefined) {
       const parsed = Number(raw);
       if (Number.isFinite(parsed) && parsed > 0) return parsed;
@@ -200,7 +200,7 @@ export class AuditExportService {
 
   /** When false, Laplace noise is skipped (exact counts are exported). */
   private get dpEnabled(): boolean {
-    const val = process.env.CHRONOPAY_DP_ENABLED;
+    const val = process.env.AEVON_BANK_DP_ENABLED;
     if (val === undefined) return true;
     return val.toLowerCase() !== "false";
   }

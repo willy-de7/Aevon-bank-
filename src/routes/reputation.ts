@@ -13,7 +13,7 @@ import { createAuthAwareRateLimiter } from "../middleware/rateLimiter.js";
 const router = Router();
 
 /**
- * Extracts authenticated actor details from JWT payload or ChronoPay custom headers.
+ * Extracts authenticated actor details from JWT payload or Aevon Bank custom headers.
  */
 function getAuthenticatedActor(req: Request): {
   userId: string | null;
@@ -41,11 +41,11 @@ function getAuthenticatedActor(req: Request): {
 
   const userIdHeader =
     (req.headers["x-supplier-owner-id"] as string) ||
-    (req.headers["x-chronopay-user-id"] as string) ||
+    (req.headers["x-aevonbank-user-id"] as string) ||
     (req.headers["x-user-id"] as string);
 
   const roleHeader =
-    (req.headers["x-chronopay-role"] as string) ||
+    (req.headers["x-aevonbank-role"] as string) ||
     (req.headers["x-user-role"] as string) ||
     (req.headers["x-role"] as string);
 

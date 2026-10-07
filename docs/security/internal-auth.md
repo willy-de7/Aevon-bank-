@@ -1,6 +1,6 @@
 # Internal HMAC Authentication
 
-ChronoPay supports optional HMAC authentication for internal scheduler/worker trigger endpoints.
+Aevon Bank supports optional HMAC authentication for internal scheduler/worker trigger endpoints.
 
 ## Protected endpoint
 
@@ -13,8 +13,8 @@ When unset, internal HMAC auth is bypassed for local development.
 
 ## Required headers
 
-- `x-chronopay-timestamp`: Unix timestamp in milliseconds
-- `x-chronopay-signature`: HMAC-SHA256 hex digest
+- `x-aevonbank-timestamp`: Unix timestamp in milliseconds
+- `x-aevonbank-signature`: HMAC-SHA256 hex digest
 
 ## Signature format
 

@@ -3,7 +3,7 @@ import { Registry, collectDefaultMetrics, Histogram, Counter, Gauge } from "prom
 import { Request, Response, NextFunction } from "express";
 
 /**
- * Prometheus metrics registry for the ChronoPay Backend.
+ * Prometheus metrics registry for the Aevon Bank Backend.
  */
 export const register = new Registry();
 

@@ -37,8 +37,8 @@ describe("POST /api/v1/booking-intents", () => {
 
       const response = await request(app)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", validUserId)
-        .set("x-chronopay-role", validRole)
+        .set("x-aevonbank-user-id", validUserId)
+        .set("x-aevonbank-role", validRole)
         .send({ slotId: validSlotId });
 
       expect(response.status).toBe(503);
@@ -49,10 +49,10 @@ describe("POST /api/v1/booking-intents", () => {
       });
     });
 
-    it("should return 401 if x-chronopay-user-id is missing", async () => {
+    it("should return 401 if x-aevonbank-user-id is missing", async () => {
       const response = await request(app)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-role", validRole)
+        .set("x-aevonbank-role", validRole)
         .send({ slotId: validSlotId });
 
       expect(response.status).toBe(401);
@@ -65,8 +65,8 @@ describe("POST /api/v1/booking-intents", () => {
     it("should return 403 if role is not authorized", async () => {
       const response = await request(app)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", validUserId)
-        .set("x-chronopay-role", "professional") // Professional is not allowed in router
+        .set("x-aevonbank-user-id", validUserId)
+        .set("x-aevonbank-role", "professional") // Professional is not allowed in router
         .send({ slotId: validSlotId });
 
       expect(response.status).toBe(403);
@@ -81,8 +81,8 @@ describe("POST /api/v1/booking-intents", () => {
     it("should create a booking intent successfully", async () => {
       const response = await request(app)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", validUserId)
-        .set("x-chronopay-role", validRole)
+        .set("x-aevonbank-user-id", validUserId)
+        .set("x-aevonbank-role", validRole)
         .send({
           slotId: validSlotId,
           note: "Please be on time",
@@ -102,8 +102,8 @@ describe("POST /api/v1/booking-intents", () => {
     it("should return 409 if slot is not bookable", async () => {
       const response = await request(app)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", validUserId)
-        .set("x-chronopay-role", validRole)
+        .set("x-aevonbank-user-id", validUserId)
+        .set("x-aevonbank-role", validRole)
         .send({ slotId: "slot-33333333-3333-4333-8333-333333333333" }); // charlie, bookable: false
 
       expect(response.status).toBe(409);
@@ -121,16 +121,16 @@ describe("POST /api/v1/booking-intents", () => {
       // First creation reserves the slot
       const first = await request(app)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", validUserId)
-        .set("x-chronopay-role", validRole)
+        .set("x-aevonbank-user-id", validUserId)
+        .set("x-aevonbank-role", validRole)
         .send({ slotId: occupiedSlot });
       expect(first.status).toBe(201);
 
       // Second creation for same slot (by anyone) is rejected
       const response = await request(app)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", "another-user")
-        .set("x-chronopay-role", validRole)
+        .set("x-aevonbank-user-id", "another-user")
+        .set("x-aevonbank-role", validRole)
         .send({ slotId: occupiedSlot });
 
       expect(response.status).toBe(409);
@@ -148,8 +148,8 @@ describe("POST /api/v1/booking-intents", () => {
       const freshApp = createApp({ apiKey: "test-api-key" });
       const response = await request(freshApp)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", "alice") // slot-1111...1111 belongs to alice
-        .set("x-chronopay-role", "admin") // alice is admin here
+        .set("x-aevonbank-user-id", "alice") // slot-1111...1111 belongs to alice
+        .set("x-aevonbank-role", "admin") // alice is admin here
         .send({ slotId: validSlotId });
 
       expect(response.status).toBe(403);
@@ -173,8 +173,8 @@ describe("POST /api/v1/booking-intents", () => {
       for (let i = 0; i < 5; i += 1) {
         const res = await request(freshApp)
           .post("/api/v1/booking-intents")
-          .set("x-chronopay-user-id", validUserId)
-          .set("x-chronopay-role", validRole)
+          .set("x-aevonbank-user-id", validUserId)
+          .set("x-aevonbank-role", validRole)
           .send({ slotId: validSlotId });
         expect([201, 409]).toContain(res.status);
       }
@@ -182,8 +182,8 @@ describe("POST /api/v1/booking-intents", () => {
       // Sixth request: velocity signal (count > max) + disposable email -> score 2.
       const blocked = await request(freshApp)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", validUserId)
-        .set("x-chronopay-role", validRole)
+        .set("x-aevonbank-user-id", validUserId)
+        .set("x-aevonbank-role", validRole)
         .set("accept-language", "es")
         .send({ slotId: validSlotId, email: DISPOSABLE_EMAIL });
 
@@ -208,15 +208,15 @@ describe("POST /api/v1/booking-intents", () => {
       for (let i = 0; i < 5; i += 1) {
         await request(freshApp)
           .post("/api/v1/booking-intents")
-          .set("x-chronopay-user-id", validUserId)
-          .set("x-chronopay-role", validRole)
+          .set("x-aevonbank-user-id", validUserId)
+          .set("x-aevonbank-role", validRole)
           .send({ slotId: validSlotId });
       }
 
       const blocked = await request(freshApp)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", validUserId)
-        .set("x-chronopay-role", validRole)
+        .set("x-aevonbank-user-id", validUserId)
+        .set("x-aevonbank-role", validRole)
         .send({ slotId: validSlotId, email: DISPOSABLE_EMAIL });
 
       expect(blocked.status).toBe(403);
@@ -229,8 +229,8 @@ describe("POST /api/v1/booking-intents", () => {
 
       const res = await request(freshApp)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", validUserId)
-        .set("x-chronopay-role", validRole)
+        .set("x-aevonbank-user-id", validUserId)
+        .set("x-aevonbank-role", validRole)
         .send({ slotId: validSlotId, email: DISPOSABLE_EMAIL });
 
       expect(res.status).toBe(201);
@@ -243,8 +243,8 @@ describe("POST /api/v1/booking-intents", () => {
 
       const first = await request(freshApp)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", validUserId)
-        .set("x-chronopay-role", validRole)
+        .set("x-aevonbank-user-id", validUserId)
+        .set("x-aevonbank-role", validRole)
         .set("user-agent", "Mozilla/5.0 (Macintosh)")
         .set("x-device-fingerprint", "fp-device-1")
         .send({ slotId: validSlotId });
@@ -252,8 +252,8 @@ describe("POST /api/v1/booking-intents", () => {
 
       const second = await request(freshApp)
         .post("/api/v1/booking-intents")
-        .set("x-chronopay-user-id", validUserId)
-        .set("x-chronopay-role", validRole)
+        .set("x-aevonbank-user-id", validUserId)
+        .set("x-aevonbank-role", validRole)
         .set("user-agent", "Mozilla/5.0 (iPhone)")
         .set("x-device-fingerprint", "fp-device-1")
         .send({ slotId: validSlotId });
